@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff6fb5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tori Spelling">
+<title>Tori's Spelling Test</title>
+<style>
+:root{--pink:#ff5fad;--lav:#8f72ea;--ink:#34283f;--muted:#756a7e;--line:#f0d8e7;--green:#178459;--red:#c43b4b}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(160deg,#fff8fc,#fff0f8 55%,#f4efff)}
+body{min-height:100vh;min-height:100dvh}
+.app{max-width:760px;margin:auto;padding:calc(20px + env(safe-area-inset-top)) 14px calc(35px + env(safe-area-inset-bottom))}
+header{text-align:center;margin-bottom:16px}
+h1{margin:0;font-size:clamp(30px,8vw,46px)}
+.subtitle{margin:7px 0 0;color:var(--muted)}
+.progress{height:11px;background:#eadff0;border-radius:999px;overflow:hidden;margin-top:18px}
+.progress>div{height:100%;background:linear-gradient(90deg,var(--pink),var(--lav));transition:width .25s}
+.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;font-weight:800;margin:8px 2px 10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:0 18px 50px rgba(78,45,91,.12)}
+.badge{display:inline-block;padding:7px 11px;border-radius:999px;background:#ffe6f3;color:#bd3d80;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.badge.challenge{background:#f0eaff;color:#7357ca}
+.hero{text-align:center;padding:10px 0 2px}.speaker{font-size:62px;margin:8px 0 4px}.hero h2{margin:0;font-size:24px}.hero p{margin:6px 0;color:var(--muted)}
+.row,.nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+button{border:0;border-radius:15px;padding:14px 16px;font-size:16px;font-weight:900;background:#f2e9f5;color:var(--ink);min-height:48px;touch-action:manipulation}
+button:active{transform:scale(.98)}
+.primary{background:linear-gradient(135deg,var(--pink),var(--lav));color:#fff}
+.cluebox{margin-top:18px;background:#fff8fc;border:1px solid #f2d9e7;border-radius:20px;padding:17px}
+.label{font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;color:#b44b81}
+.clue{font-size:19px;font-weight:850;margin-top:5px}.sentence{font-size:17px;color:var(--muted);margin-top:6px}
+.answer{width:100%;margin-top:18px;border:2px solid #edd8e6;border-radius:16px;padding:15px;font-size:22px;text-align:center;outline:none}
+.answer:focus{border-color:var(--lav)}
+.feedback{text-align:center;min-height:34px;margin-top:12px;font-size:17px;font-weight:900}.good{color:var(--green)}.bad{color:var(--red)}
+.reveal{display:none;text-align:center;margin-top:14px;padding:17px;border-radius:18px;background:#fff8fc;border:1px dashed #dabfd0}.word{font-size:46px;font-weight:950}
+.nav{justify-content:space-between}.nav button{flex:1}
+.score{margin-top:15px;padding:12px;border-radius:16px;background:#faf6fc;text-align:center;color:var(--muted);font-size:14px;font-weight:800}
+.finish{display:none;text-align:center}.finish .big{font-size:64px}
+.status{font-size:13px;color:var(--muted);text-align:center;margin-top:10px}
+@media(max-width:520px){.card{padding:18px}.row button{flex:1 1 46%}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<h1>Tori's Spelling Test 💗</h1>
+<p class="subtitle">Listen, type the word, and check your spelling.</p>
+<div class="progress"><div id="bar"></div></div>
+<div class="meta"><span id="count"></span><span id="scoreTop">0 correct</span></div>
+</header>
+
+<section class="card" id="testCard">
+<span class="badge" id="badge">Spelling Word</span>
+<div class="hero">
+  <div class="speaker">🔊</div>
+  <h2>Listen and spell</h2>
+  <p>Tap Hear Word to play the recording.</p>
+</div>
+
+<div class="row">
+  <button class="primary" id="hearWord">🔊 Hear Word</button>
+  <button id="hearAgain">🔁 Hear Again</button>
+</div>
+
+<audio id="player" preload="auto" src="audio/spelling-words.mp3"></audio>
+<div id="audioStatus" class="status">Audio ready when the page loads.</div>
+
+<div class="cluebox">
+  <div class="label">Clue</div><div class="clue" id="clue"></div>
+  <div class="label" style="margin-top:14px">Sentence</div><div class="sentence" id="sentence"></div>
+</div>
+
+<input id="answer" class="answer" placeholder="Type the spelling…" autocomplete="off" autocapitalize="none" spellcheck="false">
+
+<div class="row">
+  <button class="primary" id="check">Check Answer</button>
+  <button id="hint">💡 Hint</button>
+  <button id="show">Show Word</button>
+</div>
+
+<div id="feedback" class="feedback"></div>
+<div id="reveal" class="reveal"><div id="word" class="word"></div></div>
+
+<div class="nav">
+  <button id="prev">← Back</button>
+  <button id="shuffle">🔀 Shuffle</button>
+  <button class="primary" id="next">Next →</button>
+</div>
+<div id="score" class="score">Score: 0 correct out of 0 answers</div>
+</section>
+
+<section class="card finish" id="finish">
+  <div class="big">🌟</div>
+  <h2>Great job!</h2>
+  <p id="finalScore"></p>
+  <button class="primary" id="restart">Start Over</button>
+</section>
+</div>
+
+<script>
+const original=[{"word":"past","clue":"The opposite of future.","sentence":"We learned about the past in history class.","challenge":false,"start":0.0,"duration":1.0081},{"word":"sprain","clue":"An injury caused by twisting a joint.","sentence":"Be careful not to sprain your ankle.","challenge":false,"start":1.5581,"duration":1.1134},{"word":"weight","clue":"How heavy something is.","sentence":"The weight of the box was ten pounds.","challenge":false,"start":3.2215,"duration":0.9537},{"word":"today","clue":"This present day.","sentence":"We have spelling practice today.","challenge":false,"start":4.7251,"duration":1.1332},{"word":"talent","clue":"A natural skill or ability.","sentence":"Her talent for dancing impressed everyone.","challenge":false,"start":6.4083,"duration":1.1129},{"word":"waist","clue":"The middle part of your body.","sentence":"The belt fits around your waist.","challenge":false,"start":8.0712,"duration":1.012},{"word":"basketball","clue":"A sport played with a hoop and ball.","sentence":"We played basketball after school.","challenge":false,"start":9.6332,"duration":1.4859},{"word":"passed","clue":"Went by or moved beyond.","sentence":"The yellow bus passed our house.","challenge":false,"start":11.669,"duration":1.0081},{"word":"waste","clue":"To use carelessly or throw away.","sentence":"Try not to waste food.","challenge":false,"start":13.2271,"duration":1.012},{"word":"master","clue":"To learn or do something very well.","sentence":"She practiced until she could master the skill.","challenge":false,"start":14.789,"duration":1.1081},{"word":"vein","clue":"A blood vessel that carries blood toward the heart.","sentence":"A vein carries blood back toward the heart.","challenge":false,"start":16.4471,"duration":1.0711},{"word":"relay","clue":"A race where teammates take turns.","sentence":"Our team ran in the relay race.","challenge":false,"start":18.0682,"duration":1.0357},{"word":"escape","clue":"To get away or break free.","sentence":"The rabbit tried to escape from the pen.","challenge":false,"start":19.6538,"duration":1.1623},{"word":"magnet","clue":"An object that attracts certain metals.","sentence":"The magnet stuck to the refrigerator.","challenge":false,"start":21.3661,"duration":1.1262},{"word":"crayon","clue":"A colored wax stick used for drawing.","sentence":"I used a blue crayon to color the sky.","challenge":false,"start":23.0422,"duration":1.1304},{"word":"remain","clue":"To stay in the same place or condition.","sentence":"Please remain seated until the bell rings.","challenge":false,"start":24.7226,"duration":1.1307},{"word":"safety","clue":"Being protected from danger.","sentence":"We wear helmets for safety.","challenge":false,"start":26.4033,"duration":1.1572},{"word":"album","clue":"A book or collection of photos, music, or memories.","sentence":"We looked through the family photo album.","challenge":false,"start":28.1105,"duration":1.0803},{"word":"tomorrow","clue":"The day after today.","sentence":"We will visit the library tomorrow.","challenge":true,"start":29.7408,"duration":1.1186},{"word":"yesterday","clue":"The day before today.","sentence":"It rained yesterday afternoon.","challenge":true,"start":31.4094,"duration":1.3179}];
+let cards=[...original],i=0,correct=0,checks=0,scored=false,stopTimer=null,lastPlayed=null;
+const $=id=>document.getElementById(id), player=$("player"), answer=$("answer");
+
+function c(){return cards[i]}
+
+function render(){
+ const x=c();scored=false;
+ $("count").textContent=`${i+1} of ${cards.length}`;
+ $("bar").style.width=`${((i+1)/cards.length)*100}%`;
+ $("badge").textContent=x.challenge?"⭐ Challenge Word":"Spelling Word";
+ $("badge").className="badge"+(x.challenge?" challenge":"");
+ $("clue").textContent=x.clue;
+ $("sentence").textContent=x.sentence.replace(new RegExp("\\b"+x.word+"\\b","i"),"_____");
+ $("word").textContent=x.word;
+ $("reveal").style.display="none";
+ $("feedback").textContent="";
+ answer.value="";
+ $("scoreTop").textContent=`${correct} correct`;
+ $("score").textContent=`Score: ${correct} correct out of ${checks} answers`;
+}
+
+function stopAudio(){
+ if(stopTimer){clearTimeout(stopTimer);stopTimer=null}
+ try{player.pause()}catch(e){}
+}
+
+function playCurrent(){
+ const x=c();
+ lastPlayed=x.word;
+ stopAudio();
+ const startPlayback=()=>{
+   try{
+     player.currentTime=x.start;
+     const p=player.play();
+     $("audioStatus").textContent="Playing word…";
+     if(p && p.catch){
+       p.catch(err=>{
+         $("audioStatus").textContent="Tap Hear Word again. Make sure iPhone volume is turned up.";
+       });
+     }
+     stopTimer=setTimeout(()=>{
+       player.pause();
+       $("audioStatus").textContent="Tap Hear Word to replay.";
+     },Math.ceil((x.duration+0.08)*1000));
+   }catch(e){
+     $("audioStatus").textContent="Audio is still loading. Tap Hear Word again in a moment.";
+   }
+ };
+ if(player.readyState>=1){startPlayback()}
+ else{
+   $("audioStatus").textContent="Loading audio…";
+   player.addEventListener("loadedmetadata",startPlayback,{once:true});
+   player.load();
+ }
+}
+
+$("hearWord").onclick=playCurrent;
+$("hearAgain").onclick=playCurrent;
+
+$("check").onclick=()=>{
+ let v=answer.value.trim().toLowerCase();if(!v)return;
+ let ok=v===c().word.toLowerCase(),f=$("feedback");
+ if(!scored){checks++;scored=true;if(ok)correct++;}
+ f.textContent=ok?"✅ Correct! Great job!":"❌ Not quite. Try again!";
+ f.className="feedback "+(ok?"good":"bad");
+ $("scoreTop").textContent=`${correct} correct`;
+ $("score").textContent=`Score: ${correct} correct out of ${checks} answers`;
+};
+
+$("hint").onclick=()=>{
+ $("feedback").textContent=`💡 Starts with "${c().word[0].toUpperCase()}" • ${c().word.length} letters`;
+ $("feedback").className="feedback";
+};
+
+$("show").onclick=()=>{
+ $("reveal").style.display=$("reveal").style.display==="block"?"none":"block";
+};
+
+$("prev").onclick=()=>{stopAudio();if(i>0){i--;render()}};
+$("next").onclick=()=>{
+ stopAudio();
+ if(i===cards.length-1){
+   $("testCard").style.display="none";
+   $("finish").style.display="block";
+   $("finalScore").textContent=`You got ${correct} out of ${checks} correct.`;
+ }else{i++;render()}
+};
+
+$("shuffle").onclick=()=>{
+ stopAudio();
+ for(let j=cards.length-1;j>0;j--){
+   let k=Math.floor(Math.random()*(j+1));
+   [cards[j],cards[k]]=[cards[k],cards[j]];
+ }
+ i=0;correct=0;checks=0;render();
+};
+
+$("restart").onclick=()=>{
+ cards=[...original];i=0;correct=0;checks=0;
+ $("finish").style.display="none";$("testCard").style.display="block";render();
+};
+
+answer.addEventListener("keydown",e=>{if(e.key==="Enter")$("check").click()});
+
+player.addEventListener("canplaythrough",()=>{$("audioStatus").textContent="Audio ready."});
+player.addEventListener("error",()=>{$("audioStatus").textContent="Audio could not load. Refresh the page once."});
+
+render();
+</script>
+</body>
+</html>
