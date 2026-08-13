@@ -44,7 +44,7 @@ button{border:0;border-radius:15px;padding:14px 16px;font-size:16px;font-weight:
 <div class="row"><button class="primary" id="hearWord">🔊 Hear Word</button><button id="hearSentence">🗣️ Hear Sentence</button></div>
 <div class="status" id="audioStatus">The recording says the word only — it will not spell it.</div>
 <div class="cluebox"><div class="label">Clue</div><div class="clue" id="clue"></div><div class="label" style="margin-top:14px">Sentence</div><div class="sentence" id="sentence"></div></div>
-<input id="answer" class="answer" placeholder="Type the spelling…" autocomplete="off" autocapitalize="none" spellcheck="false">
+<input id="answer" class="answer" placeholder="Type the spelling…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" writingsuggestions="false" enterkeyhint="done">
 <div class="row"><button class="primary" id="check">Check Answer</button><button id="hint">💡 Hint</button><button id="show">Show Word</button></div>
 <div id="feedback" class="feedback"></div><div id="reveal" class="reveal"><div id="word" class="word"></div></div>
 <div class="nav"><button id="prev">← Back</button><button id="shuffle">🔀 Shuffle</button><button class="primary" id="next">Next →</button></div>
