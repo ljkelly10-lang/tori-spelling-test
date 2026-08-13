@@ -42,7 +42,6 @@ button{border:0;border-radius:15px;padding:14px 16px;font-size:16px;font-weight:
 <span class="badge" id="badge">Spelling Word</span>
 <div class="hero"><div class="speaker">🔊</div><h2>Listen and spell</h2><p>Tap Hear Word to hear it once.</p></div>
 <div class="row"><button class="primary" id="hearWord">🔊 Hear Word</button><button id="hearSentence">🗣️ Hear Sentence</button></div>
-<div class="status" id="audioStatus">The recording says the word only — it will not spell it.</div>
 <div class="cluebox"><div class="label">Clue</div><div class="clue" id="clue"></div><div class="label" style="margin-top:14px">Sentence</div><div class="sentence" id="sentence"></div></div>
 <input id="answer" class="answer" placeholder="Type the spelling…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" writingsuggestions="false" enterkeyhint="done">
 <div class="row"><button class="primary" id="check">Check Answer</button><button id="hint">💡 Hint</button><button id="show">Show Word</button></div>
@@ -57,26 +56,66 @@ const original=[{"word":"past","clue":"The opposite of future.","sentence":"We l
 let cards=[...original],i=0,correct=0,checks=0,scored=false,player=new Audio();
 const $=id=>document.getElementById(id),answer=$("answer");
 function c(){return cards[i]}
-function playOnly(src,label){
-  try{
-    player.pause();
-    player=new Audio(src);
-    player.volume=1;
-    player.onplay=()=>{$("audioStatus").textContent="Playing "+label+"…"};
-    player.onended=()=>{$("audioStatus").textContent="Tap again to replay."};
-    player.onerror=()=>{$("audioStatus").textContent="Audio could not play. Reload the page in Safari."};
-    player.play().catch(()=>{$("audioStatus").textContent="Audio could not play. Tap again."});
-  }catch(e){$("audioStatus").textContent="Audio could not play. Reload the page in Safari."}
+let systemVoices=[];
+
+function refreshVoices(){
+  if("speechSynthesis" in window){
+    systemVoices=window.speechSynthesis.getVoices() || [];
+  }
 }
+
+function chooseClearVoice(){
+  refreshVoices();
+  const preferred=["Samantha","Ava","Allison","Susan","Nicky","Joelle","Tom"];
+  for(const name of preferred){
+    const match=systemVoices.find(v =>
+      v.name.toLowerCase().includes(name.toLowerCase()) &&
+      /^en(-|_)?US/i.test(v.lang || "en-US")
+    );
+    if(match) return match;
+  }
+  return systemVoices.find(v => /^en(-|_)?US/i.test(v.lang || "")) ||
+         systemVoices.find(v => /^en/i.test(v.lang || "")) ||
+         null;
+}
+
+function speakClearly(textToSay){
+  if(!("speechSynthesis" in window)){
+    alert("Audio is not available in this browser. Please open the spelling test in Safari.");
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const u=new SpeechSynthesisUtterance(textToSay);
+  u.lang="en-US";
+  u.rate=0.78;
+  u.pitch=1.0;
+  u.volume=1.0;
+
+  const voice=chooseClearVoice();
+  if(voice) u.voice=voice;
+
+  u.onerror=()=>{
+    alert("The voice did not start. Tap again and make sure your iPhone volume is turned up.");
+  };
+
+  window.speechSynthesis.speak(u);
+}
+
+if("speechSynthesis" in window){
+  refreshVoices();
+  window.speechSynthesis.onvoiceschanged=refreshVoices;
+}
+
 function render(){
  const x=c();scored=false;$("count").textContent=`${i+1} of ${cards.length}`;$("bar").style.width=`${((i+1)/cards.length)*100}%`;
  $("badge").textContent=x.challenge?"⭐ Challenge Word":"Spelling Word";$("badge").className="badge"+(x.challenge?" challenge":"");
  $("clue").textContent=x.clue;$("sentence").textContent=x.sentence.replace(new RegExp("\\b"+x.word+"\\b","i"),"_____");$("word").textContent=x.word;
  $("reveal").style.display="none";$("feedback").textContent="";answer.value="";$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`;
- $("audioStatus").textContent="The recording says the word only — it will not spell it.";
 }
-$("hearWord").onclick=()=>playOnly(c().wordAudio,c().word);
-$("hearSentence").onclick=()=>playOnly(c().sentenceAudio,"sentence");
+$("hearWord").onclick=()=>speakClearly(c().word);
+$("hearSentence").onclick=()=>speakClearly(c().sentence);
 $("check").onclick=()=>{let v=answer.value.trim().toLowerCase();if(!v)return;let ok=v===c().word.toLowerCase(),f=$("feedback");if(!scored){checks++;scored=true;if(ok)correct++}f.textContent=ok?"✅ Correct! Great job!":"❌ Not quite. Try again!";f.className="feedback "+(ok?"good":"bad");$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`};
 $("hint").onclick=()=>{$("feedback").textContent=`💡 Starts with "${c().word[0].toUpperCase()}" • ${c().word.length} letters`;$("feedback").className="feedback"};
 $("show").onclick=()=>{$("reveal").style.display=$("reveal").style.display==="block"?"none":"block"};
