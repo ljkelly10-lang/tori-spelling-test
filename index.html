@@ -34,23 +34,21 @@ button{border:0;border-radius:15px;padding:14px 16px;font-size:16px;font-weight:
 <div class="app">
 <header>
 <h1>Tori's Spelling Test 💗</h1>
-<p class="subtitle">Spelling List 2 • Listen, type or use iPhone Dictation, and check your spelling.</p>
+<p class="subtitle">Spelling List 2 • Hear the word, then spell it aloud or type it.</p>
 <div class="progress"><div id="bar"></div></div>
 <div class="meta"><span id="count"></span><span id="scoreTop">0 correct</span></div>
 </header>
 <section class="card" id="testCard">
 <span class="badge" id="badge">Spelling Word</span>
-<div class="hero"><div class="speaker">🔊</div><h2>Listen and spell</h2><p>Tap Hear Word to hear it once.</p></div>
+<div class="hero"><div class="speaker">🔊</div><h2>Listen and spell</h2><p>Tap Hear Word. After the word plays, the mic will listen for her spelling.</p></div>
 <div class="row"><button class="primary" id="hearWord">🔊 Hear Word</button><button id="hearSentence">🗣️ Hear Sentence</button></div>
 <div class="cluebox"><div class="label">Clue</div><div class="clue" id="clue"></div><div class="label" style="margin-top:14px">Sentence</div><div class="sentence" id="sentence"></div></div>
 <input id="answer" class="answer" placeholder="Type the spelling…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" writingsuggestions="false" enterkeyhint="done">
 <div class="row">
   <button class="primary" id="check">Check Typed Answer</button>
-  <button id="micSpell">🎤 Spell by Voice</button>
   <button id="hint">💡 Hint</button>
   <button id="show">Show Word</button>
 </div>
-<div id="micStatus" class="status">Type the word, or tap Spell by Voice to use the iPhone keyboard microphone.</div>
 <div id="feedback" class="feedback"></div><div id="reveal" class="reveal"><div id="word" class="word"></div></div>
 <div class="nav"><button id="prev">← Back</button><button id="shuffle">🔀 Shuffle</button><button class="primary" id="next">Next →</button></div>
 <div id="score" class="score">Score: 0 correct out of 0 answers</div>
@@ -85,7 +83,7 @@ function chooseClearVoice(){
          null;
 }
 
-function speakClearly(textToSay){
+function speakClearly(textToSay, listenAfter=false){
   if(!("speechSynthesis" in window)){
     alert("Audio is not available in this browser. Please open the spelling test in Safari.");
     return;
@@ -106,6 +104,12 @@ function speakClearly(textToSay){
     alert("The voice did not start. Tap again and make sure your iPhone volume is turned up.");
   };
 
+  if(listenAfter){
+    u.onend=()=>{
+      setTimeout(startListeningForSpelling,300);
+    };
+  }
+
   window.speechSynthesis.speak(u);
 }
 
@@ -125,25 +129,164 @@ function render(){
  }
  $("clue").textContent=x.clue;$("sentence").textContent=x.sentence.replace(new RegExp("\\b"+x.word+"\\b","i"),"_____");$("word").textContent=x.word;
  $("reveal").style.display="none";$("feedback").textContent="";answer.value="";$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`;
- $("micStatus").textContent="Type the word, or tap Spell by Voice to use the iPhone keyboard microphone.";
 }
-$("hearWord").onclick=()=>speakClearly(c().word);
-$("hearSentence").onclick=()=>speakClearly(c().sentence);
+$("hearWord").onclick=()=>speakClearly(c().word,true);
+$("hearSentence").onclick=()=>speakClearly(c().sentence,false);
+
 
 
 function normalizeAnswerForCheck(value){
   return (value || "").toLowerCase().replace(/[^a-z]/g,"");
 }
 
-$("micSpell").onclick=()=>{
-  answer.focus();
-  $("feedback").textContent="";
-  $("micStatus").textContent=
-    "🎤 On the iPhone keyboard, tap the microphone, then spell the letters aloud slowly. Example: P, A, S, T. When it appears in the box, tap Check Typed Answer.";
-};
+const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+let activeRecognition = null;
 
-// Keep dictated punctuation/spaces from affecting checking.
-// Example: "P, A, S, T" and "P A S T" both normalize to "past".
+const spokenLetterMap = new Map([
+  ["a","a"],["ay","a"],["hey","a"],
+  ["b","b"],["bee","b"],["be","b"],
+  ["c","c"],["see","c"],["sea","c"],
+  ["d","d"],["dee","d"],
+  ["e","e"],["ee","e"],
+  ["f","f"],["ef","f"],["eff","f"],
+  ["g","g"],["gee","g"],
+  ["h","h"],["aitch","h"],["haitch","h"],
+  ["i","i"],["eye","i"],
+  ["j","j"],["jay","j"],
+  ["k","k"],["kay","k"],
+  ["l","l"],["el","l"],["ell","l"],
+  ["m","m"],["em","m"],
+  ["n","n"],["en","n"],
+  ["o","o"],["oh","o"],
+  ["p","p"],["pee","p"],["pea","p"],
+  ["q","q"],["cue","q"],["queue","q"],
+  ["r","r"],["are","r"],["ar","r"],
+  ["s","s"],["ess","s"],
+  ["t","t"],["tee","t"],["tea","t"],
+  ["u","u"],["you","u"],["yew","u"],
+  ["v","v"],["vee","v"],
+  ["w","w"],["doubleyou","w"],["double-u","w"],
+  ["x","x"],["ex","x"],
+  ["y","y"],["why","y"],
+  ["z","z"],["zee","z"],["zed","z"]
+]);
+
+function parseSpelledLetters(raw){
+  let cleaned=(raw||"")
+    .toLowerCase()
+    .replace(/[.,!?;:]/g," ")
+    .replace(/\b(letter|letters|capital|lowercase|uppercase)\b/g," ")
+    .replace(/\bdouble\s+u\b/g,"doubleyou")
+    .replace(/\s+/g," ")
+    .trim();
+
+  if(!cleaned) return "";
+
+  const expected = normalizeAnswerForCheck(c().word);
+
+  // iPhone may turn clearly-spoken letters into the completed word.
+  // Accept that transcript so she is not penalized for Apple's recognition behavior.
+  if(normalizeAnswerForCheck(cleaned) === expected) return expected;
+
+  const tokens = cleaned.split(/[\s-]+/).filter(Boolean);
+  const letters=[];
+
+  for(const token of tokens){
+    if(spokenLetterMap.has(token)){
+      letters.push(spokenLetterMap.get(token));
+      continue;
+    }
+
+    // Some recognizers return short groups of letters together.
+    if(/^[a-z]{1,4}$/.test(token)){
+      for(const ch of token) letters.push(ch);
+    }
+  }
+  return letters.join("");
+}
+
+function showListeningMessage(msg){
+  const f=$("feedback");
+  f.textContent=msg;
+  f.className="feedback";
+}
+
+function scoreSpokenAnswer(spelled){
+  const expected=normalizeAnswerForCheck(c().word);
+  const ok=spelled===expected;
+  const f=$("feedback");
+
+  if(!scored){
+    checks++;
+    scored=true;
+    if(ok) correct++;
+  }
+
+  f.textContent=ok ? "✅ Correct! Great job!" : "❌ Not quite. Tap Hear Word and spell it again.";
+  f.className="feedback "+(ok?"good":"bad");
+  $("scoreTop").textContent=`${correct} correct`;
+  $("score").textContent=`Score: ${correct} correct out of ${checks} answers`;
+}
+
+function startListeningForSpelling(){
+  if(!SpeechRecognitionAPI){
+    showListeningMessage("Mic listening is not available in this browser. She can still type the answer.");
+    return;
+  }
+
+  try{
+    if(activeRecognition){
+      try{ activeRecognition.abort(); }catch(e){}
+    }
+
+    const recognition=new SpeechRecognitionAPI();
+    activeRecognition=recognition;
+    recognition.lang="en-US";
+    recognition.continuous=false;
+    recognition.interimResults=false;
+    recognition.maxAlternatives=5;
+
+    showListeningMessage("🎤 Listening… spell the word one letter at a time.");
+
+    recognition.onresult=(event)=>{
+      let best="";
+      let bestLen=-1;
+      for(let a=0;a<event.results[0].length;a++){
+        const parsed=parseSpelledLetters(event.results[0][a].transcript||"");
+        if(parsed.length>bestLen){
+          best=parsed;
+          bestLen=parsed.length;
+        }
+      }
+
+      if(!best){
+        showListeningMessage("I couldn't make out the spelling. Tap Hear Word and try again.");
+        return;
+      }
+
+      scoreSpokenAnswer(best);
+    };
+
+    recognition.onerror=(event)=>{
+      if(event.error==="not-allowed" || event.error==="service-not-allowed"){
+        showListeningMessage("Please allow microphone access for this site, or use the typing box.");
+      }else if(event.error==="no-speech"){
+        showListeningMessage("I didn't hear anything. Tap Hear Word and try again.");
+      }else{
+        showListeningMessage("I couldn't hear the spelling clearly. Tap Hear Word and try again.");
+      }
+    };
+
+    recognition.onend=()=>{
+      activeRecognition=null;
+    };
+
+    recognition.start();
+  }catch(e){
+    showListeningMessage("Mic listening couldn't start. She can still type the answer.");
+  }
+}
+
 $("check").onclick=()=>{let raw=answer.value.trim();if(!raw)return;let v=normalizeAnswerForCheck(raw);let expected=normalizeAnswerForCheck(c().word);let ok=v===expected,f=$("feedback");if(!scored){checks++;scored=true;if(ok)correct++}f.textContent=ok?"✅ Correct! Great job!":"❌ Not quite. Try again!";f.className="feedback "+(ok?"good":"bad");$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`};
 $("hint").onclick=()=>{
  const letters=c().word.replace(/[^a-z]/gi,"");
