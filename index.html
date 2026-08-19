@@ -34,7 +34,7 @@ button{border:0;border-radius:15px;padding:14px 16px;font-size:16px;font-weight:
 <div class="app">
 <header>
 <h1>Tori's Spelling Test 💗</h1>
-<p class="subtitle">Spelling List 2 • Listen, type or spell aloud, and check your spelling.</p>
+<p class="subtitle">Spelling List 2 • Listen, type or use iPhone Dictation, and check your spelling.</p>
 <div class="progress"><div id="bar"></div></div>
 <div class="meta"><span id="count"></span><span id="scoreTop">0 correct</span></div>
 </header>
@@ -46,11 +46,11 @@ button{border:0;border-radius:15px;padding:14px 16px;font-size:16px;font-weight:
 <input id="answer" class="answer" placeholder="Type the spelling…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" writingsuggestions="false" enterkeyhint="done">
 <div class="row">
   <button class="primary" id="check">Check Typed Answer</button>
-  <button id="micSpell">🎤 Spell With Mic</button>
+  <button id="micSpell">🎤 Spell by Voice</button>
   <button id="hint">💡 Hint</button>
   <button id="show">Show Word</button>
 </div>
-<div id="micStatus" class="status">Type the word or tap the mic and spell one letter at a time.</div>
+<div id="micStatus" class="status">Type the word, or tap Spell by Voice to use the iPhone keyboard microphone.</div>
 <div id="feedback" class="feedback"></div><div id="reveal" class="reveal"><div id="word" class="word"></div></div>
 <div class="nav"><button id="prev">← Back</button><button id="shuffle">🔀 Shuffle</button><button class="primary" id="next">Next →</button></div>
 <div id="score" class="score">Score: 0 correct out of 0 answers</div>
@@ -125,163 +125,26 @@ function render(){
  }
  $("clue").textContent=x.clue;$("sentence").textContent=x.sentence.replace(new RegExp("\\b"+x.word+"\\b","i"),"_____");$("word").textContent=x.word;
  $("reveal").style.display="none";$("feedback").textContent="";answer.value="";$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`;
- $("micStatus").textContent="Type the word or tap the mic and spell one letter at a time.";
+ $("micStatus").textContent="Type the word, or tap Spell by Voice to use the iPhone keyboard microphone.";
 }
 $("hearWord").onclick=()=>speakClearly(c().word);
 $("hearSentence").onclick=()=>speakClearly(c().sentence);
 
-const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-const spokenLetterMap = new Map([
-  ["a","a"],["ay","a"],["hey","a"],
-  ["b","b"],["bee","b"],["be","b"],
-  ["c","c"],["see","c"],["sea","c"],
-  ["d","d"],["dee","d"],
-  ["e","e"],["ee","e"],
-  ["f","f"],["ef","f"],["eff","f"],
-  ["g","g"],["gee","g"],
-  ["h","h"],["aitch","h"],["haitch","h"],
-  ["i","i"],["eye","i"],
-  ["j","j"],["jay","j"],
-  ["k","k"],["kay","k"],
-  ["l","l"],["el","l"],["ell","l"],
-  ["m","m"],["em","m"],
-  ["n","n"],["en","n"],
-  ["o","o"],["oh","o"],
-  ["p","p"],["pee","p"],["pea","p"],
-  ["q","q"],["cue","q"],["queue","q"],
-  ["r","r"],["are","r"],["ar","r"],
-  ["s","s"],["ess","s"],
-  ["t","t"],["tee","t"],["tea","t"],
-  ["u","u"],["you","u"],["yew","u"],
-  ["v","v"],["vee","v"],
-  ["w","w"],["doubleyou","w"],["double-u","w"],
-  ["x","x"],["ex","x"],
-  ["y","y"],["why","y"],
-  ["z","z"],["zee","z"],["zed","z"]
-]);
-
-function normalizeMicSpelling(raw){
-  let cleaned=(raw||"")
-    .toLowerCase()
-    .replace(/[.,!?;:]/g," ")
-    .replace(/\b(letter|letters|capital|lowercase|uppercase)\b/g," ")
-    .replace(/\bdouble\s+u\b/g,"doubleyou")
-    .replace(/\s+/g," ")
-    .trim();
-
-  if(!cleaned) return {letters:"", count:0, heardWholeWord:false};
-
-  // Reject the student simply saying the whole spelling word.
-  const compact=cleaned.replace(/[^a-z]/g,"");
-  const expectedLetters=c().word.toLowerCase().replace(/[^a-z]/g,"");
-  const preliminaryTokens=cleaned.split(/[\s-]+/).filter(Boolean);
-  if(compact===expectedLetters && preliminaryTokens.length<expectedLetters.length){
-    return {letters:"", count:0, heardWholeWord:true};
-  }
-
-  const tokens=preliminaryTokens;
-  const letters=[];
-
-  for(const token of tokens){
-    if(spokenLetterMap.has(token)){
-      letters.push(spokenLetterMap.get(token));
-      continue;
-    }
-
-    // Safari sometimes returns a short group like "p a s" as "pas".
-    // Accept short alphabetic groups, but not common letter-name words.
-    const commonLetterWords=new Set(["are","why","you","see","sea","bee","tea","pea","eye","jay","kay","cue","zed","zee"]);
-    if(/^[a-z]{1,3}$/.test(token) && !commonLetterWords.has(token)){
-      for(const ch of token) letters.push(ch);
-    }
-  }
-
-  return {letters:letters.join(""), count:letters.length, heardWholeWord:false};
-}
-
-function scoreMicAnswer(spelled){
-  const f=$("feedback");
-  const ok=spelled===c().word.toLowerCase().replace(/[^a-z]/g,"");
-
-  checks++;
-  if(ok) correct++;
-
-  f.textContent=ok ? "✅ Correct! Great job!" : "❌ Not quite. Try again!";
-  f.className="feedback "+(ok ? "good" : "bad");
-  $("scoreTop").textContent=`${correct} correct`;
-  $("score").textContent=`Score: ${correct} correct out of ${checks} answers`;
-
-  $("micStatus").textContent=ok
-    ? "Nice spelling! Tap Next when you're ready."
-    : "Try again and say each letter slowly with a tiny pause between letters.";
+function normalizeAnswerForCheck(value){
+  return (value || "").toLowerCase().replace(/[^a-z]/g,"");
 }
 
 $("micSpell").onclick=()=>{
-  if(!SpeechRecognitionAPI){
-    $("micStatus").textContent="Mic spelling is not available here. You can still type the answer.";
-    return;
-  }
-
-  try{
-    const recognition=new SpeechRecognitionAPI();
-    recognition.lang="en-US";
-    recognition.continuous=false;
-    recognition.interimResults=false;
-    recognition.maxAlternatives=3;
-
-    $("micStatus").textContent="🎤 Listening… spell one letter at a time.";
-    $("feedback").textContent="";
-
-    recognition.onresult=(event)=>{
-      let best=null;
-
-      for(let a=0;a<event.results[0].length;a++){
-        const parsed=normalizeMicSpelling(event.results[0][a].transcript||"");
-        if(parsed.heardWholeWord){
-          best=parsed;
-          break;
-        }
-        if(!best || parsed.count>best.count) best=parsed;
-      }
-
-      if(best && best.heardWholeWord){
-        $("micStatus").textContent="I heard the whole word. Please say the letters one at a time.";
-        return;
-      }
-
-      if(!best || !best.letters){
-        $("micStatus").textContent="I couldn't make out the letters. Tap the mic and try again.";
-        return;
-      }
-
-      // We intentionally do NOT show the recognized letters on screen.
-      scoreMicAnswer(best.letters);
-    };
-
-    recognition.onerror=(event)=>{
-      if(event.error==="not-allowed" || event.error==="service-not-allowed"){
-        $("micStatus").textContent="Allow microphone access for this site in Safari, or use the typing option.";
-      }else if(event.error==="no-speech"){
-        $("micStatus").textContent="I didn't hear anything. Tap the mic and try again.";
-      }else{
-        $("micStatus").textContent="I couldn't hear the spelling clearly. Try again or type it.";
-      }
-    };
-
-    recognition.onend=()=>{
-      if($("micStatus").textContent==="🎤 Listening… spell one letter at a time."){
-        $("micStatus").textContent="Tap the mic to try again, or type the answer.";
-      }
-    };
-
-    recognition.start();
-  }catch(e){
-    $("micStatus").textContent="Mic spelling couldn't start. You can still type the answer.";
-  }
+  answer.focus();
+  $("feedback").textContent="";
+  $("micStatus").textContent=
+    "🎤 On the iPhone keyboard, tap the microphone, then spell the letters aloud slowly. Example: P, A, S, T. When it appears in the box, tap Check Typed Answer.";
 };
 
-$("check").onclick=()=>{let v=answer.value.trim().toLowerCase();if(!v)return;let ok=v===c().word.toLowerCase(),f=$("feedback");if(!scored){checks++;scored=true;if(ok)correct++}f.textContent=ok?"✅ Correct! Great job!":"❌ Not quite. Try again!";f.className="feedback "+(ok?"good":"bad");$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`};
+// Keep dictated punctuation/spaces from affecting checking.
+// Example: "P, A, S, T" and "P A S T" both normalize to "past".
+$("check").onclick=()=>{let raw=answer.value.trim();if(!raw)return;let v=normalizeAnswerForCheck(raw);let expected=normalizeAnswerForCheck(c().word);let ok=v===expected,f=$("feedback");if(!scored){checks++;scored=true;if(ok)correct++}f.textContent=ok?"✅ Correct! Great job!":"❌ Not quite. Try again!";f.className="feedback "+(ok?"good":"bad");$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`};
 $("hint").onclick=()=>{
  const letters=c().word.replace(/[^a-z]/gi,"");
  const wordCount=c().word.trim().split(/\s+/).length;
