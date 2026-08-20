@@ -15,7 +15,7 @@ header{text-align:center;margin-bottom:16px}h1{margin:0;font-size:clamp(30px,8vw
 .progress{height:11px;background:#eadff0;border-radius:999px;overflow:hidden;margin-top:18px}.progress>div{height:100%;background:linear-gradient(90deg,var(--pink),var(--lav))}
 .meta{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;font-weight:800;margin:8px 2px 10px}
 .card{background:#fff;border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:0 18px 50px rgba(78,45,91,.12)}
-.badge{display:inline-block;padding:7px 11px;border-radius:999px;background:#ffe6f3;color:#bd3d80;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.badge.challenge{background:#f0eaff;color:#7357ca}.badge.review{background:#eaf8ff;color:#2e6f91}
+.badge{display:inline-block;padding:7px 11px;border-radius:999px;background:#ffe6f3;color:#bd3d80;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.badge.challenge{background:#f0eaff;color:#7357ca}.badge.review{background:#eaf8ff;color:#2e6f91}.badge.retry{background:#fff3d9;color:#9a6916}
 .hero{text-align:center;padding:10px 0 2px}.speaker{font-size:62px;margin:8px 0 4px}.hero h2{margin:0;font-size:24px}.hero p{margin:6px 0;color:var(--muted)}
 .row,.nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
 button{border:0;border-radius:15px;padding:14px 16px;font-size:16px;font-weight:900;background:#f2e9f5;color:var(--ink);min-height:48px;touch-action:manipulation}button:active{transform:scale(.98)}.primary{background:linear-gradient(135deg,var(--pink),var(--lav));color:#fff}
@@ -40,7 +40,7 @@ button{border:0;border-radius:15px;padding:14px 16px;font-size:16px;font-weight:
 </header>
 <section class="card" id="testCard">
 <span class="badge" id="badge">Spelling Word</span>
-<div class="hero"><div class="speaker">🔊</div><h2>Listen and spell</h2><p>Tap Hear Word. After the word plays, the mic will listen for her spelling.</p></div>
+<div class="hero"><div class="speaker">🔊</div><h2>Listen and spell</h2><p>Tap Hear Word. It will say the word twice, then listen for her spelling.</p></div>
 <div class="row"><button class="primary" id="hearWord">🔊 Hear Word</button><button id="hearSentence">🗣️ Hear Sentence</button></div>
 <div class="cluebox"><div class="label">Clue</div><div class="clue" id="clue"></div><div class="label" style="margin-top:14px">Sentence</div><div class="sentence" id="sentence"></div></div>
 <input id="answer" class="answer" placeholder="Type the spelling…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" writingsuggestions="false" enterkeyhint="done">
@@ -58,6 +58,9 @@ button{border:0;border-radius:15px;padding:14px 16px;font-size:16px;font-weight:
 <script>
 const original=[{"word":"kept","clue":"Held onto or continued to have something.","sentence":"She kept her favorite drawing in a folder.","category":"regular"},{"word":"speech","clue":"Words spoken to a group of people.","sentence":"He gave a short speech in front of the class.","category":"regular"},{"word":"breath","clue":"The air you take into or let out of your lungs.","sentence":"Take a deep breath before you begin.","category":"regular"},{"word":"hello","clue":"A word used to greet someone.","sentence":"She smiled and said hello to her teacher.","category":"regular"},{"word":"reason","clue":"An explanation for why something happened.","sentence":"Tell me the reason you chose that answer.","category":"regular"},{"word":"squeeze","clue":"To press something firmly from the sides.","sentence":"Squeeze the sponge to get the water out.","category":"regular"},{"word":"else","clue":"In addition to or instead of something.","sentence":"Does anyone else want to play?","category":"regular"},{"word":"lesson","clue":"Something taught or learned.","sentence":"Today's math lesson was about fractions.","category":"regular"},{"word":"meant","clue":"Intended or had a particular meaning.","sentence":"I meant to put my book in my backpack.","category":"regular"},{"word":"sweater","clue":"A warm piece of clothing worn on the upper body.","sentence":"She wore a sweater because it was chilly.","category":"regular"},{"word":"breathe","clue":"To take air into and let it out of your lungs.","sentence":"Remember to breathe slowly and stay calm.","category":"regular"},{"word":"freedom","clue":"The ability to act, speak, or choose freely.","sentence":"The flag can represent freedom.","category":"regular"},{"word":"repeat","clue":"To say or do something again.","sentence":"Please repeat the directions one more time.","category":"regular"},{"word":"wealth","clue":"A large amount of money, valuable things, or resources.","sentence":"The story described a family with great wealth.","category":"regular"},{"word":"length","clue":"The measurement of how long something is.","sentence":"We measured the length of the table.","category":"regular"},{"word":"leather","clue":"A strong material made from animal hide.","sentence":"The brown belt was made of leather.","category":"regular"},{"word":"safety","clue":"Being protected from danger or harm.","sentence":"We wear helmets for safety.","category":"regular"},{"word":"album","clue":"A collection of photos, music, or memories.","sentence":"We looked through the family photo album.","category":"regular"},{"word":"waste","clue":"To use something carelessly or unnecessarily.","sentence":"Try not to waste food or water.","category":"review"},{"word":"master","clue":"To learn or do something very well.","sentence":"She practiced until she could master the skill.","category":"review"},{"word":"a lot","clue":"A large amount or a great number.","sentence":"We learned a lot during science class.","category":"challenge"},{"word":"all right","clue":"Okay, acceptable, or satisfactory.","sentence":"It is all right to ask for help.","category":"challenge"}];
 let cards=[...original],i=0,correct=0,checks=0,scored=false,player=new Audio();
+let missedFirstPass=new Map();
+let retryUnresolved=new Set();
+let retryRoundAdded=false;
 const $=id=>document.getElementById(id),answer=$("answer");
 function c(){return cards[i]}
 let systemVoices=[];
@@ -83,33 +86,56 @@ function chooseClearVoice(){
          null;
 }
 
-function speakClearly(textToSay, listenAfter=false){
+function makeUtterance(textToSay, rate=0.68){
+  const u=new SpeechSynthesisUtterance(textToSay);
+  u.lang="en-US";
+  u.rate=rate;
+  u.pitch=1.0;
+  u.volume=1.0;
+  const voice=chooseClearVoice();
+  if(voice) u.voice=voice;
+  return u;
+}
+
+function speakWordClearly(word){
   if(!("speechSynthesis" in window)){
     alert("Audio is not available in this browser. Please open the spelling test in Safari.");
     return;
   }
 
+  if(activeRecognition){
+    try{activeRecognition.abort();}catch(e){}
+  }
   window.speechSynthesis.cancel();
 
-  const u=new SpeechSynthesisUtterance(textToSay);
-  u.lang="en-US";
-  u.rate=0.78;
-  u.pitch=1.0;
-  u.volume=1.0;
+  const first=makeUtterance(word,0.64);
+  const second=makeUtterance(word,0.58);
 
-  const voice=chooseClearVoice();
-  if(voice) u.voice=voice;
+  first.onerror=()=>alert("The voice did not start. Tap Hear Word again.");
+  second.onerror=()=>alert("The voice did not start. Tap Hear Word again.");
 
-  u.onerror=()=>{
-    alert("The voice did not start. Tap again and make sure your iPhone volume is turned up.");
+  first.onend=()=>{
+    setTimeout(()=>window.speechSynthesis.speak(second),420);
   };
 
-  if(listenAfter){
-    u.onend=()=>{
-      setTimeout(startListeningForSpelling,300);
-    };
-  }
+  second.onend=()=>{
+    // Give the phone a moment so its own voice is not picked up by the mic.
+    setTimeout(startListeningForSpelling,650);
+  };
 
+  window.speechSynthesis.speak(first);
+}
+
+function speakSentenceClearly(textToSay){
+  if(!("speechSynthesis" in window)){
+    alert("Audio is not available in this browser. Please open the spelling test in Safari.");
+    return;
+  }
+  if(activeRecognition){
+    try{activeRecognition.abort();}catch(e){}
+  }
+  window.speechSynthesis.cancel();
+  const u=makeUtterance(textToSay,0.72);
   window.speechSynthesis.speak(u);
 }
 
@@ -120,7 +146,9 @@ if("speechSynthesis" in window){
 
 function render(){
  const x=c();scored=false;$("count").textContent=`${i+1} of ${cards.length}`;$("bar").style.width=`${((i+1)/cards.length)*100}%`;
- if(x.category==="challenge"){
+ if(x.retry){
+   $("badge").textContent="↩ Practice Again"; $("badge").className="badge retry";
+ }else if(x.category==="challenge"){
    $("badge").textContent="⭐ Challenge Word"; $("badge").className="badge challenge";
  }else if(x.category==="review"){
    $("badge").textContent="🔁 Review Word"; $("badge").className="badge review";
@@ -130,8 +158,8 @@ function render(){
  $("clue").textContent=x.clue;$("sentence").textContent=x.sentence.replace(new RegExp("\\b"+x.word+"\\b","i"),"_____");$("word").textContent=x.word;
  $("reveal").style.display="none";$("feedback").textContent="";answer.value="";$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`;
 }
-$("hearWord").onclick=()=>speakClearly(c().word,true);
-$("hearSentence").onclick=()=>speakClearly(c().sentence,false);
+$("hearWord").onclick=()=>speakWordClearly(c().word);
+$("hearSentence").onclick=()=>speakSentenceClearly(c().sentence);
 
 
 
@@ -143,17 +171,17 @@ const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechReco
 let activeRecognition = null;
 
 const spokenLetterMap = new Map([
-  ["a","a"],["ay","a"],["hey","a"],
+  ["a","a"],["ay","a"],["hey","a"],["eh","a"],
   ["b","b"],["bee","b"],["be","b"],
   ["c","c"],["see","c"],["sea","c"],
   ["d","d"],["dee","d"],
-  ["e","e"],["ee","e"],
+  ["e","e"],["ee","e"],["eee","e"],
   ["f","f"],["ef","f"],["eff","f"],
-  ["g","g"],["gee","g"],
+  ["g","g"],["gee","g"],["jee","g"],
   ["h","h"],["aitch","h"],["haitch","h"],
   ["i","i"],["eye","i"],
   ["j","j"],["jay","j"],
-  ["k","k"],["kay","k"],
+  ["k","k"],["kay","k"],["kaye","k"],
   ["l","l"],["el","l"],["ell","l"],
   ["m","m"],["em","m"],
   ["n","n"],["en","n"],
@@ -165,13 +193,17 @@ const spokenLetterMap = new Map([
   ["t","t"],["tee","t"],["tea","t"],
   ["u","u"],["you","u"],["yew","u"],
   ["v","v"],["vee","v"],
-  ["w","w"],["doubleyou","w"],["double-u","w"],
+  ["w","w"],["doubleyou","w"],["double-u","w"],["doubleu","w"],
   ["x","x"],["ex","x"],
   ["y","y"],["why","y"],
   ["z","z"],["zee","z"],["zed","z"]
 ]);
 
-function parseSpelledLetters(raw){
+function normalizeAnswerForCheck(value){
+  return (value || "").toLowerCase().replace(/[^a-z]/g,"");
+}
+
+function transcriptToLetters(raw){
   let cleaned=(raw||"")
     .toLowerCase()
     .replace(/[.,!?;:]/g," ")
@@ -182,13 +214,14 @@ function parseSpelledLetters(raw){
 
   if(!cleaned) return "";
 
-  const expected = normalizeAnswerForCheck(c().word);
+  const expected=normalizeAnswerForCheck(c().word);
+  const compact=normalizeAnswerForCheck(cleaned);
 
-  // iPhone may turn clearly-spoken letters into the completed word.
-  // Accept that transcript so she is not penalized for Apple's recognition behavior.
-  if(normalizeAnswerForCheck(cleaned) === expected) return expected;
+  // iPhone often collapses a clearly-spelled sequence into the finished word.
+  // Accept that transcript because the phone may have combined the letters.
+  if(compact===expected) return expected;
 
-  const tokens = cleaned.split(/[\s-]+/).filter(Boolean);
+  const tokens=cleaned.split(/[\s-]+/).filter(Boolean);
   const letters=[];
 
   for(const token of tokens){
@@ -197,12 +230,29 @@ function parseSpelledLetters(raw){
       continue;
     }
 
-    // Some recognizers return short groups of letters together.
-    if(/^[a-z]{1,4}$/.test(token)){
+    // Sometimes Safari groups several individually spoken letters into one token.
+    if(/^[a-z]{1,5}$/.test(token)){
       for(const ch of token) letters.push(ch);
     }
   }
   return letters.join("");
+}
+
+function editDistance(a,b){
+  const m=a.length,n=b.length;
+  const dp=Array.from({length:m+1},()=>Array(n+1).fill(0));
+  for(let i=0;i<=m;i++) dp[i][0]=i;
+  for(let j=0;j<=n;j++) dp[0][j]=j;
+  for(let i=1;i<=m;i++){
+    for(let j=1;j<=n;j++){
+      dp[i][j]=Math.min(
+        dp[i-1][j]+1,
+        dp[i][j-1]+1,
+        dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1)
+      );
+    }
+  }
+  return dp[m][n];
 }
 
 function showListeningMessage(msg){
@@ -211,19 +261,66 @@ function showListeningMessage(msg){
   f.className="feedback";
 }
 
-function scoreSpokenAnswer(spelled){
+
+function recordFirstAttempt(ok){
+  if(c().retry){
+    if(ok) retryUnresolved.delete(c().word);
+    return;
+  }
+  if(!ok && !missedFirstPass.has(c().word)){
+    missedFirstPass.set(c().word,{...c()});
+  }
+}
+
+function addMissedWordsToEnd(){
+  if(retryRoundAdded || missedFirstPass.size===0) return false;
+
+  const retryWords=[...missedFirstPass.values()].map(x=>({...x,retry:true}));
+
+  // Shuffle the missed words so the practice round feels mixed.
+  for(let j=retryWords.length-1;j>0;j--){
+    const k=Math.floor(Math.random()*(j+1));
+    [retryWords[j],retryWords[k]]=[retryWords[k],retryWords[j]];
+  }
+
+  retryUnresolved=new Set(retryWords.map(x=>x.word));
+  cards.push(...retryWords);
+  retryRoundAdded=true;
+  return true;
+}
+
+function finishSpokenAttempt(candidates){
   const expected=normalizeAnswerForCheck(c().word);
-  const ok=spelled===expected;
+  const unique=[...new Set(candidates.filter(Boolean))];
+
+  if(!unique.length){
+    showListeningMessage("I couldn't make out the letters. Tap Hear Word and try again.");
+    return;
+  }
+
+  // Choose the closest transcript among the phone's alternatives,
+  // but never silently change it into the correct answer.
+  unique.sort((a,b)=>editDistance(a,expected)-editDistance(b,expected));
+  const heard=unique[0];
+  const ok=heard===expected;
   const f=$("feedback");
 
   if(!scored){
     checks++;
     scored=true;
+    recordFirstAttempt(ok);
     if(ok) correct++;
   }
 
-  f.textContent=ok ? "✅ Correct! Great job!" : "❌ Not quite. Tap Hear Word and spell it again.";
-  f.className="feedback "+(ok?"good":"bad");
+  if(ok){
+    f.textContent="✅ Correct! Great job!";
+    f.className="feedback good";
+  }else{
+    const spaced=heard.split("").join(" ");
+    f.textContent=`❌ I heard: ${spaced}. Tap Hear Word and try again.`;
+    f.className="feedback bad";
+  }
+
   $("scoreTop").textContent=`${correct} correct`;
   $("score").textContent=`Score: ${correct} correct out of ${checks} answers`;
 }
@@ -236,49 +333,57 @@ function startListeningForSpelling(){
 
   try{
     if(activeRecognition){
-      try{ activeRecognition.abort(); }catch(e){}
+      try{activeRecognition.abort();}catch(e){}
     }
 
     const recognition=new SpeechRecognitionAPI();
     activeRecognition=recognition;
     recognition.lang="en-US";
-    recognition.continuous=false;
-    recognition.interimResults=false;
+    recognition.continuous=true;
+    recognition.interimResults=true;
     recognition.maxAlternatives=5;
 
-    showListeningMessage("🎤 Listening… spell the word one letter at a time.");
+    let candidates=[];
+    let stopTimer=null;
+
+    showListeningMessage("🎤 Listening… spell each letter slowly with a tiny pause.");
+
+    function scheduleStop(delay=1800){
+      clearTimeout(stopTimer);
+      stopTimer=setTimeout(()=>{
+        try{recognition.stop();}catch(e){}
+      },delay);
+    }
+
+    recognition.onstart=()=>scheduleStop(7000);
 
     recognition.onresult=(event)=>{
-      let best="";
-      let bestLen=-1;
-      for(let a=0;a<event.results[0].length;a++){
-        const parsed=parseSpelledLetters(event.results[0][a].transcript||"");
-        if(parsed.length>bestLen){
-          best=parsed;
-          bestLen=parsed.length;
+      for(let r=event.resultIndex;r<event.results.length;r++){
+        const result=event.results[r];
+        for(let a=0;a<result.length;a++){
+          const parsed=transcriptToLetters(result[a].transcript||"");
+          if(parsed) candidates.push(parsed);
         }
       }
-
-      if(!best){
-        showListeningMessage("I couldn't make out the spelling. Tap Hear Word and try again.");
-        return;
-      }
-
-      scoreSpokenAnswer(best);
+      // Keep listening briefly after the latest recognized sound.
+      scheduleStop(1700);
     };
 
     recognition.onerror=(event)=>{
+      clearTimeout(stopTimer);
       if(event.error==="not-allowed" || event.error==="service-not-allowed"){
         showListeningMessage("Please allow microphone access for this site, or use the typing box.");
       }else if(event.error==="no-speech"){
         showListeningMessage("I didn't hear anything. Tap Hear Word and try again.");
-      }else{
+      }else if(event.error!=="aborted"){
         showListeningMessage("I couldn't hear the spelling clearly. Tap Hear Word and try again.");
       }
     };
 
     recognition.onend=()=>{
+      clearTimeout(stopTimer);
       activeRecognition=null;
+      finishSpokenAttempt(candidates);
     };
 
     recognition.start();
@@ -287,7 +392,7 @@ function startListeningForSpelling(){
   }
 }
 
-$("check").onclick=()=>{let raw=answer.value.trim();if(!raw)return;let v=normalizeAnswerForCheck(raw);let expected=normalizeAnswerForCheck(c().word);let ok=v===expected,f=$("feedback");if(!scored){checks++;scored=true;if(ok)correct++}f.textContent=ok?"✅ Correct! Great job!":"❌ Not quite. Try again!";f.className="feedback "+(ok?"good":"bad");$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`};
+$("check").onclick=()=>{let raw=answer.value.trim();if(!raw)return;let v=normalizeAnswerForCheck(raw);let expected=normalizeAnswerForCheck(c().word);let ok=v===expected,f=$("feedback");if(!scored){checks++;scored=true;recordFirstAttempt(ok);if(ok)correct++}f.textContent=ok?"✅ Correct! Great job!":"❌ Not quite. Try again!";f.className="feedback "+(ok?"good":"bad");$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`};
 $("hint").onclick=()=>{
  const letters=c().word.replace(/[^a-z]/gi,"");
  const wordCount=c().word.trim().split(/\s+/).length;
@@ -296,9 +401,31 @@ $("hint").onclick=()=>{
 };
 $("show").onclick=()=>{$("reveal").style.display=$("reveal").style.display==="block"?"none":"block"};
 $("prev").onclick=()=>{if(i>0){i--;render()}};
-$("next").onclick=()=>{if(i===cards.length-1){$("testCard").style.display="none";$("finish").style.display="block";$("finalScore").textContent=`You got ${correct} out of ${checks} correct.`}else{i++;render()}};
-$("shuffle").onclick=()=>{for(let j=cards.length-1;j>0;j--){let k=Math.floor(Math.random()*(j+1));[cards[j],cards[k]]=[cards[k],cards[j]]}i=0;correct=0;checks=0;render()};
-$("restart").onclick=()=>{cards=[...original];i=0;correct=0;checks=0;$("finish").style.display="none";$("testCard").style.display="block";render()};
+$("next").onclick=()=>{
+  if(i===cards.length-1){
+    if(addMissedWordsToEnd()){
+      i++;
+      render();
+      $("feedback").textContent="💗 Missed words have been mixed back in for another try.";
+      $("feedback").className="feedback";
+    }else{
+      $("testCard").style.display="none";
+      $("finish").style.display="block";
+      if(retryRoundAdded){
+        $("finalScore").textContent=retryUnresolved.size===0
+          ? "Great job! You practiced every missed word again and got them all."
+          : `You finished the practice round. ${retryUnresolved.size} word${retryUnresolved.size===1?"":"s"} still need a little more practice.`;
+      }else{
+        $("finalScore").textContent=`You got ${correct} out of ${checks} correct. No missed words needed to be repeated.`;
+      }
+    }
+  }else{
+    i++;
+    render();
+  }
+};
+$("shuffle").onclick=()=>{cards=[...original];for(let j=cards.length-1;j>0;j--){let k=Math.floor(Math.random()*(j+1));[cards[j],cards[k]]=[cards[k],cards[j]]}i=0;correct=0;checks=0;missedFirstPass=new Map();retryUnresolved=new Set();retryRoundAdded=false;render()};
+$("restart").onclick=()=>{cards=[...original];i=0;correct=0;checks=0;missedFirstPass=new Map();retryUnresolved=new Set();retryRoundAdded=false;$("finish").style.display="none";$("testCard").style.display="block";render()};
 answer.addEventListener("input",()=>{
   const start=answer.selectionStart, end=answer.selectionEnd;
   const lower=answer.value.toLowerCase();
