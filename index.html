@@ -238,6 +238,40 @@ function transcriptToLetters(raw){
   return letters.join("");
 }
 
+
+function collapseExtraDuplicatesToExpected(heard, expected){
+  if(!heard || !expected) return heard;
+  if(heard===expected) return heard;
+
+  // Build runs, e.g. "kkept" -> [["k",2],["e",1],["p",1],["t",1]]
+  const runs=s=>{
+    const out=[];
+    for(const ch of s){
+      if(out.length && out[out.length-1][0]===ch) out[out.length-1][1]++;
+      else out.push([ch,1]);
+    }
+    return out;
+  };
+
+  const hr=runs(heard);
+  const er=runs(expected);
+
+  if(hr.length!==er.length) return heard;
+
+  let cleaned="";
+  for(let i=0;i<hr.length;i++){
+    const [hc,hn]=hr[i], [ec,en]=er[i];
+    if(hc!==ec) return heard;
+
+    // Only trim a run if the recognizer produced MORE of the same letter
+    // than the real word needs. Never invent a missing double letter.
+    if(hn<en) return heard;
+    cleaned += hc.repeat(en);
+  }
+
+  return cleaned===expected ? cleaned : heard;
+}
+
 function editDistance(a,b){
   const m=a.length,n=b.length;
   const dp=Array.from({length:m+1},()=>Array(n+1).fill(0));
@@ -301,7 +335,8 @@ function finishSpokenAttempt(candidates){
   // Choose the closest transcript among the phone's alternatives,
   // but never silently change it into the correct answer.
   unique.sort((a,b)=>editDistance(a,expected)-editDistance(b,expected));
-  const heard=unique[0];
+  const rawHeard=unique[0];
+  const heard=collapseExtraDuplicatesToExpected(rawHeard,expected);
   const ok=heard===expected;
   const f=$("feedback");
 
@@ -316,7 +351,7 @@ function finishSpokenAttempt(candidates){
     f.textContent="✅ Correct! Great job!";
     f.className="feedback good";
   }else{
-    const spaced=heard.split("").join(" ");
+    const spaced=rawHeard.split("").join(" ");
     f.textContent=`❌ I heard: ${spaced}. Tap Hear Word and try again.`;
     f.className="feedback bad";
   }
@@ -339,14 +374,14 @@ function startListeningForSpelling(){
     const recognition=new SpeechRecognitionAPI();
     activeRecognition=recognition;
     recognition.lang="en-US";
-    recognition.continuous=true;
-    recognition.interimResults=true;
+    recognition.continuous=false;
+    recognition.interimResults=false;
     recognition.maxAlternatives=5;
 
     let candidates=[];
     let stopTimer=null;
 
-    showListeningMessage("🎤 Listening… spell each letter slowly with a tiny pause.");
+    showListeningMessage("🎤 Listening… spell each letter once, with a small pause.");
 
     function scheduleStop(delay=1800){
       clearTimeout(stopTimer);
