@@ -22,7 +22,7 @@ button{border:0;border-radius:15px;padding:14px 16px;font-size:16px;font-weight:
 .status{font-size:13px;color:var(--muted);text-align:center;margin-top:10px;min-height:18px}
 .cluebox{margin-top:18px;background:#fff8fc;border:1px solid #f2d9e7;border-radius:20px;padding:17px}.label{font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;color:#b44b81}
 .clue{font-size:19px;font-weight:850;margin-top:5px}.sentence{font-size:17px;color:var(--muted);margin-top:6px}
-.answer{width:100%;margin-top:18px;border:2px solid #edd8e6;border-radius:16px;padding:15px;font-size:22px;text-align:center;outline:none}.answer:focus{border-color:var(--lav)}
+.answer{width:100%;margin-top:18px;border:2px solid #edd8e6;border-radius:16px;padding:15px;font-size:22px;text-align:center;outline:none;text-transform:lowercase}.answer:focus{border-color:var(--lav)}
 .feedback{text-align:center;min-height:34px;margin-top:12px;font-size:17px;font-weight:900}.good{color:var(--green)}.bad{color:var(--red)}
 .reveal{display:none;text-align:center;margin-top:14px;padding:17px;border-radius:18px;background:#fff8fc;border:1px dashed #dabfd0}.word{font-size:46px;font-weight:950}
 .nav{justify-content:space-between}.nav button{flex:1}.score{margin-top:15px;padding:12px;border-radius:16px;background:#faf6fc;text-align:center;color:var(--muted);font-size:14px;font-weight:800}
@@ -299,6 +299,14 @@ $("prev").onclick=()=>{if(i>0){i--;render()}};
 $("next").onclick=()=>{if(i===cards.length-1){$("testCard").style.display="none";$("finish").style.display="block";$("finalScore").textContent=`You got ${correct} out of ${checks} correct.`}else{i++;render()}};
 $("shuffle").onclick=()=>{for(let j=cards.length-1;j>0;j--){let k=Math.floor(Math.random()*(j+1));[cards[j],cards[k]]=[cards[k],cards[j]]}i=0;correct=0;checks=0;render()};
 $("restart").onclick=()=>{cards=[...original];i=0;correct=0;checks=0;$("finish").style.display="none";$("testCard").style.display="block";render()};
+answer.addEventListener("input",()=>{
+  const start=answer.selectionStart, end=answer.selectionEnd;
+  const lower=answer.value.toLowerCase();
+  if(answer.value!==lower){
+    answer.value=lower;
+    try{answer.setSelectionRange(start,end);}catch(e){}
+  }
+});
 answer.addEventListener("keydown",e=>{if(e.key==="Enter")$("check").click()});
 render();
 </script>
