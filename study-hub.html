@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#8f72ea">
+<title>Tori's Study Hub</title>
+<style>
+:root{--ink:#34283f;--muted:#746b7b;--pink:#ff5fad;--lav:#8f72ea;--blue:#5aa7e8;--gold:#f1b84b;--line:#eadff0}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(160deg,#fff8fc,#f6f2ff 55%,#eef8ff)}
+body{min-height:100vh;min-height:100dvh}
+.app{max-width:820px;margin:auto;padding:calc(24px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom))}
+header{text-align:center;margin:8px 0 22px}
+h1{font-size:clamp(34px,9vw,54px);margin:0;line-height:1}
+.subtitle{font-size:17px;color:var(--muted);margin:10px auto 0;max-width:620px;line-height:1.45}
+.week{display:inline-block;margin-top:14px;padding:8px 12px;border-radius:999px;background:white;border:1px solid var(--line);font-weight:800;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line);border-radius:26px;padding:22px;min-height:260px;box-shadow:0 16px 45px rgba(63,38,88,.10);transition:.15s}
+.card:active{transform:scale(.985)}
+.icon{font-size:48px}
+.label{font-size:12px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;margin-top:14px;color:var(--lav)}
+.card h2{font-size:25px;margin:5px 0 8px}
+.card p{color:var(--muted);line-height:1.45;margin:0 0 18px}
+.go{margin-top:auto;padding:12px 14px;border-radius:14px;text-align:center;font-weight:900;color:#fff}
+.spell .go{background:linear-gradient(135deg,var(--pink),var(--lav))}
+.grammar .go{background:linear-gradient(135deg,var(--lav),var(--blue))}
+.bible .go{background:linear-gradient(135deg,#e09935,var(--gold))}
+.note{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;text-align:center;color:var(--muted);line-height:1.45}
+.note b{color:var(--ink)}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.card{min-height:0}.icon{font-size:42px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <h1>Tori's Study Hub ✨</h1>
+  <div class="subtitle">One place for this week's spelling, grammar, and Bible verse practice.</div>
+  <div class="week">Week of August 24–28</div>
+</header>
+
+<div class="grid">
+  <a class="card spell" href="index.html">
+    <div class="icon">📝</div>
+    <div class="label">Spelling</div>
+    <h2>Spelling Practice</h2>
+    <p>Use Tori's current spelling game with word audio, clues, sentences, and missed-word review.</p>
+    <div class="go">Practice Spelling →</div>
+  </a>
+
+  <a class="card grammar" href="subject-predicate.html">
+    <div class="icon">📚</div>
+    <div class="label">English</div>
+    <h2>Grammar Practice</h2>
+    <p>Subjects, predicates, sentence fragments, sentence types, compound subjects, and compound sentences.</p>
+    <div class="go">Practice Grammar →</div>
+  </a>
+
+  <a class="card bible" href="bible-verse.html">
+    <div class="icon">📖</div>
+    <div class="label">Bible & Memory</div>
+    <h2>2 Timothy 3:16–17</h2>
+    <p>Listen, practice by chunks, fill in missing words, put the verse in order, and try it from memory.</p>
+    <div class="go">Practice Bible Verse →</div>
+  </a>
+</div>
+
+<div class="note"><b>Bible & Memory Verse Test:</b> Friday, August 28</div>
+</div>
+</body>
+</html>

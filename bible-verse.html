@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#e5a23b">
+<title>Tori's Bible Verse Practice</title>
+<style>
+:root{--ink:#342f2a;--muted:#746f69;--cream:#fffaf0;--gold:#e1a13b;--deep:#9f6720;--green:#24835a;--red:#bd4550;--line:#efdfc3}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(165deg,#fffdf8,#fff6e7 58%,#f7f1ff)}
+body{min-height:100vh;min-height:100dvh}
+.app{max-width:850px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 14px calc(36px + env(safe-area-inset-bottom))}
+.hub{display:inline-block;text-decoration:none;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 13px;font-weight:850}
+header{text-align:center;margin:14px 0 18px}
+h1{font-size:clamp(31px,8vw,48px);margin:0}
+.subtitle{color:var(--muted);margin:8px auto 0;line-height:1.4}
+.ref{font-size:25px;font-weight:950;color:var(--deep);margin-top:10px}
+.testdate{display:inline-block;margin-top:10px;background:#fff;border:1px solid var(--line);padding:7px 11px;border-radius:999px;font-size:13px;font-weight:850}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap;border:1px solid var(--line);background:#fff;padding:11px 13px;border-radius:999px;font-weight:850;color:var(--ink)}
+.tab.active{background:var(--deep);color:#fff;border-color:var(--deep)}
+.panel{display:none;background:#fff;border:1px solid var(--line);border-radius:26px;padding:22px;box-shadow:0 16px 45px rgba(88,62,29,.09)}
+.panel.active{display:block}
+.panel h2{margin:0 0 8px;font-size:25px}
+.help{color:var(--muted);line-height:1.45;margin:0 0 16px}
+.verse{font-size:clamp(21px,5vw,28px);line-height:1.65;font-weight:750;background:var(--cream);padding:18px;border-radius:20px;border:1px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+button{font:inherit;border:0;border-radius:14px;padding:12px 15px;font-weight:900;background:#f3ebdf;color:var(--ink);min-height:46px}
+.primary{background:linear-gradient(135deg,#d78c2c,#efbb55);color:#fff}
+.secondary{background:#fff;border:1px solid var(--line)}
+.chunk{font-size:clamp(23px,6vw,31px);font-weight:850;line-height:1.45;text-align:center;padding:26px 12px}
+.counter{text-align:center;color:var(--muted);font-weight:800;margin-bottom:6px}
+.cover{filter:blur(7px);user-select:none}
+.blank-wrap{font-size:20px;line-height:2.25;background:var(--cream);border:1px solid var(--line);padding:16px;border-radius:18px}
+.blank{display:inline-block;width:105px;max-width:32vw;border:0;border-bottom:2px solid #b18b56;background:#fff9;border-radius:6px 6px 0 0;padding:5px 6px;font-size:17px;text-align:center;outline:none}
+.blank.good{border-color:var(--green);background:#e9f8ef}
+.blank.bad{border-color:var(--red);background:#fff0f1}
+.feedback{margin-top:14px;padding:12px;border-radius:14px;display:none;font-weight:850;line-height:1.4}
+.feedback.good{display:block;background:#e9f8ef;color:#196743}
+.feedback.bad{display:block;background:#fff0f1;color:#8f2833}
+.initials{font-size:clamp(21px,5vw,29px);line-height:1.8;letter-spacing:.03em;background:var(--cream);border:1px solid var(--line);padding:18px;border-radius:18px;font-weight:850}
+.order-bank,.answer-bank{display:grid;gap:9px;margin-top:12px}
+.order-card{text-align:left;border:2px solid var(--line);background:#fff;padding:13px;border-radius:14px}
+.answer-chip{background:#fff6e5;border:1px solid var(--line);border-radius:13px;padding:12px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.answer-chip button{padding:6px 10px;min-height:0;background:#fff}
+textarea{width:100%;min-height:180px;border:2px solid var(--line);border-radius:18px;padding:15px;font:inherit;font-size:18px;line-height:1.5;resize:vertical;outline:none}
+textarea:focus{border-color:#d7a252}
+.scorebig{font-size:42px;font-weight:950;color:var(--deep);text-align:center;margin:10px 0}
+.tip{margin-top:16px;background:#fff8ea;border:1px dashed #dcb875;padding:13px;border-radius:15px;color:#6b572f;line-height:1.4}
+@media(max-width:560px){.panel{padding:17px} .row button{flex:1 1 45%}}
+</style>
+</head>
+<body>
+<div class="app">
+<a class="hub" href="study-hub.html">← Study Hub</a>
+<header>
+<h1>Bible Verse Practice 📖</h1>
+<div class="ref">2 Timothy 3:16–17</div>
+<div class="subtitle">Practice it a few different ways until the words begin to feel automatic.</div>
+<div class="testdate">Test: Friday, August 28</div>
+</header>
+
+<div class="tabs">
+<button class="tab active" data-panel="read">1. Read & Listen</button>
+<button class="tab" data-panel="chunks">2. Chunks</button>
+<button class="tab" data-panel="blanks">3. Missing Words</button>
+<button class="tab" data-panel="letters">4. First Letters</button>
+<button class="tab" data-panel="order">5. Put in Order</button>
+<button class="tab" data-panel="memory">6. From Memory</button>
+</div>
+
+<section class="panel active" id="read">
+<h2>Read & Listen</h2>
+<p class="help">Read along while the phone says the verse. Then try saying it with the voice.</p>
+<div class="verse">“All Scripture is inspired by God, and is profitable for teaching, for rebuking, for correcting, for training in righteousness, so that the man of God may be complete, equipped for every good work.”</div>
+<div class="row">
+<button class="primary" id="speakVerse">🔊 Listen to Verse</button>
+<button class="secondary" id="speakSlow">🐢 Listen Slowly</button>
+</div>
+<div class="tip"><b>Memory trick:</b> Notice the pattern: <i>teaching → rebuking → correcting → training</i>. Those four action words are the middle of the verse.</div>
+</section>
+
+<section class="panel" id="chunks">
+<h2>Learn It in Chunks</h2>
+<p class="help">Say each chunk out loud three times. Then hide it and try to say it without looking.</p>
+<div class="counter" id="chunkCount"></div>
+<div class="verse chunk" id="chunkText"></div>
+<div class="row">
+<button id="chunkPrev">← Back</button>
+<button id="chunkHide">🙈 Hide Words</button>
+<button class="primary" id="chunkNext">Next Chunk →</button>
+</div>
+</section>
+
+<section class="panel" id="blanks">
+<h2>Fill in the Missing Words</h2>
+<p class="help">Start with Easy. When that feels comfortable, switch to Hard.</p>
+<div class="row">
+<button class="primary" id="easyBlank">Easy</button>
+<button id="hardBlank">Hard</button>
+<button id="newBlank">New Blanks</button>
+</div>
+<div class="blank-wrap" id="blankArea"></div>
+<div class="row"><button class="primary" id="checkBlanks">Check My Answers</button><button id="showBlanks">Show Answers</button></div>
+<div class="feedback" id="blankFeedback"></div>
+</section>
+
+<section class="panel" id="letters">
+<h2>First-Letter Challenge</h2>
+<p class="help">Each letter is the first letter of a word. Use the letters to help you say the whole verse.</p>
+<div class="initials" id="initials"></div>
+<div class="row">
+<button class="primary" id="listenLetters">🔊 Hear Verse</button>
+<button id="revealLetters">Show Full Verse</button>
+</div>
+<div class="verse" id="lettersReveal" style="display:none;margin-top:14px">“All Scripture is inspired by God, and is profitable for teaching, for rebuking, for correcting, for training in righteousness, so that the man of God may be complete, equipped for every good work.”</div>
+</section>
+
+<section class="panel" id="order">
+<h2>Put the Verse in Order</h2>
+<p class="help">Tap the chunks in the correct order. If you make a mistake, tap a chosen chunk to send it back.</p>
+<div class="answer-bank" id="chosen"></div>
+<div class="order-bank" id="orderBank"></div>
+<div class="row"><button class="primary" id="checkOrder">Check Order</button><button id="resetOrder">Shuffle Again</button></div>
+<div class="feedback" id="orderFeedback"></div>
+</section>
+
+<section class="panel" id="memory">
+<h2>Try It From Memory</h2>
+<p class="help">Type the verse without looking. Capitalization and punctuation do not count — the words do.</p>
+<textarea id="memoryText" placeholder="All Scripture is..."></textarea>
+<div class="row"><button class="primary" id="checkMemory">Check My Verse</button><button id="clearMemory">Clear</button></div>
+<div id="memoryScore"></div>
+<div class="feedback" id="memoryFeedback"></div>
+</section>
+</div>
+
+<script>
+const verse="All Scripture is inspired by God, and is profitable for teaching, for rebuking, for correcting, for training in righteousness, so that the man of God may be complete, equipped for every good work.";
+const chunks=["All Scripture is inspired by God,", "and is profitable for teaching,", "for rebuking, for correcting,", "for training in righteousness,", "so that the man of God may be complete,", "equipped for every good work."];
+const tabs=[...document.querySelectorAll(".tab")];
+const panels=[...document.querySelectorAll(".panel")];
+
+tabs.forEach(t=>t.addEventListener("click",()=>{
+  tabs.forEach(x=>x.classList.remove("active"));
+  panels.forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  document.getElementById(t.dataset.panel).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}));
+
+function say(text,rate=.78){
+  if(!("speechSynthesis" in window)){ alert("Audio is not available in this browser."); return; }
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="en-US";u.rate=rate;u.pitch=1;
+  const voices=speechSynthesis.getVoices();
+  const v=voices.find(v=>/Samantha|Ava|Allison|Susan/i.test(v.name)&&/^en/i.test(v.lang)) || voices.find(v=>/^en-US/i.test(v.lang));
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+document.getElementById("speakVerse").onclick=()=>say("Second Timothy, chapter three, verses sixteen through seventeen. "+verse,.78);
+document.getElementById("speakSlow").onclick=()=>say(verse,.60);
+document.getElementById("listenLetters").onclick=()=>say(verse,.72);
+
+// chunks
+let ci=0, hidden=false;
+function renderChunk(){
+  document.getElementById("chunkCount").textContent=`Chunk ${ci+1} of ${chunks.length}`;
+  const box=document.getElementById("chunkText");
+  box.textContent=chunks[ci];
+  box.classList.toggle("cover",hidden);
+  document.getElementById("chunkHide").textContent=hidden?"👀 Show Words":"🙈 Hide Words";
+}
+document.getElementById("chunkPrev").onclick=()=>{ci=(ci-1+chunks.length)%chunks.length;hidden=false;renderChunk()};
+document.getElementById("chunkNext").onclick=()=>{ci=(ci+1)%chunks.length;hidden=false;renderChunk()};
+document.getElementById("chunkHide").onclick=()=>{hidden=!hidden;renderChunk()};
+renderChunk();
+
+// blanks
+const rawWords=verse.split(" ");
+let blankMode="easy";
+function clean(w){return w.toLowerCase().replace(/[^a-z]/g,"")}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function buildBlanks(){
+  const rate=blankMode==="easy"?7:3;
+  const offset=Math.floor(Math.random()*rate);
+  const protectedWords=new Set([0]);
+  let out="";
+  rawWords.forEach((w,i)=>{
+    const shouldBlank = !protectedWords.has(i) && ((i+offset)%rate===0);
+    const punctuation=(w.match(/[^A-Za-z]+$/)||[""])[0];
+    if(shouldBlank){
+      out += `<input class="blank" data-answer="${clean(w)}" aria-label="missing word">`+escapeHTML(punctuation)+" ";
+    }else{
+      out += escapeHTML(w)+" ";
+    }
+  });
+  document.getElementById("blankArea").innerHTML=out;
+  const f=document.getElementById("blankFeedback");f.className="feedback";f.textContent="";
+}
+document.getElementById("easyBlank").onclick=()=>{blankMode="easy";buildBlanks()};
+document.getElementById("hardBlank").onclick=()=>{blankMode="hard";buildBlanks()};
+document.getElementById("newBlank").onclick=buildBlanks;
+document.getElementById("checkBlanks").onclick=()=>{
+  const inputs=[...document.querySelectorAll(".blank")];let right=0;
+  inputs.forEach(inp=>{
+    const ok=clean(inp.value)===inp.dataset.answer;
+    inp.classList.toggle("good",ok);inp.classList.toggle("bad",!ok);if(ok)right++;
+  });
+  const f=document.getElementById("blankFeedback");
+  if(right===inputs.length){f.className="feedback good";f.textContent="Perfect! Every missing word is correct."}
+  else{f.className="feedback bad";f.textContent=`You have ${right} of ${inputs.length} correct. Fix the red blanks and check again.`}
+};
+document.getElementById("showBlanks").onclick=()=>{
+  document.querySelectorAll(".blank").forEach(inp=>{inp.value=inp.dataset.answer;inp.classList.remove("bad");inp.classList.add("good")});
+};
+buildBlanks();
+
+// first letters
+const wordTokens=verse.match(/[A-Za-z]+/g);
+document.getElementById("initials").textContent=wordTokens.map(w=>w[0].toUpperCase()+".").join(" ");
+document.getElementById("revealLetters").onclick=()=>{
+  const r=document.getElementById("lettersReveal");
+  const show=r.style.display==="none";r.style.display=show?"block":"none";
+  document.getElementById("revealLetters").textContent=show?"Hide Full Verse":"Show Full Verse";
+};
+
+// order
+let remaining=[],chosen=[];
+function shuffled(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function resetOrder(){
+  remaining=shuffled(chunks.map((text,index)=>({text,index}))); chosen=[];
+  document.getElementById("orderFeedback").className="feedback";
+  renderOrder();
+}
+function renderOrder(){
+  const bank=document.getElementById("orderBank"), ch=document.getElementById("chosen");
+  bank.innerHTML="";ch.innerHTML="";
+  chosen.forEach((x,pos)=>{
+    const d=document.createElement("div");d.className="answer-chip";
+    d.innerHTML=`<span><b>${pos+1}.</b> ${escapeHTML(x.text)}</span><button>↩</button>`;
+    d.querySelector("button").onclick=()=>{remaining.push(chosen.splice(pos,1)[0]);renderOrder()};
+    ch.appendChild(d);
+  });
+  remaining.forEach((x,pos)=>{
+    const b=document.createElement("button");b.className="order-card";b.textContent=x.text;
+    b.onclick=()=>{chosen.push(remaining.splice(pos,1)[0]);renderOrder()};
+    bank.appendChild(b);
+  });
+}
+document.getElementById("checkOrder").onclick=()=>{
+  const f=document.getElementById("orderFeedback");
+  if(chosen.length!==chunks.length){f.className="feedback bad";f.textContent="Choose all six chunks first.";return}
+  const ok=chosen.every((x,i)=>x.index===i);
+  f.className="feedback "+(ok?"good":"bad");
+  f.textContent=ok?"Yes! The whole verse is in the correct order.":"Not quite. One or more chunks are out of order. Try again.";
+};
+document.getElementById("resetOrder").onclick=resetOrder;
+resetOrder();
+
+// memory
+function normalizedWords(s){return (s.toLowerCase().match(/[a-z]+/g)||[])}
+document.getElementById("checkMemory").onclick=()=>{
+  const expected=normalizedWords(verse), got=normalizedWords(document.getElementById("memoryText").value);
+  let positional=0;for(let i=0;i<expected.length;i++) if(got[i]===expected[i]) positional++;
+  const pct=Math.round(positional/expected.length*100);
+  document.getElementById("memoryScore").innerHTML=`<div class="scorebig">${pct}%</div>`;
+  const f=document.getElementById("memoryFeedback");
+  if(pct===100){f.className="feedback good";f.textContent="Amazing — every word is in the correct place!"}
+  else if(pct>=85){f.className="feedback good";f.textContent="Very close! Read the verse once, then try it again without looking."}
+  else{
+    let first=0;while(first<expected.length&&got[first]===expected[first])first++;
+    const hint=first<expected.length?`The next expected word is “${expected[first]}.”`:"";
+    f.className="feedback bad";f.textContent=`Keep going. ${hint}`;
+  }
+};
+document.getElementById("clearMemory").onclick=()=>{
+  document.getElementById("memoryText").value="";
+  document.getElementById("memoryScore").innerHTML="";
+  document.getElementById("memoryFeedback").className="feedback";
+};
+</script>
+</body>
+</html>
