@@ -5,472 +5,307 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ff6fb5">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Tori Spelling">
-<title>Tori's Spelling Test</title>
+<meta name="apple-mobile-web-app-title" content="Tori Study Hub">
+<title>Tori's Study Hub</title>
 <style>
-:root{--pink:#ff5fad;--lav:#8f72ea;--ink:#34283f;--muted:#756a7e;--line:#f0d8e7;--green:#178459;--red:#c43b4b}
-*{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(160deg,#fff8fc,#fff0f8 55%,#f4efff)}
-body{min-height:100vh;min-height:100dvh}.app{max-width:760px;margin:auto;padding:calc(20px + env(safe-area-inset-top)) 14px calc(35px + env(safe-area-inset-bottom))}
-header{text-align:center;margin-bottom:16px}h1{margin:0;font-size:clamp(30px,8vw,46px)}.subtitle{margin:7px 0 0;color:var(--muted)}
-.progress{height:11px;background:#eadff0;border-radius:999px;overflow:hidden;margin-top:18px}.progress>div{height:100%;background:linear-gradient(90deg,var(--pink),var(--lav))}
+:root{--pink:#ff5fad;--lav:#8f72ea;--ink:#34283f;--muted:#756a7e;--line:#f0d8e7;--green:#178459;--red:#c43b4b;--gold:#a06d12}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(160deg,#fff8fc,#fff0f8 55%,#f4efff)}
+body{min-height:100vh;min-height:100dvh}
+.app{max-width:820px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 14px calc(35px + env(safe-area-inset-bottom))}
+header{text-align:center;margin-bottom:14px} h1{margin:0;font-size:clamp(30px,8vw,46px)} .subtitle{margin:7px 0;color:var(--muted)}
+.schedule{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.day{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;text-align:center;font-size:12px;box-shadow:0 8px 25px rgba(78,45,91,.06)}
+.day b{display:block;font-size:14px;margin-bottom:3px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0 16px}
+.tab{border:0;border-radius:14px;padding:11px 7px;font-size:13px;font-weight:900;background:#f2e9f5;color:var(--ink)}
+.tab.active{background:linear-gradient(135deg,var(--pink),var(--lav));color:white}
+.panel{display:none} .panel.active{display:block}
+.card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:20px;box-shadow:0 18px 50px rgba(78,45,91,.12)}
+.progress{height:10px;background:#eadff0;border-radius:999px;overflow:hidden;margin-top:14px} .progress>div{height:100%;background:linear-gradient(90deg,var(--pink),var(--lav))}
 .meta{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;font-weight:800;margin:8px 2px 10px}
-.card{background:#fff;border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:0 18px 50px rgba(78,45,91,.12)}
-.badge{display:inline-block;padding:7px 11px;border-radius:999px;background:#ffe6f3;color:#bd3d80;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.badge.challenge{background:#f0eaff;color:#7357ca}.badge.review{background:#eaf8ff;color:#2e6f91}.badge.retry{background:#fff3d9;color:#9a6916}
-.hero{text-align:center;padding:10px 0 2px}.speaker{font-size:62px;margin:8px 0 4px}.hero h2{margin:0;font-size:24px}.hero p{margin:6px 0;color:var(--muted)}
-.row,.nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
-button{border:0;border-radius:15px;padding:14px 16px;font-size:16px;font-weight:900;background:#f2e9f5;color:var(--ink);min-height:48px;touch-action:manipulation}button:active{transform:scale(.98)}.primary{background:linear-gradient(135deg,var(--pink),var(--lav));color:#fff}
-.status{font-size:13px;color:var(--muted);text-align:center;margin-top:10px;min-height:18px}
-.cluebox{margin-top:18px;background:#fff8fc;border:1px solid #f2d9e7;border-radius:20px;padding:17px}.label{font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;color:#b44b81}
-.clue{font-size:19px;font-weight:850;margin-top:5px}.sentence{font-size:17px;color:var(--muted);margin-top:6px}
-.answer{width:100%;margin-top:18px;border:2px solid #edd8e6;border-radius:16px;padding:15px;font-size:22px;text-align:center;outline:none;text-transform:lowercase}.answer:focus{border-color:var(--lav)}
-.feedback{text-align:center;min-height:34px;margin-top:12px;font-size:17px;font-weight:900}.good{color:var(--green)}.bad{color:var(--red)}
-.reveal{display:none;text-align:center;margin-top:14px;padding:17px;border-radius:18px;background:#fff8fc;border:1px dashed #dabfd0}.word{font-size:46px;font-weight:950}
-.nav{justify-content:space-between}.nav button{flex:1}.score{margin-top:15px;padding:12px;border-radius:16px;background:#faf6fc;text-align:center;color:var(--muted);font-size:14px;font-weight:800}
-.finish{display:none;text-align:center}.finish .big{font-size:64px}
-@media(max-width:520px){.card{padding:18px}.row button{flex:1 1 46%}}
+.badge{display:inline-block;padding:7px 11px;border-radius:999px;background:#ffe6f3;color:#bd3d80;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+.badge.challenge{background:#f0eaff;color:#7357ca} .badge.review{background:#eaf8ff;color:#2e6f91} .badge.retry{background:#fff3d9;color:#9a6916}
+.hero{text-align:center;padding:7px 0 2px} .speaker{font-size:52px;margin:4px 0} .hero h2{margin:0;font-size:24px} .hero p{margin:6px 0;color:var(--muted)}
+.row,.nav{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+button{border:0;border-radius:14px;padding:13px 15px;font-size:15px;font-weight:900;background:#f2e9f5;color:var(--ink);min-height:46px;touch-action:manipulation} button:active{transform:scale(.98)} .primary{background:linear-gradient(135deg,var(--pink),var(--lav));color:#fff}
+.cluebox{margin-top:16px;background:#fff8fc;border:1px solid #f2d9e7;border-radius:19px;padding:15px}
+.label{font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;color:#b44b81}
+.clue{font-size:18px;font-weight:850;margin-top:5px} .sentence{font-size:16px;color:var(--muted);margin-top:6px}
+.answer{width:100%;margin-top:16px;border:2px solid #edd8e6;border-radius:15px;padding:14px;font-size:21px;text-align:center;outline:none;text-transform:lowercase}
+.answer:focus{border-color:var(--lav)} .feedback{text-align:center;min-height:30px;margin-top:10px;font-size:16px;font-weight:900} .good{color:var(--green)} .bad{color:var(--red)}
+.reveal{display:none;text-align:center;margin-top:12px;padding:15px;border-radius:17px;background:#fff8fc;border:1px dashed #dabfd0} .word{font-size:40px;font-weight:950}
+.nav{justify-content:space-between} .nav button{flex:1} .score{margin-top:13px;padding:11px;border-radius:15px;background:#faf6fc;text-align:center;color:var(--muted);font-size:14px;font-weight:800}
+.sectionTitle{margin:0 0 6px;font-size:26px} .muted{color:var(--muted)} .notice{background:#fff8e7;border:1px solid #f2ddb4;border-radius:16px;padding:12px;color:#6e531f;font-size:13px;margin-bottom:14px}
+.verseBox{font-size:25px;line-height:1.6;font-weight:800;text-align:center;padding:20px 8px} .verseRef{text-align:center;font-weight:900;color:#7357ca}
+.memoryInput{width:100%;min-height:135px;border:2px solid #edd8e6;border-radius:16px;padding:14px;font-size:17px;line-height:1.5;outline:none}
+.levels{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.blankWord{display:inline-block;min-width:42px;border-bottom:2px solid #9f8aac;color:transparent;margin:0 2px;user-select:none}
+.quizCard{background:#fff8fc;border:1px solid #f0d7e7;border-radius:18px;padding:16px;margin-top:12px}
+.qnum{font-size:12px;font-weight:950;color:#b44b81;text-transform:uppercase} .qtext{font-size:18px;font-weight:850;margin:5px 0 12px}
+.option{display:block;width:100%;text-align:left;margin:7px 0;background:white;border:1px solid #ead9e5;font-weight:700}
+.option.selected{outline:2px solid var(--lav)} .explain{display:none;margin-top:10px;padding:10px;border-radius:12px;background:#f7f1fa;color:var(--muted);font-size:14px}
+.readingScore{text-align:center;font-weight:900;margin-top:14px}
+.placeholder{text-align:center;padding:28px 10px} .placeholder .big{font-size:54px}
+footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
+@media(max-width:560px){.schedule{grid-template-columns:1fr} .tabs{grid-template-columns:repeat(2,1fr)} .card{padding:17px} .row button{flex:1 1 45%}}
 </style>
 </head>
 <body>
 <div class="app">
 <header>
-<h1>Tori's Spelling Test 💗</h1>
-<p class="subtitle">Spelling List 2 • Revised 20-word list • Hear the word, then spell it aloud or type it.</p>
+<h1>Tori's Study Hub 💗</h1>
+<p class="subtitle">This week's reading, math, spelling, and Bible verse practice</p>
+<div class="schedule">
+  <div class="day"><b>Monday</b>Down the Rabbit-Hole Quiz</div>
+  <div class="day"><b>Tuesday</b>Math Test</div>
+  <div class="day"><b>Wednesday</b>Spelling List 3 Test</div>
+</div>
+</header>
+
+<div class="tabs">
+<button class="tab active" data-tab="spelling">📝 Spelling</button>
+<button class="tab" data-tab="reading">📖 Reading</button>
+<button class="tab" data-tab="bible">✝️ Bible Verse</button>
+<button class="tab" data-tab="math">➗ Math</button>
+</div>
+
+<section id="spelling" class="panel active">
+<div class="card">
+<h2 class="sectionTitle">Spelling List 3</h2>
 <div class="progress"><div id="bar"></div></div>
 <div class="meta"><span id="count"></span><span id="scoreTop">0 correct</span></div>
-</header>
-<section class="card" id="testCard">
 <span class="badge" id="badge">Spelling Word</span>
-<div class="hero"><div class="speaker">🔊</div><h2>Listen and spell</h2><p>Tap Hear Word. It will say the word twice, then listen for her spelling.</p></div>
+<div class="hero"><div class="speaker">🔊</div><h2>Listen and spell</h2><p>Tap Hear Word. It says the word twice, then listens for the spelling. Typing still works too.</p></div>
 <div class="row"><button class="primary" id="hearWord">🔊 Hear Word</button><button id="hearSentence">🗣️ Hear Sentence</button></div>
-<div class="cluebox"><div class="label">Clue</div><div class="clue" id="clue"></div><div class="label" style="margin-top:14px">Sentence</div><div class="sentence" id="sentence"></div></div>
+<div class="cluebox"><div class="label">Clue</div><div class="clue" id="clue"></div><div class="label" style="margin-top:13px">Sentence</div><div class="sentence" id="sentence"></div></div>
 <input id="answer" class="answer" placeholder="Type the spelling…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" writingsuggestions="false" enterkeyhint="done">
-<div class="row">
-  <button class="primary" id="check">Check Typed Answer</button>
-  <button id="hint">💡 Hint</button>
-  <button id="show">Show Word</button>
-</div>
-<div id="feedback" class="feedback"></div><div id="reveal" class="reveal"><div id="word" class="word"></div></div>
+<div class="row"><button class="primary" id="check">Check Typed Answer</button><button id="hint">💡 Hint</button><button id="show">Show Word</button></div>
+<div id="feedback" class="feedback"></div>
+<div id="reveal" class="reveal"><div id="word" class="word"></div></div>
 <div class="nav"><button id="prev">← Back</button><button id="shuffle">🔀 Shuffle</button><button class="primary" id="next">Next →</button></div>
 <div id="score" class="score">Score: 0 correct out of 0 answers</div>
-</section>
-<section class="card finish" id="finish"><div class="big">🌟</div><h2>Great job!</h2><p id="finalScore"></p><button class="primary" id="restart">Start Over</button></section>
 </div>
+</section>
+
+<section id="reading" class="panel">
+<div class="card">
+<h2 class="sectionTitle">Down the Rabbit-Hole Practice</h2>
+<p class="muted">10 comprehension questions for Monday's quiz.</p>
+<div class="notice">These questions use the standard Chapter 1 of <i>Alice's Adventures in Wonderland</i>. If the class has a shortened or adapted version, upload those pages and the questions can be matched exactly.</div>
+<div id="readingQuestions"></div>
+<div id="readingScore" class="readingScore"></div>
+<div class="row"><button class="primary" id="checkReading">Check Reading Quiz</button><button id="resetReading">Try Again</button></div>
+</div>
+</section>
+
+<section id="bible" class="panel">
+<div class="card">
+<h2 class="sectionTitle">Bible Verse Practice</h2>
+<div class="verseRef">Isaiah 40:8 (CSB)</div>
+<div id="verseDisplay" class="verseBox">The grass withers, the flowers fade, but the word of our God remains forever.</div>
+<div class="levels">
+<button data-hide="0">Show All</button>
+<button data-hide="4">Hide 4 Words</button>
+<button data-hide="8">Hide 8 Words</button>
+<button data-hide="12">Hard Mode</button>
+</div>
+<div class="cluebox">
+<div class="label">Type From Memory</div>
+<textarea id="verseInput" class="memoryInput" placeholder="Type the verse here from memory…" autocorrect="off" spellcheck="false"></textarea>
+<div class="row"><button class="primary" id="checkVerse">Check Verse</button><button id="clearVerse">Clear</button></div>
+<div id="verseFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<section id="math" class="panel">
+<div class="card placeholder">
+<div class="big">➗</div>
+<h2>Math Test Tuesday</h2>
+<p class="muted">Upload the study guide when she receives it. This tab is ready for her math practice questions.</p>
+</div>
+</section>
+
+<footer>Study Hub • Spelling List 3 • Isaiah 40:8 (CSB)</footer>
+</div>
+
 <script>
-const original=[{"word":"kept","clue":"Held onto or continued to have something.","sentence":"She kept her favorite drawing in a folder.","category":"regular"},{"word":"speech","clue":"Words spoken to a group of people.","sentence":"He gave a short speech in front of the class.","category":"regular"},{"word":"breath","clue":"The air you take into or let out of your lungs.","sentence":"Take a deep breath before you begin.","category":"regular"},{"word":"hello","clue":"A word used to greet someone.","sentence":"She smiled and said hello to her teacher.","category":"regular"},{"word":"reason","clue":"An explanation for why something happened.","sentence":"Tell me the reason you chose that answer.","category":"regular"},{"word":"squeeze","clue":"To press something firmly from the sides.","sentence":"Squeeze the sponge to get the water out.","category":"regular"},{"word":"else","clue":"In addition to or instead of something.","sentence":"Does anyone else want to play?","category":"regular"},{"word":"lesson","clue":"Something taught or learned.","sentence":"Today's math lesson was about fractions.","category":"regular"},{"word":"meant","clue":"Intended or had a particular meaning.","sentence":"I meant to put my book in my backpack.","category":"regular"},{"word":"sweater","clue":"A warm piece of clothing worn on the upper body.","sentence":"She wore a sweater because it was chilly.","category":"regular"},{"word":"breathe","clue":"To take air into and let it out of your lungs.","sentence":"Remember to breathe slowly and stay calm.","category":"regular"},{"word":"freedom","clue":"The ability to act, speak, or choose freely.","sentence":"The flag can represent freedom.","category":"regular"},{"word":"repeat","clue":"To say or do something again.","sentence":"Please repeat the directions one more time.","category":"regular"},{"word":"wealth","clue":"A large amount of money, valuable things, or resources.","sentence":"The story described a family with great wealth.","category":"regular"},{"word":"length","clue":"The measurement of how long something is.","sentence":"We measured the length of the table.","category":"regular"},{"word":"leather","clue":"A strong material made from animal hide.","sentence":"The brown belt was made of leather.","category":"regular"},{"word":"waste","clue":"To use something carelessly or unnecessarily.","sentence":"Try not to waste food or water.","category":"review"},{"word":"master","clue":"To learn or do something very well.","sentence":"She practiced until she could master the skill.","category":"review"},{"word":"a lot","clue":"A large amount or a great number.","sentence":"We learned a lot during science class.","category":"challenge"},{"word":"all right","clue":"Okay, acceptable, or satisfactory.","sentence":"It is all right to ask for help.","category":"challenge"}];
-let cards=[...original],i=0,correct=0,checks=0,scored=false,player=new Audio();
-let missedFirstPass=new Map();
-let retryUnresolved=new Set();
-let retryRoundAdded=false;
-const $=id=>document.getElementById(id),answer=$("answer");
-function c(){return cards[i]}
+const spellingData=[{"word":"size","clue":"How big or small something is.","sentence":"The size of the box made it easy to carry.","category":"regular"},{"word":"visit","clue":"To go see a person or place for a period of time.","sentence":"We will visit our grandparents this weekend.","category":"regular"},{"word":"polite","clue":"Showing good manners and respect.","sentence":"It is polite to say please and thank you.","category":"regular"},{"word":"deny","clue":"To say that something is not true.","sentence":"He did not deny that he ate the last cookie.","category":"regular"},{"word":"pride","clue":"A feeling of satisfaction about something done well.","sentence":"She felt pride after finishing her project.","category":"regular"},{"word":"style","clue":"A particular way something looks or is done.","sentence":"Her dance style was smooth and confident.","category":"regular"},{"word":"finger","clue":"One of the five parts at the end of your hand.","sentence":"She pointed with her finger to the answer.","category":"regular"},{"word":"delight","clue":"A feeling of great pleasure or happiness.","sentence":"The surprise party filled her with delight.","category":"regular"},{"word":"wildlife","clue":"Animals and plants living naturally in the wild.","sentence":"We saw lots of wildlife at the nature park.","category":"regular"},{"word":"drive","clue":"To operate a vehicle or cause something to move forward.","sentence":"My mom will drive us to school.","category":"regular"},{"word":"liquid","clue":"A substance that flows and takes the shape of its container.","sentence":"Water is a liquid.","category":"regular"},{"word":"kitchen","clue":"The room where food is prepared or cooked.","sentence":"We made breakfast in the kitchen.","category":"regular"},{"word":"pilot","clue":"A person who flies an aircraft.","sentence":"The pilot safely landed the airplane.","category":"regular"},{"word":"twilight","clue":"The time when the sky is partly light before sunrise or after sunset.","sentence":"The sky turned purple at twilight.","category":"regular"},{"word":"rely","clue":"To depend on someone or something.","sentence":"You can rely on a good friend to help.","category":"regular"},{"word":"type","clue":"A kind or category of something, or to enter words with a keyboard.","sentence":"What type of book do you like to read?","category":"regular"},{"word":"breath","clue":"The air you take into or let out of your lungs.","sentence":"Take a deep breath before you begin.","category":"review"},{"word":"reason","clue":"An explanation for why something happened.","sentence":"Tell me the reason you chose that answer.","category":"review"},{"word":"inning","clue":"A division of play in a baseball or softball game.","sentence":"Our team scored two runs in the third inning.","category":"challenge"},{"word":"surprise","clue":"Something unexpected or the feeling caused by it.","sentence":"The birthday gift was a wonderful surprise.","category":"challenge"}];
+const readingData=[{"q":"Why was Alice bored at the beginning of \u201cDown the Rabbit-Hole\u201d?","options":["Her sister would not talk to her.","Her sister\u2019s book had no pictures or conversations.","She had lost her favorite toy.","It had started to rain."],"answer":1,"explain":"Alice was tired of sitting beside her sister, and the book did not have pictures or conversations."},{"q":"What finally made the White Rabbit seem especially unusual to Alice?","options":["It was eating daisies.","It was wearing shoes.","It took a watch from its waistcoat-pocket.","It asked Alice for directions."],"answer":2,"explain":"Alice had never seen a rabbit with a waistcoat-pocket and a watch."},{"q":"Which character trait best explains why Alice followed the Rabbit?","options":["Curious","Angry","Careless","Shy"],"answer":0,"explain":"Alice was curious about the strange Rabbit and wanted to see where it went."},{"q":"What happened to the rabbit-hole after Alice entered it?","options":["It became a staircase.","It suddenly dropped downward like a deep well.","It opened into a river.","It became too small for Alice."],"answer":1,"explain":"The passage describes the hole as going on like a tunnel and then suddenly dipping down."},{"q":"What did Alice find on a shelf while she was falling?","options":["A tiny golden key","An empty marmalade jar","A pocket-watch","A pair of gloves"],"answer":1,"explain":"Alice took down a jar labeled orange marmalade, but it was empty."},{"q":"Who is Dinah?","options":["Alice\u2019s sister","The White Rabbit","Alice\u2019s cat","A girl at school"],"answer":2,"explain":"Dinah is Alice\u2019s cat, whom Alice thinks and talks about while falling."},{"q":"Where did Alice land after her long fall?","options":["On a bed of flowers","In a pool of water","On a heap of sticks and dry leaves","On a stone floor"],"answer":2,"explain":"Alice\u2019s fall ended on a heap of sticks and dry leaves."},{"q":"What did Alice find on the little three-legged table?","options":["A tiny golden key","A blue ribbon","A teacup","A rabbit\u2019s hat"],"answer":0,"explain":"Alice found a tiny golden key on the glass table."},{"q":"What was behind the tiny door that Alice opened?","options":["A classroom","A beautiful garden","A dark cave","Her sister\u2019s house"],"answer":1,"explain":"Alice could see a lovely garden through the small doorway."},{"q":"What happened after Alice drank from the bottle marked \u201cDRINK ME\u201d?","options":["She became very sleepy.","She grew taller.","She became much smaller.","She forgot about the Rabbit."],"answer":2,"explain":"Alice shrank after drinking from the bottle."}];
+const verseText="The grass withers, the flowers fade, but the word of our God remains forever.";
+const $=id=>document.getElementById(id);
+
+// Tabs
+document.querySelectorAll(".tab").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+    btn.classList.add("active");
+    $(btn.dataset.tab).classList.add("active");
+  });
+});
+
+// ---------- SPELLING ----------
+let cards=[...spellingData],i=0,correct=0,checks=0,scored=false;
+let missedFirstPass=new Map(),retryUnresolved=new Set(),retryRoundAdded=false;
+const originalCount=spellingData.length;
+const answer=$("answer");
 let systemVoices=[];
+let activeRecognition=null;
+const SpeechRecognitionAPI=window.SpeechRecognition||window.webkitSpeechRecognition;
 
-function refreshVoices(){
-  if("speechSynthesis" in window){
-    systemVoices=window.speechSynthesis.getVoices() || [];
-  }
-}
-
+function refreshVoices(){if("speechSynthesis" in window) systemVoices=window.speechSynthesis.getVoices()||[];}
 function chooseClearVoice(){
   refreshVoices();
   const preferred=["Samantha","Ava","Allison","Susan","Nicky","Joelle","Tom"];
   for(const name of preferred){
-    const match=systemVoices.find(v =>
-      v.name.toLowerCase().includes(name.toLowerCase()) &&
-      /^en(-|_)?US/i.test(v.lang || "en-US")
-    );
+    const match=systemVoices.find(v=>v.name.toLowerCase().includes(name.toLowerCase())&&/^en(-|_)?US/i.test(v.lang||"en-US"));
     if(match) return match;
   }
-  return systemVoices.find(v => /^en(-|_)?US/i.test(v.lang || "")) ||
-         systemVoices.find(v => /^en/i.test(v.lang || "")) ||
-         null;
+  return systemVoices.find(v=>/^en(-|_)?US/i.test(v.lang||""))||systemVoices.find(v=>/^en/i.test(v.lang||""))||null;
 }
-
-function makeUtterance(textToSay, rate=0.68){
-  const u=new SpeechSynthesisUtterance(textToSay);
-  u.lang="en-US";
-  u.rate=rate;
-  u.pitch=1.0;
-  u.volume=1.0;
-  const voice=chooseClearVoice();
-  if(voice) u.voice=voice;
-  return u;
+if("speechSynthesis" in window){refreshVoices();window.speechSynthesis.onvoiceschanged=refreshVoices;}
+function c(){return cards[i]}
+function makeUtterance(t,rate=.67){
+  const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=rate;u.pitch=1;u.volume=1;
+  const v=chooseClearVoice();if(v)u.voice=v;return u;
 }
-
 function speakWordClearly(word){
-  if(!("speechSynthesis" in window)){
-    alert("Audio is not available in this browser. Please open the spelling test in Safari.");
-    return;
-  }
-
-  if(activeRecognition){
-    try{activeRecognition.abort();}catch(e){}
-  }
-  window.speechSynthesis.cancel();
-
-  const first=makeUtterance(word,0.64);
-  const second=makeUtterance(word,0.58);
-
-  first.onerror=()=>alert("The voice did not start. Tap Hear Word again.");
-  second.onerror=()=>alert("The voice did not start. Tap Hear Word again.");
-
-  first.onend=()=>{
-    setTimeout(()=>window.speechSynthesis.speak(second),420);
-  };
-
-  second.onend=()=>{
-    // Give the phone a moment so its own voice is not picked up by the mic.
-    setTimeout(startListeningForSpelling,650);
-  };
-
-  window.speechSynthesis.speak(first);
+  if(!("speechSynthesis" in window))return;
+  if(activeRecognition){try{activeRecognition.abort()}catch(e){}}
+  speechSynthesis.cancel();
+  const u1=makeUtterance(word,.65),u2=makeUtterance(word,.60);
+  u1.onend=()=>setTimeout(()=>speechSynthesis.speak(u2),400);
+  u2.onend=()=>setTimeout(startListeningForSpelling,650);
+  speechSynthesis.speak(u1);
 }
-
-function speakSentenceClearly(textToSay){
-  if(!("speechSynthesis" in window)){
-    alert("Audio is not available in this browser. Please open the spelling test in Safari.");
-    return;
-  }
-  if(activeRecognition){
-    try{activeRecognition.abort();}catch(e){}
-  }
-  window.speechSynthesis.cancel();
-  const u=makeUtterance(textToSay,0.72);
-  window.speechSynthesis.speak(u);
+function speakSentenceClearly(t){
+  if(!("speechSynthesis" in window))return;
+  if(activeRecognition){try{activeRecognition.abort()}catch(e){}}
+  speechSynthesis.cancel();speechSynthesis.speak(makeUtterance(t,.73));
 }
-
-if("speechSynthesis" in window){
-  refreshVoices();
-  window.speechSynthesis.onvoiceschanged=refreshVoices;
+function norm(v){return (v||"").toLowerCase().replace(/[^a-z]/g,"")}
+const letterMap=new Map([
+["a","a"],["ay","a"],["b","b"],["bee","b"],["be","b"],["c","c"],["see","c"],["sea","c"],["d","d"],["dee","d"],
+["e","e"],["ee","e"],["f","f"],["ef","f"],["eff","f"],["g","g"],["gee","g"],["h","h"],["aitch","h"],["i","i"],["eye","i"],
+["j","j"],["jay","j"],["k","k"],["kay","k"],["l","l"],["el","l"],["ell","l"],["m","m"],["em","m"],["n","n"],["en","n"],
+["o","o"],["oh","o"],["p","p"],["pee","p"],["pea","p"],["q","q"],["cue","q"],["queue","q"],["r","r"],["are","r"],["ar","r"],
+["s","s"],["ess","s"],["t","t"],["tee","t"],["tea","t"],["u","u"],["you","u"],["v","v"],["vee","v"],["w","w"],["doubleyou","w"],
+["x","x"],["ex","x"],["y","y"],["why","y"],["z","z"],["zee","z"],["zed","z"]
+]);
+function transcriptToLetters(raw){
+  let clean=(raw||"").toLowerCase().replace(/[.,!?;:]/g," ").replace(/\bdouble\s+u\b/g,"doubleyou").replace(/\s+/g," ").trim();
+  if(!clean)return"";
+  const expected=norm(c().word),compact=norm(clean);
+  if(compact===expected)return expected;
+  const out=[];
+  for(const token of clean.split(/[\s-]+/).filter(Boolean)){
+    if(letterMap.has(token))out.push(letterMap.get(token));
+    else if(/^[a-z]{1,5}$/.test(token))for(const ch of token)out.push(ch);
+  }
+  return out.join("");
 }
-
+function collapseExtraDuplicatesToExpected(heard,expected){
+  if(!heard||heard===expected)return heard;
+  const runs=s=>{const o=[];for(const ch of s){if(o.length&&o[o.length-1][0]===ch)o[o.length-1][1]++;else o.push([ch,1]);}return o;};
+  const a=runs(heard),b=runs(expected);if(a.length!==b.length)return heard;let cleaned="";
+  for(let x=0;x<a.length;x++){if(a[x][0]!==b[x][0]||a[x][1]<b[x][1])return heard;cleaned+=a[x][0].repeat(b[x][1]);}
+  return cleaned===expected?cleaned:heard;
+}
+function editDistance(a,b){const d=Array.from({length:a.length+1},()=>Array(b.length+1).fill(0));for(let x=0;x<=a.length;x++)d[x][0]=x;for(let y=0;y<=b.length;y++)d[0][y]=y;for(let x=1;x<=a.length;x++)for(let y=1;y<=b.length;y++)d[x][y]=Math.min(d[x-1][y]+1,d[x][y-1]+1,d[x-1][y-1]+(a[x-1]===b[y-1]?0:1));return d[a.length][b.length];}
+function recordResult(ok){if(c().retry){if(ok)retryUnresolved.delete(c().word);return;}if(!ok&&!missedFirstPass.has(c().word))missedFirstPass.set(c().word,{...c()});}
+function finishSpoken(cands){
+  const expected=norm(c().word),unique=[...new Set(cands.filter(Boolean))];
+  if(!unique.length){showFeedback("I couldn't make out the letters. Tap Hear Word and try again.","");return;}
+  unique.sort((a,b)=>editDistance(a,expected)-editDistance(b,expected));
+  const raw=unique[0],heard=collapseExtraDuplicatesToExpected(raw,expected),ok=heard===expected;
+  if(!scored){checks++;scored=true;recordResult(ok);if(ok)correct++;}
+  if(ok)showFeedback("✅ Correct! Great job!","good"); else showFeedback(`❌ I heard: ${raw.split("").join(" ")}. Tap Hear Word and try again.`,"bad");
+  updateScore();
+}
+function startListeningForSpelling(){
+  if(!SpeechRecognitionAPI){showFeedback("Mic listening is not available here. She can still type the answer.","");return;}
+  try{
+    const r=new SpeechRecognitionAPI();activeRecognition=r;r.lang="en-US";r.continuous=false;r.interimResults=false;r.maxAlternatives=5;
+    const cands=[];showFeedback("🎤 Listening… spell each letter once, with a small pause.","");
+    r.onresult=e=>{for(let a=0;a<e.results[0].length;a++)cands.push(transcriptToLetters(e.results[0][a].transcript||""));};
+    r.onerror=e=>{if(e.error==="not-allowed")showFeedback("Please allow microphone access, or use the typing box.","");else if(e.error!=="aborted")showFeedback("I couldn't hear the spelling clearly. Tap Hear Word and try again.","");};
+    r.onend=()=>{activeRecognition=null;if(cands.length)finishSpoken(cands);};
+    r.start();
+  }catch(e){showFeedback("Mic listening couldn't start. Typing still works.","");}
+}
+function showFeedback(msg,cls){$("feedback").textContent=msg;$("feedback").className="feedback "+cls;}
+function updateScore(){$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`;}
 function render(){
- const x=c();scored=false;$("count").textContent=`${i+1} of ${cards.length}`;$("bar").style.width=`${((i+1)/cards.length)*100}%`;
- if(x.retry){
-   $("badge").textContent="↩ Practice Again"; $("badge").className="badge retry";
- }else if(x.category==="challenge"){
-   $("badge").textContent="⭐ Challenge Word"; $("badge").className="badge challenge";
- }else if(x.category==="review"){
-   $("badge").textContent="🔁 Review Word"; $("badge").className="badge review";
- }else{
-   $("badge").textContent="Spelling Word"; $("badge").className="badge";
- }
- $("clue").textContent=x.clue;$("sentence").textContent=x.sentence.replace(new RegExp("\\b"+x.word+"\\b","i"),"_____");$("word").textContent=x.word;
- $("reveal").style.display="none";$("feedback").textContent="";answer.value="";$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`;
+  const x=c();scored=false;$("count").textContent=`${i+1} of ${cards.length}`;$("bar").style.width=`${((i+1)/cards.length)*100}%`;
+  if(x.retry){$("badge").textContent="↩ Practice Again";$("badge").className="badge retry";}
+  else if(x.category==="challenge"){$("badge").textContent="⭐ Challenge Word";$("badge").className="badge challenge";}
+  else if(x.category==="review"){$("badge").textContent="🔁 Review Word";$("badge").className="badge review";}
+  else{$("badge").textContent="Spelling Word";$("badge").className="badge";}
+  $("clue").textContent=x.clue;$("sentence").textContent=x.sentence.replace(new RegExp("\\b"+x.word+"\\b","i"),"_____");$("word").textContent=x.word;
+  answer.value="";$("reveal").style.display="none";showFeedback("","");updateScore();
+}
+function addMissed(){
+  if(retryRoundAdded||!missedFirstPass.size)return false;
+  const r=[...missedFirstPass.values()].map(x=>({...x,retry:true}));
+  for(let j=r.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[r[j],r[k]]=[r[k],r[j]];}
+  retryUnresolved=new Set(r.map(x=>x.word));cards.push(...r);retryRoundAdded=true;return true;
 }
 $("hearWord").onclick=()=>speakWordClearly(c().word);
 $("hearSentence").onclick=()=>speakSentenceClearly(c().sentence);
-
-
-
-function normalizeAnswerForCheck(value){
-  return (value || "").toLowerCase().replace(/[^a-z]/g,"");
-}
-
-const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-let activeRecognition = null;
-
-const spokenLetterMap = new Map([
-  ["a","a"],["ay","a"],["hey","a"],["eh","a"],
-  ["b","b"],["bee","b"],["be","b"],
-  ["c","c"],["see","c"],["sea","c"],
-  ["d","d"],["dee","d"],
-  ["e","e"],["ee","e"],["eee","e"],
-  ["f","f"],["ef","f"],["eff","f"],
-  ["g","g"],["gee","g"],["jee","g"],
-  ["h","h"],["aitch","h"],["haitch","h"],
-  ["i","i"],["eye","i"],
-  ["j","j"],["jay","j"],
-  ["k","k"],["kay","k"],["kaye","k"],
-  ["l","l"],["el","l"],["ell","l"],
-  ["m","m"],["em","m"],
-  ["n","n"],["en","n"],
-  ["o","o"],["oh","o"],
-  ["p","p"],["pee","p"],["pea","p"],
-  ["q","q"],["cue","q"],["queue","q"],
-  ["r","r"],["are","r"],["ar","r"],
-  ["s","s"],["ess","s"],
-  ["t","t"],["tee","t"],["tea","t"],
-  ["u","u"],["you","u"],["yew","u"],
-  ["v","v"],["vee","v"],
-  ["w","w"],["doubleyou","w"],["double-u","w"],["doubleu","w"],
-  ["x","x"],["ex","x"],
-  ["y","y"],["why","y"],
-  ["z","z"],["zee","z"],["zed","z"]
-]);
-
-function normalizeAnswerForCheck(value){
-  return (value || "").toLowerCase().replace(/[^a-z]/g,"");
-}
-
-function transcriptToLetters(raw){
-  let cleaned=(raw||"")
-    .toLowerCase()
-    .replace(/[.,!?;:]/g," ")
-    .replace(/\b(letter|letters|capital|lowercase|uppercase)\b/g," ")
-    .replace(/\bdouble\s+u\b/g,"doubleyou")
-    .replace(/\s+/g," ")
-    .trim();
-
-  if(!cleaned) return "";
-
-  const expected=normalizeAnswerForCheck(c().word);
-  const compact=normalizeAnswerForCheck(cleaned);
-
-  // iPhone often collapses a clearly-spelled sequence into the finished word.
-  // Accept that transcript because the phone may have combined the letters.
-  if(compact===expected) return expected;
-
-  const tokens=cleaned.split(/[\s-]+/).filter(Boolean);
-  const letters=[];
-
-  for(const token of tokens){
-    if(spokenLetterMap.has(token)){
-      letters.push(spokenLetterMap.get(token));
-      continue;
-    }
-
-    // Sometimes Safari groups several individually spoken letters into one token.
-    if(/^[a-z]{1,5}$/.test(token)){
-      for(const ch of token) letters.push(ch);
-    }
-  }
-  return letters.join("");
-}
-
-
-function collapseExtraDuplicatesToExpected(heard, expected){
-  if(!heard || !expected) return heard;
-  if(heard===expected) return heard;
-
-  // Build runs, e.g. "kkept" -> [["k",2],["e",1],["p",1],["t",1]]
-  const runs=s=>{
-    const out=[];
-    for(const ch of s){
-      if(out.length && out[out.length-1][0]===ch) out[out.length-1][1]++;
-      else out.push([ch,1]);
-    }
-    return out;
-  };
-
-  const hr=runs(heard);
-  const er=runs(expected);
-
-  if(hr.length!==er.length) return heard;
-
-  let cleaned="";
-  for(let i=0;i<hr.length;i++){
-    const [hc,hn]=hr[i], [ec,en]=er[i];
-    if(hc!==ec) return heard;
-
-    // Only trim a run if the recognizer produced MORE of the same letter
-    // than the real word needs. Never invent a missing double letter.
-    if(hn<en) return heard;
-    cleaned += hc.repeat(en);
-  }
-
-  return cleaned===expected ? cleaned : heard;
-}
-
-function editDistance(a,b){
-  const m=a.length,n=b.length;
-  const dp=Array.from({length:m+1},()=>Array(n+1).fill(0));
-  for(let i=0;i<=m;i++) dp[i][0]=i;
-  for(let j=0;j<=n;j++) dp[0][j]=j;
-  for(let i=1;i<=m;i++){
-    for(let j=1;j<=n;j++){
-      dp[i][j]=Math.min(
-        dp[i-1][j]+1,
-        dp[i][j-1]+1,
-        dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1)
-      );
-    }
-  }
-  return dp[m][n];
-}
-
-function showListeningMessage(msg){
-  const f=$("feedback");
-  f.textContent=msg;
-  f.className="feedback";
-}
-
-
-function recordFirstAttempt(ok){
-  if(c().retry){
-    if(ok) retryUnresolved.delete(c().word);
-    return;
-  }
-  if(!ok && !missedFirstPass.has(c().word)){
-    missedFirstPass.set(c().word,{...c()});
-  }
-}
-
-function addMissedWordsToEnd(){
-  if(retryRoundAdded || missedFirstPass.size===0) return false;
-
-  const retryWords=[...missedFirstPass.values()].map(x=>({...x,retry:true}));
-
-  // Shuffle the missed words so the practice round feels mixed.
-  for(let j=retryWords.length-1;j>0;j--){
-    const k=Math.floor(Math.random()*(j+1));
-    [retryWords[j],retryWords[k]]=[retryWords[k],retryWords[j]];
-  }
-
-  retryUnresolved=new Set(retryWords.map(x=>x.word));
-  cards.push(...retryWords);
-  retryRoundAdded=true;
-  return true;
-}
-
-function finishSpokenAttempt(candidates){
-  const expected=normalizeAnswerForCheck(c().word);
-  const unique=[...new Set(candidates.filter(Boolean))];
-
-  if(!unique.length){
-    showListeningMessage("I couldn't make out the letters. Tap Hear Word and try again.");
-    return;
-  }
-
-  // Choose the closest transcript among the phone's alternatives,
-  // but never silently change it into the correct answer.
-  unique.sort((a,b)=>editDistance(a,expected)-editDistance(b,expected));
-  const rawHeard=unique[0];
-  const heard=collapseExtraDuplicatesToExpected(rawHeard,expected);
-  const ok=heard===expected;
-  const f=$("feedback");
-
-  if(!scored){
-    checks++;
-    scored=true;
-    recordFirstAttempt(ok);
-    if(ok) correct++;
-  }
-
-  if(ok){
-    f.textContent="✅ Correct! Great job!";
-    f.className="feedback good";
-  }else{
-    const spaced=rawHeard.split("").join(" ");
-    f.textContent=`❌ I heard: ${spaced}. Tap Hear Word and try again.`;
-    f.className="feedback bad";
-  }
-
-  $("scoreTop").textContent=`${correct} correct`;
-  $("score").textContent=`Score: ${correct} correct out of ${checks} answers`;
-}
-
-function startListeningForSpelling(){
-  if(!SpeechRecognitionAPI){
-    showListeningMessage("Mic listening is not available in this browser. She can still type the answer.");
-    return;
-  }
-
-  try{
-    if(activeRecognition){
-      try{activeRecognition.abort();}catch(e){}
-    }
-
-    const recognition=new SpeechRecognitionAPI();
-    activeRecognition=recognition;
-    recognition.lang="en-US";
-    recognition.continuous=false;
-    recognition.interimResults=false;
-    recognition.maxAlternatives=5;
-
-    let candidates=[];
-    let stopTimer=null;
-
-    showListeningMessage("🎤 Listening… spell each letter once, with a small pause.");
-
-    function scheduleStop(delay=1800){
-      clearTimeout(stopTimer);
-      stopTimer=setTimeout(()=>{
-        try{recognition.stop();}catch(e){}
-      },delay);
-    }
-
-    recognition.onstart=()=>scheduleStop(7000);
-
-    recognition.onresult=(event)=>{
-      for(let r=event.resultIndex;r<event.results.length;r++){
-        const result=event.results[r];
-        for(let a=0;a<result.length;a++){
-          const parsed=transcriptToLetters(result[a].transcript||"");
-          if(parsed) candidates.push(parsed);
-        }
-      }
-      // Keep listening briefly after the latest recognized sound.
-      scheduleStop(1700);
-    };
-
-    recognition.onerror=(event)=>{
-      clearTimeout(stopTimer);
-      if(event.error==="not-allowed" || event.error==="service-not-allowed"){
-        showListeningMessage("Please allow microphone access for this site, or use the typing box.");
-      }else if(event.error==="no-speech"){
-        showListeningMessage("I didn't hear anything. Tap Hear Word and try again.");
-      }else if(event.error!=="aborted"){
-        showListeningMessage("I couldn't hear the spelling clearly. Tap Hear Word and try again.");
-      }
-    };
-
-    recognition.onend=()=>{
-      clearTimeout(stopTimer);
-      activeRecognition=null;
-      finishSpokenAttempt(candidates);
-    };
-
-    recognition.start();
-  }catch(e){
-    showListeningMessage("Mic listening couldn't start. She can still type the answer.");
-  }
-}
-
-$("check").onclick=()=>{let raw=answer.value.trim();if(!raw)return;let v=normalizeAnswerForCheck(raw);let expected=normalizeAnswerForCheck(c().word);let ok=v===expected,f=$("feedback");if(!scored){checks++;scored=true;recordFirstAttempt(ok);if(ok)correct++}f.textContent=ok?"✅ Correct! Great job!":"❌ Not quite. Try again!";f.className="feedback "+(ok?"good":"bad");$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`};
-$("hint").onclick=()=>{
- const letters=c().word.replace(/[^a-z]/gi,"");
- const wordCount=c().word.trim().split(/\s+/).length;
- $("feedback").textContent=`💡 Starts with "${letters[0].toUpperCase()}" • ${letters.length} letters${wordCount>1?` • ${wordCount} words`:""}`;
- $("feedback").className="feedback";
-};
-$("show").onclick=()=>{$("reveal").style.display=$("reveal").style.display==="block"?"none":"block"};
-$("prev").onclick=()=>{if(i>0){i--;render()}};
-$("next").onclick=()=>{
-  if(i===cards.length-1){
-    if(addMissedWordsToEnd()){
-      i++;
-      render();
-      $("feedback").textContent="💗 Missed words have been mixed back in for another try.";
-      $("feedback").className="feedback";
-    }else{
-      $("testCard").style.display="none";
-      $("finish").style.display="block";
-      if(retryRoundAdded){
-        $("finalScore").textContent=retryUnresolved.size===0
-          ? "Great job! You practiced every missed word again and got them all."
-          : `You finished the practice round. ${retryUnresolved.size} word${retryUnresolved.size===1?"":"s"} still need a little more practice.`;
-      }else{
-        $("finalScore").textContent=`You got ${correct} out of ${checks} correct. No missed words needed to be repeated.`;
-      }
-    }
-  }else{
-    i++;
-    render();
-  }
-};
-$("shuffle").onclick=()=>{cards=[...original];for(let j=cards.length-1;j>0;j--){let k=Math.floor(Math.random()*(j+1));[cards[j],cards[k]]=[cards[k],cards[j]]}i=0;correct=0;checks=0;missedFirstPass=new Map();retryUnresolved=new Set();retryRoundAdded=false;render()};
-$("restart").onclick=()=>{cards=[...original];i=0;correct=0;checks=0;missedFirstPass=new Map();retryUnresolved=new Set();retryRoundAdded=false;$("finish").style.display="none";$("testCard").style.display="block";render()};
-answer.addEventListener("input",()=>{
-  const start=answer.selectionStart, end=answer.selectionEnd;
-  const lower=answer.value.toLowerCase();
-  if(answer.value!==lower){
-    answer.value=lower;
-    try{answer.setSelectionRange(start,end);}catch(e){}
-  }
-});
-answer.addEventListener("keydown",e=>{if(e.key==="Enter")$("check").click()});
+$("check").onclick=()=>{const raw=answer.value.trim();if(!raw)return;const ok=norm(raw)===norm(c().word);if(!scored){checks++;scored=true;recordResult(ok);if(ok)correct++;}showFeedback(ok?"✅ Correct! Great job!":"❌ Not quite. Try again!",ok?"good":"bad");updateScore();};
+$("hint").onclick=()=>{const letters=norm(c().word);showFeedback(`💡 Starts with "${letters[0].toUpperCase()}" • ${letters.length} letters`,"");};
+$("show").onclick=()=>{$("reveal").style.display=$("reveal").style.display==="block"?"none":"block";};
+$("prev").onclick=()=>{if(i>0){i--;render();}};
+$("next").onclick=()=>{if(i===cards.length-1){if(addMissed()){i++;render();showFeedback("💗 Missed words are mixed back in for another try.","");}else{showFeedback(retryRoundAdded&&retryUnresolved.size===0?"🌟 Finished! All missed words were cleared.":"🌟 Finished! Great practice today.","good");}}else{i++;render();}};
+$("shuffle").onclick=()=>{cards=[...spellingData];for(let j=cards.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[cards[j],cards[k]]=[cards[k],cards[j]];}i=0;correct=0;checks=0;missedFirstPass=new Map();retryUnresolved=new Set();retryRoundAdded=false;render();};
+answer.addEventListener("input",()=>{answer.value=answer.value.toLowerCase();});
+answer.addEventListener("keydown",e=>{if(e.key==="Enter")$("check").click();});
 render();
+
+// ---------- READING ----------
+const rq=$("readingQuestions");
+let readingSelections={};
+readingData.forEach((item,idx)=>{
+  const wrap=document.createElement("div");wrap.className="quizCard";
+  wrap.innerHTML=`<div class="qnum">Question ${idx+1}</div><div class="qtext">${item.q}</div>`;
+  item.options.forEach((op,oi)=>{
+    const b=document.createElement("button");b.className="option";b.textContent=op;
+    b.onclick=()=>{wrap.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");readingSelections[idx]=oi;};
+    wrap.appendChild(b);
+  });
+  const ex=document.createElement("div");ex.className="explain";ex.id="ex"+idx;wrap.appendChild(ex);rq.appendChild(wrap);
+});
+$("checkReading").onclick=()=>{
+  let got=0;
+  readingData.forEach((item,idx)=>{
+    const ex=$("ex"+idx),choice=readingSelections[idx];
+    const card=ex.parentElement,opts=card.querySelectorAll(".option");
+    opts.forEach((b,oi)=>{b.style.borderColor=oi===item.answer?"#65a988":(choice===oi?"#d98a96":"#ead9e5");});
+    if(choice===item.answer)got++;
+    ex.textContent=(choice===item.answer?"✅ ":"❌ ")+item.explain;ex.style.display="block";
+  });
+  $("readingScore").textContent=`Reading score: ${got} / ${readingData.length}`;
+};
+$("resetReading").onclick=()=>{readingSelections={};document.querySelectorAll(".option").forEach(b=>{b.classList.remove("selected");b.style.borderColor="#ead9e5";});document.querySelectorAll(".explain").forEach(e=>e.style.display="none");$("readingScore").textContent="";};
+
+// ---------- BIBLE VERSE ----------
+function renderVerse(hideCount=0){
+  const words=verseText.split(" ");let indices=[...words.keys()];
+  // deterministic spread across the verse so practice is consistent
+  const priority=[1,4,7,10,0,3,6,9,2,5,8,11,12,13,14,15];
+  const hide=new Set(priority.filter(x=>x<words.length).slice(0,hideCount));
+  $("verseDisplay").innerHTML=words.map((w,idx)=>hide.has(idx)?`<span class="blankWord">${w}</span>`:w).join(" ");
+}
+document.querySelectorAll("[data-hide]").forEach(b=>b.onclick=()=>renderVerse(Number(b.dataset.hide)));
+function normalizeVerse(v){return (v||"").toLowerCase().replace(/[^a-z0-9 ]/g,"").replace(/\s+/g," ").trim();}
+$("checkVerse").onclick=()=>{
+  const got=normalizeVerse($("verseInput").value),expected=normalizeVerse(verseText);
+  const ok=got===expected;$("verseFeedback").textContent=ok?"✅ Perfect! You remembered the whole verse.":"💡 Almost! Compare it with the full verse and try again.";$("verseFeedback").className="feedback "+(ok?"good":"bad");
+};
+$("clearVerse").onclick=()=>{$("verseInput").value="";$("verseFeedback").textContent="";};
+renderVerse(0);
 </script>
 </body>
 </html>
