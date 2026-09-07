@@ -49,6 +49,14 @@ button{border:0;border-radius:14px;padding:13px 15px;font-size:15px;font-weight:
 .placeholder{text-align:center;padding:28px 10px} .placeholder .big{font-size:54px}
 footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 @media(max-width:560px){.schedule{grid-template-columns:1fr} .tabs{grid-template-columns:repeat(2,1fr)} .card{padding:17px} .row button{flex:1 1 45%}}
+
+.verseSteps{display:grid;gap:10px;margin:16px 0}
+.verseStep{background:#fff8fc;border:1px solid #f0d7e7;border-radius:16px;padding:14px;opacity:.5}
+.verseStep.active{opacity:1;border-color:#cdb8f4;box-shadow:0 8px 24px rgba(118,89,202,.10)}
+.stepNum{font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;color:#b44b81;margin-bottom:5px}
+.stepText{font-size:19px;font-weight:800;line-height:1.45}
+.firstLetters{font-size:20px;font-weight:900;letter-spacing:.12em;line-height:1.8;text-align:center;padding:14px;background:#faf6fc;border-radius:15px;margin-top:12px;display:none}
+
 </style>
 </head>
 <body>
@@ -87,20 +95,51 @@ footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 
 <section id="bible" class="panel">
 <div class="card">
-<h2 class="sectionTitle">Chapter 4 Bible &amp; Memory Verse Practice</h2>
-<div class="verseRef">2 Timothy 2:15 (CSB)</div><p class="muted" style="text-align:center;margin-top:6px">Test: Friday, September 11</p>
-<div id="verseDisplay" class="verseBox">Be diligent to present yourself to God as one approved, a worker who doesn’t need to be ashamed, correctly teaching the word of truth.</div>
-<div class="levels">
-<button data-hide="0">Show All</button>
-<button data-hide="5">Hide 5 Words</button>
-<button data-hide="10">Hide 10 Words</button>
-<button data-hide="16">Hard Mode</button>
+<h2 class="sectionTitle">Bible Verse Practice</h2>
+<div class="verseRef">2 Timothy 2:15 (CSB)</div>
+<p class="muted" style="text-align:center;margin-top:6px">Test: Friday, September 11</p>
+
+<div class="verseBox" id="verseDisplay">Be diligent to present yourself to God as one approved, a worker who doesn’t need to be ashamed, correctly teaching the word of truth.</div>
+
+<div class="row">
+  <button class="primary" id="hearVerse">🔊 Hear Whole Verse</button>
+  <button id="hearPart">🗣️ Hear This Part</button>
 </div>
+
 <div class="cluebox">
-<div class="label">Type From Memory</div>
-<textarea id="verseInput" class="memoryInput" placeholder="Type the verse here from memory…" autocorrect="off" spellcheck="false"></textarea>
-<div class="row"><button class="primary" id="checkVerse">Check Verse</button><button id="clearVerse">Clear</button></div>
-<div id="verseFeedback" class="feedback"></div>
+  <div class="label">Learn It In 4 Parts</div>
+  <div class="verseSteps">
+    <div class="verseStep active" data-step="0"><div class="stepNum">Part 1</div><div class="stepText">Be diligent to present yourself to God</div></div>
+    <div class="verseStep" data-step="1"><div class="stepNum">Part 2</div><div class="stepText">as one approved, a worker who doesn’t need to be ashamed,</div></div>
+    <div class="verseStep" data-step="2"><div class="stepNum">Part 3</div><div class="stepText">correctly teaching</div></div>
+    <div class="verseStep" data-step="3"><div class="stepNum">Part 4</div><div class="stepText">the word of truth.</div></div>
+  </div>
+  <div class="row">
+    <button id="prevPart">← Previous Part</button>
+    <button class="primary" id="nextPart">Next Part →</button>
+  </div>
+</div>
+
+<div class="cluebox">
+  <div class="label">Memory Levels</div>
+  <div class="levels">
+    <button data-hide="0">Show All</button>
+    <button data-hide="5">Easy</button>
+    <button data-hide="10">Medium</button>
+    <button data-hide="16">Hard</button>
+    <button id="firstLettersBtn">First Letters</button>
+  </div>
+  <div id="firstLetters" class="firstLetters"></div>
+</div>
+
+<div class="cluebox">
+  <div class="label">Type From Memory</div>
+  <textarea id="verseInput" class="memoryInput" placeholder="Type the verse here from memory…" autocorrect="off" spellcheck="false"></textarea>
+  <div class="row">
+    <button class="primary" id="checkVerse">Check Verse</button>
+    <button id="clearVerse">Clear</button>
+  </div>
+  <div id="verseFeedback" class="feedback"></div>
 </div>
 </div>
 </section>
@@ -242,20 +281,82 @@ answer.addEventListener("keydown",e=>{if(e.key==="Enter")$("check").click();});
 render();
 
 // ---------- BIBLE VERSE ----------
+const verseParts=[
+  "Be diligent to present yourself to God",
+  "as one approved, a worker who doesn’t need to be ashamed,",
+  "correctly teaching",
+  "the word of truth."
+];
+let currentVersePart=0;
+
+function speakBible(textToSay){
+  if(!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(textToSay);
+  u.lang="en-US";
+  u.rate=.72;
+  u.pitch=1;
+  u.volume=1;
+  if(typeof chooseClearVoice==="function"){
+    const v=chooseClearVoice();
+    if(v) u.voice=v;
+  }
+  window.speechSynthesis.speak(u);
+}
+
+function updateVersePart(){
+  document.querySelectorAll(".verseStep").forEach((el,idx)=>{
+    el.classList.toggle("active",idx===currentVersePart);
+  });
+}
+$("hearVerse").onclick=()=>speakBible(verseText);
+$("hearPart").onclick=()=>speakBible(verseParts[currentVersePart]);
+$("nextPart").onclick=()=>{
+  if(currentVersePart<verseParts.length-1) currentVersePart++;
+  updateVersePart();
+};
+$("prevPart").onclick=()=>{
+  if(currentVersePart>0) currentVersePart--;
+  updateVersePart();
+};
+document.querySelectorAll(".verseStep").forEach((el,idx)=>{
+  el.onclick=()=>{currentVersePart=idx;updateVersePart();};
+});
+
 function renderVerse(hideCount=0){
-  const words=verseText.split(" ");let indices=[...words.keys()];
-  // deterministic spread across the verse so practice is consistent
+  $("firstLetters").style.display="none";
+  const words=verseText.split(" ");
   const priority=[2,5,8,11,14,17,20,1,4,7,10,13,16,19,0,3,6,9,12,15,18,21,22,23,24,25,26];
   const hide=new Set(priority.filter(x=>x<words.length).slice(0,hideCount));
   $("verseDisplay").innerHTML=words.map((w,idx)=>hide.has(idx)?`<span class="blankWord">${w}</span>`:w).join(" ");
 }
 document.querySelectorAll("[data-hide]").forEach(b=>b.onclick=()=>renderVerse(Number(b.dataset.hide)));
-function normalizeVerse(v){return (v||"").toLowerCase().replace(/[^a-z0-9 ]/g,"").replace(/\s+/g," ").trim();}
+
+$("firstLettersBtn").onclick=()=>{
+  const words=verseText.split(/\s+/);
+  $("firstLetters").textContent=words.map(w=>{
+    const m=w.match(/[A-Za-z]/);
+    return m?m[0].toLowerCase()+".":"";
+  }).join(" ");
+  $("firstLetters").style.display="block";
+};
+
+function normalizeVerse(v){
+  return (v||"").toLowerCase().replace(/[’']/g,"").replace(/[^a-z0-9 ]/g,"").replace(/\s+/g," ").trim();
+}
 $("checkVerse").onclick=()=>{
   const got=normalizeVerse($("verseInput").value),expected=normalizeVerse(verseText);
-  const ok=got===expected;$("verseFeedback").textContent=ok?"✅ Perfect! You remembered the whole verse.":"💡 Almost! Compare it with the full verse and try again.";$("verseFeedback").className="feedback "+(ok?"good":"bad");
+  const ok=got===expected;
+  $("verseFeedback").textContent=ok
+    ?"✅ Perfect! You remembered the whole verse."
+    :"💡 Almost! Read it once more, then try again.";
+  $("verseFeedback").className="feedback "+(ok?"good":"bad");
 };
-$("clearVerse").onclick=()=>{$("verseInput").value="";$("verseFeedback").textContent="";};
+$("clearVerse").onclick=()=>{
+  $("verseInput").value="";
+  $("verseFeedback").textContent="";
+};
+updateVersePart();
 renderVerse(0);
 </script>
 </body>
