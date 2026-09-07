@@ -50,12 +50,28 @@ button{border:0;border-radius:14px;padding:13px 15px;font-size:15px;font-weight:
 footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 @media(max-width:560px){.schedule{grid-template-columns:1fr} .tabs{grid-template-columns:repeat(2,1fr)} .card{padding:17px} .row button{flex:1 1 45%}}
 
-.verseSteps{display:grid;gap:10px;margin:16px 0}
-.verseStep{background:#fff8fc;border:1px solid #f0d7e7;border-radius:16px;padding:14px;opacity:.5}
-.verseStep.active{opacity:1;border-color:#cdb8f4;box-shadow:0 8px 24px rgba(118,89,202,.10)}
-.stepNum{font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;color:#b44b81;margin-bottom:5px}
-.stepText{font-size:19px;font-weight:800;line-height:1.45}
-.firstLetters{font-size:20px;font-weight:900;letter-spacing:.12em;line-height:1.8;text-align:center;padding:14px;background:#faf6fc;border-radius:15px;margin-top:12px;display:none}
+.bibleTabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 16px}
+.bibleTab{border:0;border-radius:13px;padding:11px 8px;font-size:13px;font-weight:900;background:#f2e9f5;color:var(--ink)}
+.bibleTab.active{background:linear-gradient(135deg,#e8a23d,#b27a2b);color:#fff}
+.biblePanel{display:none}.biblePanel.active{display:block}
+.bibleVerse{font-size:22px;line-height:1.65;font-weight:800;background:#fff8ea;border:1px solid #ead8b0;padding:18px;border-radius:18px}
+.bibleHelp{color:var(--muted);line-height:1.45}
+.bibleTip{margin-top:14px;background:#fff8ea;border:1px dashed #dcb875;padding:13px;border-radius:15px;color:#6b572f;line-height:1.4}
+.counter{text-align:center;font-weight:900;color:#7357ca;margin:8px 0}
+.chunkBox{font-size:25px;font-weight:900;line-height:1.5;text-align:center;padding:22px;border-radius:18px;background:#fff8fc;border:1px solid #efd9e7;min-height:120px;display:flex;align-items:center;justify-content:center}
+.chunkBox.cover{color:transparent;text-shadow:0 0 12px rgba(70,45,80,.25)}
+.blank-wrap{line-height:2.2;font-size:18px;background:#fff8fc;border:1px solid #efd9e7;padding:16px;border-radius:18px}
+.blank{width:110px;border:0;border-bottom:2px solid #b99aad;background:transparent;font:inherit;text-align:center;outline:none;text-transform:lowercase}
+.blank.good{border-bottom-color:#178459}.blank.bad{border-bottom-color:#c43b4b}
+.initials{font-size:clamp(20px,5vw,28px);line-height:1.8;letter-spacing:.05em;background:#fff8ea;border:1px solid #ead8b0;padding:18px;border-radius:18px;font-weight:850}
+.order-bank,.answer-bank{display:grid;gap:9px;margin-top:12px}
+.order-card{text-align:left;border:2px solid var(--line);background:#fff;padding:13px;border-radius:14px}
+.answer-chip{background:#fff6e5;border:1px solid var(--line);border-radius:13px;padding:12px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.answer-chip button{padding:6px 10px;min-height:0;background:#fff}
+.memoryText{width:100%;min-height:180px;border:2px solid var(--line);border-radius:18px;padding:15px;font:inherit;font-size:18px;line-height:1.5;resize:vertical;outline:none}
+.memoryText:focus{border-color:#d7a252}
+.scorebig{font-size:42px;font-weight:950;text-align:center;margin:10px 0;color:#7357ca}
+@media(max-width:560px){.bibleTabs{grid-template-columns:repeat(2,1fr)}}
 
 </style>
 </head>
@@ -99,47 +115,87 @@ footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 <div class="verseRef">2 Timothy 2:15 (CSB)</div>
 <p class="muted" style="text-align:center;margin-top:6px">Test: Friday, September 11</p>
 
-<div class="verseBox" id="verseDisplay">Be diligent to present yourself to God as one approved, a worker who doesn’t need to be ashamed, correctly teaching the word of truth.</div>
-
-<div class="row">
-  <button class="primary" id="hearVerse">🔊 Hear Whole Verse</button>
-  <button id="hearPart">🗣️ Hear This Part</button>
+<div class="bibleTabs">
+  <button class="bibleTab active" data-bpanel="read">1. Read & Listen</button>
+  <button class="bibleTab" data-bpanel="chunks">2. Chunks</button>
+  <button class="bibleTab" data-bpanel="blanks">3. Missing Words</button>
+  <button class="bibleTab" data-bpanel="letters">4. First Letters</button>
+  <button class="bibleTab" data-bpanel="order">5. Put in Order</button>
+  <button class="bibleTab" data-bpanel="memory">6. From Memory</button>
 </div>
 
-<div class="cluebox">
-  <div class="label">Learn It In 4 Parts</div>
-  <div class="verseSteps">
-    <div class="verseStep active" data-step="0"><div class="stepNum">Part 1</div><div class="stepText">Be diligent to present yourself to God</div></div>
-    <div class="verseStep" data-step="1"><div class="stepNum">Part 2</div><div class="stepText">as one approved, a worker who doesn’t need to be ashamed,</div></div>
-    <div class="verseStep" data-step="2"><div class="stepNum">Part 3</div><div class="stepText">correctly teaching</div></div>
-    <div class="verseStep" data-step="3"><div class="stepNum">Part 4</div><div class="stepText">the word of truth.</div></div>
-  </div>
+<div class="biblePanel active" id="read">
+  <h3>Read & Listen</h3>
+  <p class="bibleHelp">Read along while the phone says the verse. Then try saying it with the voice.</p>
+  <div class="bibleVerse">“Be diligent to present yourself to God as one approved, a worker who doesn’t need to be ashamed, correctly teaching the word of truth.”</div>
   <div class="row">
-    <button id="prevPart">← Previous Part</button>
-    <button class="primary" id="nextPart">Next Part →</button>
+    <button class="primary" id="speakVerse">🔊 Listen to Verse</button>
+    <button id="speakSlow">🐢 Listen Slowly</button>
   </div>
+  <div class="bibleTip"><b>Memory trick:</b> Think of the verse in four ideas: <i>be diligent → approved by God → not ashamed → teach the truth correctly.</i></div>
 </div>
 
-<div class="cluebox">
-  <div class="label">Memory Levels</div>
-  <div class="levels">
-    <button data-hide="0">Show All</button>
-    <button data-hide="5">Easy</button>
-    <button data-hide="10">Medium</button>
-    <button data-hide="16">Hard</button>
-    <button id="firstLettersBtn">First Letters</button>
-  </div>
-  <div id="firstLetters" class="firstLetters"></div>
-</div>
-
-<div class="cluebox">
-  <div class="label">Type From Memory</div>
-  <textarea id="verseInput" class="memoryInput" placeholder="Type the verse here from memory…" autocorrect="off" spellcheck="false"></textarea>
+<div class="biblePanel" id="chunks">
+  <h3>Learn It in Chunks</h3>
+  <p class="bibleHelp">Say each chunk out loud three times. Then hide it and try to say it without looking.</p>
+  <div class="counter" id="chunkCount"></div>
+  <div class="chunkBox" id="chunkText"></div>
   <div class="row">
-    <button class="primary" id="checkVerse">Check Verse</button>
-    <button id="clearVerse">Clear</button>
+    <button id="chunkPrev">← Back</button>
+    <button id="chunkHide">🙈 Hide Words</button>
+    <button class="primary" id="chunkNext">Next Chunk →</button>
   </div>
-  <div id="verseFeedback" class="feedback"></div>
+</div>
+
+<div class="biblePanel" id="blanks">
+  <h3>Fill in the Missing Words</h3>
+  <p class="bibleHelp">Start with Easy. When that feels comfortable, switch to Hard.</p>
+  <div class="row">
+    <button class="primary" id="easyBlank">Easy</button>
+    <button id="hardBlank">Hard</button>
+    <button id="newBlank">New Blanks</button>
+  </div>
+  <div class="blank-wrap" id="blankArea"></div>
+  <div class="row">
+    <button class="primary" id="checkBlanks">Check My Answers</button>
+    <button id="showBlanks">Show Answers</button>
+  </div>
+  <div class="feedback" id="blankFeedback"></div>
+</div>
+
+<div class="biblePanel" id="letters">
+  <h3>First-Letter Challenge</h3>
+  <p class="bibleHelp">Each letter is the first letter of a word. Use the letters to help you say the whole verse.</p>
+  <div class="initials" id="initials"></div>
+  <div class="row">
+    <button class="primary" id="listenLetters">🔊 Hear Verse</button>
+    <button id="revealLetters">Show Full Verse</button>
+  </div>
+  <div class="bibleVerse" id="lettersReveal" style="display:none;margin-top:14px">“Be diligent to present yourself to God as one approved, a worker who doesn’t need to be ashamed, correctly teaching the word of truth.”</div>
+</div>
+
+<div class="biblePanel" id="order">
+  <h3>Put the Verse in Order</h3>
+  <p class="bibleHelp">Tap the chunks in the correct order. If you make a mistake, tap a chosen chunk to send it back.</p>
+  <div class="answer-bank" id="chosen"></div>
+  <div class="order-bank" id="orderBank"></div>
+  <div class="row">
+    <button class="primary" id="checkOrder">Check Order</button>
+    <button id="resetOrder">Shuffle Again</button>
+  </div>
+  <div class="feedback" id="orderFeedback"></div>
+</div>
+
+<div class="biblePanel" id="memory">
+  <h3>Try It From Memory</h3>
+  <p class="bibleHelp">Type the verse without looking. Capitalization and punctuation do not count — the words do.</p>
+  <textarea class="memoryText" id="memoryText" placeholder="Be diligent to present yourself..."></textarea>
+  <div class="row">
+    <button class="primary" id="checkMemory">Check My Verse</button>
+    <button id="clearMemory">Clear</button>
+  </div>
+  <div id="memoryScore"></div>
+  <div class="feedback" id="memoryFeedback"></div>
 </div>
 </div>
 </section>
@@ -281,83 +337,165 @@ answer.addEventListener("keydown",e=>{if(e.key==="Enter")$("check").click();});
 render();
 
 // ---------- BIBLE VERSE ----------
-const verseParts=[
+const verse="Be diligent to present yourself to God as one approved, a worker who doesn’t need to be ashamed, correctly teaching the word of truth.";
+const chunks=[
   "Be diligent to present yourself to God",
-  "as one approved, a worker who doesn’t need to be ashamed,",
+  "as one approved,",
+  "a worker who doesn’t need to be ashamed,",
   "correctly teaching",
   "the word of truth."
 ];
-let currentVersePart=0;
 
-function speakBible(textToSay){
-  if(!("speechSynthesis" in window)) return;
-  window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(textToSay);
-  u.lang="en-US";
-  u.rate=.72;
-  u.pitch=1;
-  u.volume=1;
-  if(typeof chooseClearVoice==="function"){
-    const v=chooseClearVoice();
-    if(v) u.voice=v;
-  }
-  window.speechSynthesis.speak(u);
+// six Bible tabs
+const bibleTabs=[...document.querySelectorAll(".bibleTab")];
+const biblePanels=[...document.querySelectorAll(".biblePanel")];
+bibleTabs.forEach(t=>t.addEventListener("click",()=>{
+  bibleTabs.forEach(x=>x.classList.remove("active"));
+  biblePanels.forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  document.getElementById(t.dataset.bpanel).classList.add("active");
+}));
+
+function sayBible(text,rate=.78){
+  if(!("speechSynthesis" in window)){ alert("Audio is not available in this browser."); return; }
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="en-US";u.rate=rate;u.pitch=1;u.volume=1;
+  const voices=speechSynthesis.getVoices();
+  const v=voices.find(v=>/Samantha|Ava|Allison|Susan/i.test(v.name)&&/^en/i.test(v.lang))
+    || voices.find(v=>/^en-US/i.test(v.lang));
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
 }
+document.getElementById("speakVerse").onclick=()=>sayBible("Second Timothy, chapter two, verse fifteen. "+verse,.78);
+document.getElementById("speakSlow").onclick=()=>sayBible(verse,.60);
+document.getElementById("listenLetters").onclick=()=>sayBible(verse,.72);
 
-function updateVersePart(){
-  document.querySelectorAll(".verseStep").forEach((el,idx)=>{
-    el.classList.toggle("active",idx===currentVersePart);
+// chunks
+let ci=0, hidden=false;
+function renderChunk(){
+  document.getElementById("chunkCount").textContent=`Chunk ${ci+1} of ${chunks.length}`;
+  const box=document.getElementById("chunkText");
+  box.textContent=chunks[ci];
+  box.classList.toggle("cover",hidden);
+  document.getElementById("chunkHide").textContent=hidden?"👀 Show Words":"🙈 Hide Words";
+}
+document.getElementById("chunkPrev").onclick=()=>{ci=(ci-1+chunks.length)%chunks.length;hidden=false;renderChunk()};
+document.getElementById("chunkNext").onclick=()=>{ci=(ci+1)%chunks.length;hidden=false;renderChunk()};
+document.getElementById("chunkHide").onclick=()=>{hidden=!hidden;renderChunk()};
+renderChunk();
+
+// missing words
+let blankMode="easy";
+function verseWords(){return verse.match(/[A-Za-z’']+/g)||[]}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function pickBlankIndexes(){
+  const words=verseWords(), count=blankMode==="easy"?5:10;
+  const choices=[...Array(words.length).keys()];
+  for(let i=choices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]]}
+  return new Set(choices.slice(0,Math.min(count,words.length)));
+}
+let blankIndexes=new Set();
+function buildBlanks(){
+  const words=verseWords();
+  blankIndexes=pickBlankIndexes();
+  const area=document.getElementById("blankArea");area.innerHTML="";
+  words.forEach((w,i)=>{
+    if(blankIndexes.has(i)){
+      const inp=document.createElement("input");inp.className="blank";inp.dataset.answer=w.toLowerCase().replace(/[’']/g,"");inp.autocomplete="off";inp.autocorrect="off";inp.spellcheck=false;
+      area.appendChild(inp);
+    }else{
+      const span=document.createElement("span");span.textContent=w+" ";area.appendChild(span);
+    }
   });
 }
-$("hearVerse").onclick=()=>speakBible(verseText);
-$("hearPart").onclick=()=>speakBible(verseParts[currentVersePart]);
-$("nextPart").onclick=()=>{
-  if(currentVersePart<verseParts.length-1) currentVersePart++;
-  updateVersePart();
+document.getElementById("easyBlank").onclick=()=>{blankMode="easy";buildBlanks()};
+document.getElementById("hardBlank").onclick=()=>{blankMode="hard";buildBlanks()};
+document.getElementById("newBlank").onclick=buildBlanks;
+document.getElementById("checkBlanks").onclick=()=>{
+  const inputs=[...document.querySelectorAll(".blank")];let right=0;
+  inputs.forEach(inp=>{
+    const got=(inp.value||"").toLowerCase().replace(/[^a-z]/g,"");
+    const ans=inp.dataset.answer.replace(/[^a-z]/g,"");
+    const ok=got===ans;if(ok)right++;
+    inp.classList.toggle("good",ok);inp.classList.toggle("bad",!ok);
+  });
+  const f=document.getElementById("blankFeedback");
+  if(right===inputs.length){f.className="feedback good";f.textContent="Perfect! Every missing word is correct."}
+  else{f.className="feedback bad";f.textContent=`You have ${right} of ${inputs.length} correct. Fix the red blanks and check again.`}
 };
-$("prevPart").onclick=()=>{
-  if(currentVersePart>0) currentVersePart--;
-  updateVersePart();
+document.getElementById("showBlanks").onclick=()=>{
+  document.querySelectorAll(".blank").forEach(inp=>{inp.value=inp.dataset.answer;inp.classList.remove("bad");inp.classList.add("good")});
 };
-document.querySelectorAll(".verseStep").forEach((el,idx)=>{
-  el.onclick=()=>{currentVersePart=idx;updateVersePart();};
-});
+buildBlanks();
 
-function renderVerse(hideCount=0){
-  $("firstLetters").style.display="none";
-  const words=verseText.split(" ");
-  const priority=[2,5,8,11,14,17,20,1,4,7,10,13,16,19,0,3,6,9,12,15,18,21,22,23,24,25,26];
-  const hide=new Set(priority.filter(x=>x<words.length).slice(0,hideCount));
-  $("verseDisplay").innerHTML=words.map((w,idx)=>hide.has(idx)?`<span class="blankWord">${w}</span>`:w).join(" ");
+// first letters
+const wordTokens=verse.match(/[A-Za-z]+/g)||[];
+document.getElementById("initials").textContent=wordTokens.map(w=>w[0].toUpperCase()+".").join(" ");
+document.getElementById("revealLetters").onclick=()=>{
+  const r=document.getElementById("lettersReveal");
+  const show=r.style.display==="none";
+  r.style.display=show?"block":"none";
+  document.getElementById("revealLetters").textContent=show?"Hide Full Verse":"Show Full Verse";
+};
+
+// put in order
+let remaining=[],chosen=[];
+function shuffled(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function resetOrder(){
+  remaining=shuffled(chunks.map((text,index)=>({text,index})));chosen=[];
+  document.getElementById("orderFeedback").className="feedback";
+  document.getElementById("orderFeedback").textContent="";
+  renderOrder();
 }
-document.querySelectorAll("[data-hide]").forEach(b=>b.onclick=()=>renderVerse(Number(b.dataset.hide)));
-
-$("firstLettersBtn").onclick=()=>{
-  const words=verseText.split(/\s+/);
-  $("firstLetters").textContent=words.map(w=>{
-    const m=w.match(/[A-Za-z]/);
-    return m?m[0].toLowerCase()+".":"";
-  }).join(" ");
-  $("firstLetters").style.display="block";
-};
-
-function normalizeVerse(v){
-  return (v||"").toLowerCase().replace(/[’']/g,"").replace(/[^a-z0-9 ]/g,"").replace(/\s+/g," ").trim();
+function renderOrder(){
+  const bank=document.getElementById("orderBank"), ch=document.getElementById("chosen");
+  bank.innerHTML="";ch.innerHTML="";
+  chosen.forEach((x,pos)=>{
+    const d=document.createElement("div");d.className="answer-chip";
+    const span=document.createElement("span");span.innerHTML=`<b>${pos+1}.</b> ${escapeHTML(x.text)}`;
+    const b=document.createElement("button");b.textContent="↩";b.onclick=()=>{remaining.push(chosen.splice(pos,1)[0]);renderOrder()};
+    d.appendChild(span);d.appendChild(b);ch.appendChild(d);
+  });
+  remaining.forEach((x,pos)=>{
+    const b=document.createElement("button");b.className="order-card";b.textContent=x.text;
+    b.onclick=()=>{chosen.push(remaining.splice(pos,1)[0]);renderOrder()};
+    bank.appendChild(b);
+  });
 }
-$("checkVerse").onclick=()=>{
-  const got=normalizeVerse($("verseInput").value),expected=normalizeVerse(verseText);
-  const ok=got===expected;
-  $("verseFeedback").textContent=ok
-    ?"✅ Perfect! You remembered the whole verse."
-    :"💡 Almost! Read it once more, then try again.";
-  $("verseFeedback").className="feedback "+(ok?"good":"bad");
+document.getElementById("checkOrder").onclick=()=>{
+  const f=document.getElementById("orderFeedback");
+  if(chosen.length!==chunks.length){f.className="feedback bad";f.textContent=`Choose all ${chunks.length} chunks first.`;return}
+  const ok=chosen.every((x,i)=>x.index===i);
+  f.className="feedback "+(ok?"good":"bad");
+  f.textContent=ok?"Yes! The whole verse is in the correct order.":"Not quite. One or more chunks are out of order. Try again.";
 };
-$("clearVerse").onclick=()=>{
-  $("verseInput").value="";
-  $("verseFeedback").textContent="";
+document.getElementById("resetOrder").onclick=resetOrder;
+resetOrder();
+
+// from memory
+function normalizedWords(s){return (s.toLowerCase().replace(/[’']/g,"").match(/[a-z]+/g)||[])}
+document.getElementById("checkMemory").onclick=()=>{
+  const expected=normalizedWords(verse), got=normalizedWords(document.getElementById("memoryText").value);
+  let positional=0;for(let i=0;i<expected.length;i++)if(got[i]===expected[i])positional++;
+  const pct=Math.round(positional/expected.length*100);
+  document.getElementById("memoryScore").innerHTML=`<div class="scorebig">${pct}%</div>`;
+  const f=document.getElementById("memoryFeedback");
+  if(pct===100){f.className="feedback good";f.textContent="Amazing — every word is in the correct place!"}
+  else if(pct>=85){f.className="feedback good";f.textContent="Very close! Read the verse once, then try it again without looking."}
+  else{
+    let first=0;while(first<expected.length&&got[first]===expected[first])first++;
+    const hint=first<expected.length?`The next expected word is “${expected[first]}.”`:"";
+    f.className="feedback bad";f.textContent=`Keep going. ${hint}`;
+  }
 };
-updateVersePart();
-renderVerse(0);
+document.getElementById("clearMemory").onclick=()=>{
+  document.getElementById("memoryText").value="";
+  document.getElementById("memoryScore").innerHTML="";
+  document.getElementById("memoryFeedback").className="feedback";
+  document.getElementById("memoryFeedback").textContent="";
+};
+
 </script>
 </body>
 </html>
