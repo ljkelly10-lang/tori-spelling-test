@@ -17,7 +17,7 @@ header{text-align:center;margin-bottom:14px} h1{margin:0;font-size:clamp(30px,8v
 .schedule{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
 .day{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;text-align:center;font-size:12px;box-shadow:0 8px 25px rgba(78,45,91,.06)}
 .day b{display:block;font-size:14px;margin-bottom:3px}
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0 16px}
+.tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0 16px}
 .tab{border:0;border-radius:14px;padding:11px 7px;font-size:13px;font-weight:900;background:#f2e9f5;color:var(--ink)}
 .tab.active{background:linear-gradient(135deg,var(--pink),var(--lav));color:white}
 .panel{display:none} .panel.active{display:block}
@@ -55,7 +55,7 @@ footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 <div class="app">
 <header>
 <h1>Tori's Study Hub 💗</h1>
-<p class="subtitle">This week's reading, math, spelling, and Bible verse practice</p>
+<p class="subtitle">This week's spelling and Bible verse practice</p>
 <div class="schedule">
   <div class="day"><b>Wednesday</b>Spelling List 4 Test</div>
   <div class="day"><b>Friday</b>Chapter 4 Bible &amp; Memory Verse Test</div>
@@ -64,9 +64,7 @@ footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 
 <div class="tabs">
 <button class="tab active" data-tab="spelling">📝 Spelling</button>
-<button class="tab" data-tab="reading">📖 Reading</button>
 <button class="tab" data-tab="bible">✝️ Bible Verse</button>
-<button class="tab" data-tab="math">➗ Math</button>
 </div>
 
 <section id="spelling" class="panel active">
@@ -84,17 +82,6 @@ footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 <div id="reveal" class="reveal"><div id="word" class="word"></div></div>
 <div class="nav"><button id="prev">← Back</button><button id="shuffle">🔀 Shuffle</button><button class="primary" id="next">Next →</button></div>
 <div id="score" class="score">Score: 0 correct out of 0 answers</div>
-</div>
-</section>
-
-<section id="reading" class="panel">
-<div class="card">
-<h2 class="sectionTitle">Down the Rabbit-Hole Practice</h2>
-<p class="muted">10 NEW comprehension questions for Monday's quiz.</p>
-<div class="notice">These questions use the standard Chapter 1 of <i>Alice's Adventures in Wonderland</i>. If the class has a shortened or adapted version, upload those pages and the questions can be matched exactly.</div>
-<div id="readingQuestions"></div>
-<div id="readingScore" class="readingScore"></div>
-<div class="row"><button class="primary" id="checkReading">Check Reading Quiz</button><button id="resetReading">Try Again</button></div>
 </div>
 </section>
 
@@ -118,20 +105,11 @@ footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 </div>
 </section>
 
-<section id="math" class="panel">
-<div class="card placeholder">
-<div class="big">➗</div>
-<h2>Math Test Tuesday</h2>
-<p class="muted">Upload the study guide when she receives it. This tab is ready for her math practice questions.</p>
-</div>
-</section>
-
 <footer>Study Hub • Spelling List 4 • 2 Timothy 2:15 (CSB)</footer>
 </div>
 
 <script>
 const spellingData=[{"word":"shown","clue":"Past participle of show; displayed or made visible.","sentence":"The teacher has shown us how to solve the problem.","category":"regular"},{"word":"common","clue":"Happening often or found in many places.","sentence":"Rain is common during spring.","category":"regular"},{"word":"soap","clue":"A substance used for washing and cleaning.","sentence":"Wash your hands with soap and water.","category":"regular"},{"word":"problem","clue":"A question or situation that needs to be solved.","sentence":"She worked carefully to solve the math problem.","category":"regular"},{"word":"quote","clue":"To repeat the exact words someone said or wrote.","sentence":"She used a quote from the book in her report.","category":"regular"},{"word":"bowling","clue":"A game in which a ball is rolled toward pins.","sentence":"We went bowling with our family.","category":"regular"},{"word":"growth","clue":"The process of becoming bigger or developing.","sentence":"The plant showed a lot of growth this month.","category":"regular"},{"word":"stone","clue":"A small piece of rock.","sentence":"He skipped a flat stone across the pond.","category":"regular"},{"word":"product","clue":"Something that is made or sold; also the answer to a multiplication problem.","sentence":"The store displayed its newest product.","category":"regular"},{"word":"fellowship","clue":"Friendly companionship or a group sharing something in common.","sentence":"The group enjoyed fellowship after the meeting.","category":"regular"},{"word":"contest","clue":"A competition in which people try to win.","sentence":"She entered the school art contest.","category":"regular"},{"word":"shadow","clue":"A dark shape made when something blocks light.","sentence":"Her shadow stretched across the sidewalk.","category":"regular"},{"word":"coax","clue":"To gently persuade someone to do something.","sentence":"He tried to coax the puppy out from under the chair.","category":"regular"},{"word":"scroll","clue":"To move up or down through information on a screen.","sentence":"Scroll down to see the rest of the page.","category":"regular"},{"word":"topic","clue":"The subject being discussed, written about, or studied.","sentence":"Our science topic this week is weather.","category":"regular"},{"word":"suppose","clue":"To think or believe that something may be true.","sentence":"I suppose we can finish the project tomorrow.","category":"regular"},{"word":"visit","clue":"To go see a person or place for a period of time.","sentence":"We will visit our grandparents this weekend.","category":"review"},{"word":"style","clue":"A particular way something looks or is done.","sentence":"Her dance style was smooth and confident.","category":"review"},{"word":"though","clue":"A word used to show contrast, similar to although.","sentence":"It was raining, though we still had fun.","category":"challenge"},{"word":"clothes","clue":"Things people wear, such as shirts, pants, and dresses.","sentence":"She folded her clean clothes and put them away.","category":"challenge"}];
-const readingData=[{"q":"Before the White Rabbit appeared, what was Alice thinking about making?","options":["A daisy-chain","A flower crown","A paper boat","A picnic basket"],"answer":0,"explain":"Alice was deciding whether making a daisy-chain was worth getting up to pick the flowers."},{"q":"While falling down the rabbit-hole, why did Alice begin wondering whether she was near the center of the earth?","options":["She could feel the ground getting hotter.","She thought she had already fallen a very long distance.","The White Rabbit told her where she was.","She saw a map on the wall."],"answer":1,"explain":"Alice wondered how many miles she had fallen and began thinking about the distance to the center of the earth."},{"q":"What mistaken word did Alice use for the people she imagined living on the opposite side of the earth?","options":["Antipathies","Australians","Adventurers","Astronomers"],"answer":0,"explain":"Alice says \u201cAntipathies,\u201d then realizes it does not sound like the right word."},{"q":"What did Alice try to do while falling when she imagined politely asking whether she was in New Zealand or Australia?","options":["Wave","Curtsey","Clap","Whisper"],"answer":1,"explain":"Alice tried to curtsey while falling as she imagined politely asking where she was."},{"q":"After the White Rabbit disappeared around a corner, what provided light in the long, low hall Alice entered?","options":["Candles on the floor","Sunlight through windows","A row of lamps hanging from the roof","The golden key"],"answer":2,"explain":"The long, low hall was lit by a row of lamps hanging from the roof."},{"q":"Before Alice drank from the bottle labeled \u201cDRINK ME,\u201d what safety check did she make?","options":["She checked whether it was marked \u201cpoison.\u201d","She asked the White Rabbit to taste it first.","She poured the drink onto the floor.","She smelled it to see whether it was water."],"answer":0,"explain":"Alice remembered safety lessons and checked the bottle for a poison warning before tasting it."},{"q":"After Alice became only ten inches tall, what stopped her from immediately entering the garden?","options":["The little door had disappeared.","She had forgotten the golden key on the table and could not reach it.","The White Rabbit locked the garden.","She became too frightened to continue."],"answer":1,"explain":"Alice was finally small enough for the doorway, but the key was now too high for her to reach."},{"q":"What does the narrator say about the advice Alice gives herself?","options":["She never gives herself advice.","She usually gives herself bad advice.","She gives herself good advice but seldom follows it.","She always follows her own advice immediately."],"answer":2,"explain":"The narrator says Alice gives herself very good advice but rarely follows it."},{"q":"How were the words \u201cEAT ME\u201d written on the little cake Alice found?","options":["With frosting","With currants","With chocolate","With sugar crystals"],"answer":1,"explain":"The words \u201cEAT ME\u201d were marked on the cake in currants."},{"q":"Why did Alice decide that eating the \u201cEAT ME\u201d cake could help her either way?","options":["Growing would let her reach the key, while shrinking would let her creep under the door.","Growing would help her catch the Rabbit, while shrinking would help her hide.","The cake would either wake her up or make her fall asleep.","The cake would either unlock the door or make a new key appear."],"answer":0,"explain":"Alice reasoned that either change in size might help her reach the garden."}];
 const verseText="Be diligent to present yourself to God as one approved, a worker who doesn’t need to be ashamed, correctly teaching the word of truth.";
 const $=id=>document.getElementById(id);
 
@@ -262,32 +240,6 @@ $("shuffle").onclick=()=>{cards=[...spellingData];for(let j=cards.length-1;j>0;j
 answer.addEventListener("input",()=>{answer.value=answer.value.toLowerCase();});
 answer.addEventListener("keydown",e=>{if(e.key==="Enter")$("check").click();});
 render();
-
-// ---------- READING ----------
-const rq=$("readingQuestions");
-let readingSelections={};
-readingData.forEach((item,idx)=>{
-  const wrap=document.createElement("div");wrap.className="quizCard";
-  wrap.innerHTML=`<div class="qnum">Question ${idx+1}</div><div class="qtext">${item.q}</div>`;
-  item.options.forEach((op,oi)=>{
-    const b=document.createElement("button");b.className="option";b.textContent=op;
-    b.onclick=()=>{wrap.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");readingSelections[idx]=oi;};
-    wrap.appendChild(b);
-  });
-  const ex=document.createElement("div");ex.className="explain";ex.id="ex"+idx;wrap.appendChild(ex);rq.appendChild(wrap);
-});
-$("checkReading").onclick=()=>{
-  let got=0;
-  readingData.forEach((item,idx)=>{
-    const ex=$("ex"+idx),choice=readingSelections[idx];
-    const card=ex.parentElement,opts=card.querySelectorAll(".option");
-    opts.forEach((b,oi)=>{b.style.borderColor=oi===item.answer?"#65a988":(choice===oi?"#d98a96":"#ead9e5");});
-    if(choice===item.answer)got++;
-    ex.textContent=(choice===item.answer?"✅ ":"❌ ")+item.explain;ex.style.display="block";
-  });
-  $("readingScore").textContent=`Reading score: ${got} / ${readingData.length}`;
-};
-$("resetReading").onclick=()=>{readingSelections={};document.querySelectorAll(".option").forEach(b=>{b.classList.remove("selected");b.style.borderColor="#ead9e5";});document.querySelectorAll(".explain").forEach(e=>e.style.display="none");$("readingScore").textContent="";};
 
 // ---------- BIBLE VERSE ----------
 function renderVerse(hideCount=0){
