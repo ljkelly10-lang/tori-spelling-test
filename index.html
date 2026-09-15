@@ -17,7 +17,7 @@ header{text-align:center;margin-bottom:14px} h1{margin:0;font-size:clamp(30px,8v
 .schedule{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
 .day{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;text-align:center;font-size:12px;box-shadow:0 8px 25px rgba(78,45,91,.06)}
 .day b{display:block;font-size:14px;margin-bottom:3px}
-.tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0 16px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0 16px}
 .tab{border:0;border-radius:14px;padding:11px 7px;font-size:13px;font-weight:900;background:#f2e9f5;color:var(--ink)}
 .tab.active{background:linear-gradient(135deg,var(--pink),var(--lav));color:white}
 .panel{display:none} .panel.active{display:block}
@@ -73,21 +73,62 @@ footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 .scorebig{font-size:42px;font-weight:950;text-align:center;margin:10px 0;color:#7357ca}
 @media(max-width:560px){.bibleTabs{grid-template-columns:repeat(2,1fr)}}
 
+
+.heritageIntro{background:linear-gradient(135deg,#eef8ff,#f5f2ff);border:1px solid #d9e7f4;border-radius:18px;padding:15px;margin-bottom:14px}
+.hStep{background:#fff;border:1px solid #e5ddeb;border-radius:18px;padding:15px;margin-top:14px}
+.hStep h3{margin:0 0 6px;font-size:20px}
+.hStep .small{font-size:13px;color:var(--muted);line-height:1.45}
+.directionBox{background:#fff8e7;border:2px solid #efcf8e;border-radius:18px;padding:16px;margin-top:10px}
+.directionBox .readall{font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;color:#9a6916}
+.directionBox p{font-size:17px;line-height:1.55;margin:8px 0}
+.choiceGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.choiceGrid button{background:#fff;border:1px solid #ddd2e1}
+.choiceGrid button.selected{background:#efe8ff;border-color:#8f72ea}
+.lineMap{position:relative;height:300px;border:2px solid #cdd9e7;border-radius:20px;background:linear-gradient(#eef9ff,#f7fcff);margin:14px 0;overflow:hidden}
+.hline{position:absolute;left:8%;right:8%;height:3px;background:#5e9ec8;border-radius:3px}
+.hline span{position:absolute;left:-30px;top:-12px;font-weight:950;color:#3c6f91}
+.vline{position:absolute;top:7%;bottom:7%;left:52%;width:3px;background:#c76565;border-radius:3px}
+.vline span{position:absolute;left:-12px;bottom:-26px;font-weight:950;color:#9a4646}
+.mapBlob{position:absolute;background:#d9e9cc;border:1px solid #b8cbaa;border-radius:45% 55% 50% 40%;opacity:.85}
+.mapLabels{display:grid;grid-template-columns:1fr;gap:8px}
+.mapLabelRow{display:grid;grid-template-columns:36px 1fr;gap:8px;align-items:center}
+.mapLabelRow b{text-align:center;font-size:18px}
+.mapLabelRow select{width:100%;padding:12px;border-radius:13px;border:1px solid #d9cddd;background:#fff;font:inherit}
+.hQuestion{background:#fff8fc;border:1px solid #efd9e7;border-radius:17px;padding:14px;margin-top:10px}
+.hQuestion .q{font-size:17px;font-weight:850;line-height:1.4;margin-bottom:8px}
+.hQuestion button{display:block;width:100%;text-align:left;margin:6px 0;background:#fff;border:1px solid #e2d7e0}
+.hQuestion button.right{background:#e9f8ef;border-color:#6fbe91}
+.hQuestion button.wrong{background:#fff0f2;border-color:#d98b95}
+.hFeedback{font-size:14px;font-weight:800;margin-top:7px;min-height:20px}
+.writeRow{margin-top:10px}
+.writeRow label{display:block;font-weight:850;margin-bottom:5px}
+.writeRow input{width:100%;padding:12px;border:2px solid #e1d5df;border-radius:13px;font-size:17px;outline:none}
+.writeRow input.goodField{border-color:#52a777;background:#f0fbf5}
+.writeRow input.badField{border-color:#ce6d79;background:#fff5f6}
+.attentionBadge{display:inline-block;background:#fff2c9;color:#8a6516;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:950}
+@media(max-width:560px){
+  .tabs{grid-template-columns:repeat(3,1fr)}
+  .tab{font-size:12px;padding:10px 4px}
+  .choiceGrid{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
 <div class="app">
 <header>
 <h1>Tori's Study Hub 💗</h1>
-<p class="subtitle">This week's spelling and Bible verse practice</p>
+<p class="subtitle">This week's spelling, Heritage Studies, and Bible verse practice</p>
 <div class="schedule">
   <div class="day"><b>Wednesday</b>Spelling List 5 Test</div>
-  <div class="day"><b>Friday</b>Chapter 4 Bible &amp; Memory Verse Test</div>
+  <div class="day"><b>Friday</b>Heritage Studies Quiz</div>
+  <div class="day"><b>Monday</b>Heritage Studies Test</div>
 </div>
 </header>
 
 <div class="tabs">
 <button class="tab active" data-tab="spelling">📝 Spelling</button>
+<button class="tab" data-tab="heritage">🌎 Heritage</button>
 <button class="tab" data-tab="bible">✝️ Bible Verse</button>
 </div>
 
@@ -106,6 +147,98 @@ footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 <div id="reveal" class="reveal"><div id="word" class="word"></div></div>
 <div class="nav"><button id="prev">← Back</button><button id="shuffle">🔀 Shuffle</button><button class="primary" id="next">Next →</button></div>
 <div id="score" class="score">Score: 0 correct out of 0 answers</div>
+</div>
+</section>
+
+
+<section id="heritage" class="panel">
+<div class="card">
+<h2 class="sectionTitle">Heritage Studies Practice 🌎</h2>
+<p class="muted">Quiz Friday • Test Monday</p>
+
+<div class="heritageIntro">
+  <span class="attentionBadge">⭐ Main goal: READ EVERY DIRECTION</span>
+  <p style="margin:10px 0 0;line-height:1.5">This practice works on the exact skills from the homework: following all parts of a direction, labeling map lines, spelling geography words, and using directions such as northwest and southeast.</p>
+</div>
+
+<div class="hStep">
+  <h3>1. Direction Detective</h3>
+  <p class="small">Before answering, read the entire yellow box. The questions check whether you noticed every part.</p>
+  <div class="directionBox">
+    <div class="readall">Read all directions before you answer</div>
+    <p><b>Directions:</b> Imagine five lines of latitude and one line of longitude. Color every line of <b>latitude BLUE</b>. Color the <b>Prime Meridian RED</b>. Then choose the answers below.</p>
+  </div>
+  <div class="hQuestion">
+    <div class="q">What color should the lines of latitude be?</div>
+    <div class="choiceGrid" id="dirQ1">
+      <button data-value="blue">Blue</button><button data-value="red">Red</button>
+    </div>
+  </div>
+  <div class="hQuestion">
+    <div class="q">What color should the Prime Meridian be?</div>
+    <div class="choiceGrid" id="dirQ2">
+      <button data-value="blue">Blue</button><button data-value="red">Red</button>
+    </div>
+  </div>
+  <div class="row"><button class="primary" id="checkDirections">Check Directions</button></div>
+  <div class="feedback" id="directionFeedback"></div>
+</div>
+
+<div class="hStep">
+  <h3>2. Learn the Map Lines</h3>
+  <p class="small">A–E are lines of latitude. F is the Prime Meridian, a line of longitude.</p>
+  <div class="lineMap" aria-label="Simple practice map diagram">
+    <div class="mapBlob" style="left:12%;top:55px;width:120px;height:100px"></div>
+    <div class="mapBlob" style="left:30%;top:150px;width:85px;height:95px"></div>
+    <div class="mapBlob" style="right:17%;top:70px;width:180px;height:100px"></div>
+    <div class="mapBlob" style="right:12%;top:190px;width:95px;height:65px"></div>
+    <div class="hline" style="top:16%"><span>A</span></div>
+    <div class="hline" style="top:35%"><span>B</span></div>
+    <div class="hline" style="top:50%"><span>C</span></div>
+    <div class="hline" style="top:66%"><span>D</span></div>
+    <div class="hline" style="top:86%"><span>E</span></div>
+    <div class="vline"><span>F</span></div>
+  </div>
+  <div class="mapLabels">
+    <div class="mapLabelRow"><b>A</b><select id="mapA"></select></div>
+    <div class="mapLabelRow"><b>B</b><select id="mapB"></select></div>
+    <div class="mapLabelRow"><b>C</b><select id="mapC"></select></div>
+    <div class="mapLabelRow"><b>D</b><select id="mapD"></select></div>
+    <div class="mapLabelRow"><b>E</b><select id="mapE"></select></div>
+    <div class="mapLabelRow"><b>F</b><select id="mapF"></select></div>
+  </div>
+  <div class="row"><button class="primary" id="checkMapLabels">Check Map Labels</button><button id="resetMapLabels">Try Again</button></div>
+  <div class="feedback" id="mapFeedback"></div>
+</div>
+
+<div class="hStep">
+  <h3>3. Geography Words — Spell Them Carefully</h3>
+  <p class="small">Type the complete name. Capitalization does not count, but the spelling does.</p>
+  <div id="heritageSpelling"></div>
+  <div class="row"><button class="primary" id="checkHeritageSpelling">Check Spelling</button><button id="clearHeritageSpelling">Clear</button></div>
+  <div class="feedback" id="heritageSpellFeedback"></div>
+</div>
+
+<div class="hStep">
+  <h3>4. Daily Directions & Map Quiz</h3>
+  <p class="small"><b>New wording each day:</b> the same skills are asked in different ways so Tori practices understanding the question, not memorizing it. Use “New Mix” for extra practice the same day.</p>
+  <div class="directionBox" style="margin-bottom:10px"><div class="readall">Direction wording tip</div><p>When a question says <b>“Where is A from B?”</b>, start at <b>B</b> and look toward <b>A</b>.</p></div>
+  <div id="heritageQuiz"></div>
+  <div class="row"><button id="newHeritageQuiz">🔀 New Mix</button></div>
+  <div class="score" id="heritageScore">Score: 0 of 0</div>
+</div>
+
+<div class="hStep">
+  <h3>5. Stop & Check Routine</h3>
+  <div class="directionBox">
+    <div class="readall">Use this on schoolwork</div>
+    <p><b>1.</b> Read the whole direction.<br>
+    <b>2.</b> Ask: “How many things am I supposed to do?”<br>
+    <b>3.</b> Do each part one at a time.<br>
+    <b>4.</b> Before moving on, reread the direction and check that every part is finished.</p>
+  </div>
+</div>
+
 </div>
 </section>
 
@@ -200,7 +333,7 @@ footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 </div>
 </section>
 
-<footer>Study Hub • Spelling List 5 • 2 Timothy 2:15 (CSB)</footer>
+<footer>Study Hub • Spelling List 5 • Heritage Studies • 2 Timothy 2:15 (CSB)</footer>
 </div>
 
 <script>
@@ -335,6 +468,287 @@ $("shuffle").onclick=()=>{cards=[...spellingData];for(let j=cards.length-1;j>0;j
 answer.addEventListener("input",()=>{answer.value=answer.value.toLowerCase();});
 answer.addEventListener("keydown",e=>{if(e.key==="Enter")$("check").click();});
 render();
+
+
+// ---------- HERITAGE STUDIES ----------
+const mapNames=["Choose a label…","Arctic Circle","Tropic of Cancer","Equator","Tropic of Capricorn","Antarctic Circle","Prime Meridian"];
+const mapAnswers={A:"Arctic Circle",B:"Tropic of Cancer",C:"Equator",D:"Tropic of Capricorn",E:"Antarctic Circle",F:"Prime Meridian"};
+
+["A","B","C","D","E","F"].forEach(letter=>{
+  const sel=$("map"+letter);
+  mapNames.forEach(name=>{
+    const opt=document.createElement("option");
+    opt.value=name==="Choose a label…"?"":name;
+    opt.textContent=name;
+    sel.appendChild(opt);
+  });
+});
+
+let dirAnswers={q1:null,q2:null};
+function wireChoiceGroup(id,key){
+  document.querySelectorAll("#"+id+" button").forEach(btn=>{
+    btn.onclick=()=>{
+      document.querySelectorAll("#"+id+" button").forEach(b=>b.classList.remove("selected"));
+      btn.classList.add("selected");
+      dirAnswers[key]=btn.dataset.value;
+    };
+  });
+}
+wireChoiceGroup("dirQ1","q1");
+wireChoiceGroup("dirQ2","q2");
+
+$("checkDirections").onclick=()=>{
+  const ok1=dirAnswers.q1==="blue",ok2=dirAnswers.q2==="red";
+  const f=$("directionFeedback");
+  if(ok1&&ok2){
+    f.className="feedback good";
+    f.textContent="✅ Great job! You read BOTH parts of the direction.";
+  }else{
+    f.className="feedback bad";
+    f.textContent="Look back at the yellow directions. There are TWO color instructions.";
+  }
+};
+
+$("checkMapLabels").onclick=()=>{
+  let right=0;
+  ["A","B","C","D","E","F"].forEach(letter=>{
+    const sel=$("map"+letter);
+    const ok=sel.value===mapAnswers[letter];
+    if(ok) right++;
+    sel.style.borderColor=ok?"#52a777":"#ce6d79";
+    sel.style.background=ok?"#f0fbf5":"#fff5f6";
+  });
+  const f=$("mapFeedback");
+  f.className="feedback "+(right===6?"good":"bad");
+  f.textContent=right===6?"✅ All 6 map lines are correct!":`${right} of 6 correct. Fix the ones outlined in red.`;
+};
+$("resetMapLabels").onclick=()=>{
+  ["A","B","C","D","E","F"].forEach(letter=>{
+    const sel=$("map"+letter);sel.value="";sel.style.borderColor="";sel.style.background="";
+  });
+  $("mapFeedback").textContent="";
+};
+
+const heritageSpellWords=[
+  {label:"The continent at the South Pole",answer:"Antarctica"},
+  {label:"The continent southeast of North America",answer:"South America"},
+  {label:"The northern polar circle",answer:"Arctic Circle"},
+  {label:"The southern polar circle",answer:"Antarctic Circle"},
+  {label:"0° latitude",answer:"Equator"},
+  {label:"0° longitude",answer:"Prime Meridian"}
+];
+function buildHeritageSpelling(){
+  const box=$("heritageSpelling");box.innerHTML="";
+  heritageSpellWords.forEach((item,idx)=>{
+    const row=document.createElement("div");row.className="writeRow";
+    const label=document.createElement("label");label.textContent=(idx+1)+". "+item.label;
+    const input=document.createElement("input");
+    input.id="hspell"+idx;input.autocomplete="off";input.autocorrect="off";input.spellcheck=false;
+    input.placeholder="Type the complete name";
+    row.appendChild(label);row.appendChild(input);box.appendChild(row);
+  });
+}
+buildHeritageSpelling();
+
+function normGeo(s){return (s||"").toLowerCase().replace(/[^a-z]/g,"")}
+$("checkHeritageSpelling").onclick=()=>{
+  let right=0;
+  heritageSpellWords.forEach((item,idx)=>{
+    const inp=$("hspell"+idx);
+    const ok=normGeo(inp.value)===normGeo(item.answer);
+    if(ok)right++;
+    inp.classList.toggle("goodField",ok);
+    inp.classList.toggle("badField",!ok);
+  });
+  const f=$("heritageSpellFeedback");
+  f.className="feedback "+(right===heritageSpellWords.length?"good":"bad");
+  f.textContent=right===heritageSpellWords.length
+    ?"✅ Perfect spelling!"
+    :`${right} of ${heritageSpellWords.length} correct. Fix the red boxes and check again.`;
+};
+$("clearHeritageSpelling").onclick=()=>{
+  heritageSpellWords.forEach((_,idx)=>{
+    const inp=$("hspell"+idx);inp.value="";inp.classList.remove("goodField","badField");
+  });
+  $("heritageSpellFeedback").textContent="";
+};
+
+const directionFacts=[
+  {target:"South America",reference:"North America",direction:"Southeast"},
+  {target:"North America",reference:"South America",direction:"Northwest"},
+  {target:"Europe",reference:"Australia",direction:"Northwest"},
+  {target:"Australia",reference:"Europe",direction:"Southeast"},
+  {target:"Africa",reference:"Europe",direction:"South"},
+  {target:"Europe",reference:"Africa",direction:"North"},
+  {target:"Asia",reference:"Australia",direction:"Northwest"},
+  {target:"Australia",reference:"Asia",direction:"Southeast"}
+];
+
+const directionOptions=["North","South","East","West","Northeast","Northwest","Southeast","Southwest"];
+
+const wordingTemplates=[
+  (t,r)=>`Where is ${t} in relation to ${r}?`,
+  (t,r)=>`${t} is in which direction from ${r}?`,
+  (t,r)=>`If you start in ${r} and travel toward ${t}, which direction would you go?`,
+  (t,r)=>`Starting at ${r}, which direction points toward ${t}?`,
+  (t,r)=>`Which direction best describes the location of ${t} compared with ${r}?`,
+  (t,r)=>`On a world map, ${t} is mostly which direction from ${r}?`
+];
+
+const mapConcepts=[
+  {
+    q:"Which imaginary line is 0° latitude?",
+    a:"Equator",
+    options:["Equator","Prime Meridian","Arctic Circle","Tropic of Capricorn"],
+    explain:"The Equator is 0° latitude."
+  },
+  {
+    q:"Which imaginary line is 0° longitude?",
+    a:"Prime Meridian",
+    options:["Prime Meridian","Equator","Tropic of Cancer","Antarctic Circle"],
+    explain:"The Prime Meridian is 0° longitude."
+  },
+  {
+    q:"Which line of latitude is north of the Equator?",
+    a:"Tropic of Cancer",
+    options:["Tropic of Cancer","Tropic of Capricorn","Antarctic Circle","Prime Meridian"],
+    explain:"The Tropic of Cancer is north of the Equator."
+  },
+  {
+    q:"Which line of latitude is south of the Equator?",
+    a:"Tropic of Capricorn",
+    options:["Tropic of Capricorn","Tropic of Cancer","Arctic Circle","Prime Meridian"],
+    explain:"The Tropic of Capricorn is south of the Equator."
+  },
+  {
+    q:"Which statement about latitude is correct?",
+    a:"Lines of latitude run east–west and measure distance north or south of the Equator.",
+    options:[
+      "Lines of latitude run east–west and measure distance north or south of the Equator.",
+      "Lines of latitude run north–south and measure distance east or west of the Prime Meridian.",
+      "Latitude is another name for the Prime Meridian.",
+      "Latitude tells only which continent you are on."
+    ],
+    explain:"Latitude lines circle east–west and tell how far north or south a place is."
+  },
+  {
+    q:"Which statement about longitude is correct?",
+    a:"Lines of longitude run north–south and measure distance east or west of the Prime Meridian.",
+    options:[
+      "Lines of longitude run north–south and measure distance east or west of the Prime Meridian.",
+      "Lines of longitude run east–west and measure distance north or south of the Equator.",
+      "Longitude is another name for the Equator.",
+      "Longitude tells only whether a place is hot or cold."
+    ],
+    explain:"Longitude lines run pole to pole and tell how far east or west a place is."
+  },
+  {
+    q:"Which is one way a family might use GPS?",
+    a:"To find a location and get directions while traveling.",
+    options:[
+      "To find a location and get directions while traveling.",
+      "To change the weather.",
+      "To measure the temperature of the ocean.",
+      "To move a continent on a map."
+    ],
+    explain:"GPS can help find locations and provide directions."
+  },
+  {
+    q:"Which continent is south of all the other continents?",
+    a:"Antarctica",
+    options:["Antarctica","Australia","Africa","South America"],
+    explain:"Antarctica surrounds the South Pole and is south of the other continents."
+  }
+];
+
+function seededRandom(seed){
+  let a=seed>>>0;
+  return function(){
+    a+=0x6D2B79F5;
+    let t=a;
+    t=Math.imul(t^t>>>15,t|1);
+    t^=t+Math.imul(t^t>>>7,t|61);
+    return ((t^t>>>14)>>>0)/4294967296;
+  };
+}
+function localDateSeed(){
+  const d=new Date();
+  return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();
+}
+function shuffleWithRand(arr,rand){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(rand()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function directionDistractors(correct,rand){
+  const wrong=directionOptions.filter(x=>x!==correct);
+  return shuffleWithRand(wrong,rand).slice(0,3);
+}
+function makeDirectionQuestion(fact,rand){
+  const template=wordingTemplates[Math.floor(rand()*wordingTemplates.length)];
+  const opts=shuffleWithRand([fact.direction,...directionDistractors(fact.direction,rand)],rand);
+  return {
+    q:template(fact.target,fact.reference),
+    a:fact.direction,
+    options:opts,
+    explain:`Start at ${fact.reference}. ${fact.target} is ${fact.direction.toLowerCase()} from there.`
+  };
+}
+function makeDailyHeritageQuestions(extraShuffle=false){
+  const seed=localDateSeed()+(extraShuffle?Math.floor(Math.random()*100000):0);
+  const rand=seededRandom(seed);
+
+  // Six direction questions, phrased differently, plus four map/latitude/longitude questions.
+  const dirFacts=shuffleWithRand(directionFacts,rand).slice(0,6);
+  const dirs=dirFacts.map(f=>makeDirectionQuestion(f,rand));
+  const concepts=shuffleWithRand(mapConcepts,rand).slice(0,4);
+
+  return shuffleWithRand([...dirs,...concepts],rand);
+}
+
+let heritageMix=[],heritageAnswered=0,heritageCorrect=0;
+function shuffledCopy(arr){
+  const a=[...arr];
+  for(let x=a.length-1;x>0;x--){
+    const j=Math.floor(Math.random()*(x+1));
+    [a[x],a[j]]=[a[j],a[x]];
+  }
+  return a;
+}
+function buildHeritageQuiz(extraShuffle=false){
+  heritageAnswered=0;heritageCorrect=0;
+  heritageMix=makeDailyHeritageQuestions(extraShuffle);
+  const box=$("heritageQuiz");box.innerHTML="";
+  heritageMix.forEach((item,idx)=>{
+    const card=document.createElement("div");card.className="hQuestion";
+    const q=document.createElement("div");q.className="q";q.textContent=(idx+1)+". "+item.q;card.appendChild(q);
+    const fb=document.createElement("div");fb.className="hFeedback";card.appendChild(fb);
+    item.options.forEach(opt=>{
+      const b=document.createElement("button");b.textContent=opt;
+      b.onclick=()=>{
+        if(card.dataset.done==="1")return;
+        card.dataset.done="1";heritageAnswered++;
+        const ok=opt===item.a;if(ok)heritageCorrect++;
+        card.querySelectorAll("button").forEach(btn=>{
+          btn.disabled=true;
+          if(btn.textContent===item.a)btn.classList.add("right");
+        });
+        if(!ok)b.classList.add("wrong");
+        fb.textContent=(ok?"✅ ":"💡 ")+item.explain;
+        fb.className="hFeedback "+(ok?"good":"bad");
+        $("heritageScore").textContent=`Score: ${heritageCorrect} of ${heritageAnswered}`;
+      };
+      card.insertBefore(b,fb);
+    });
+    box.appendChild(card);
+  });
+  $("heritageScore").textContent="Score: 0 of 0";
+}
+$("newHeritageQuiz").onclick=()=>buildHeritageQuiz(true);
+buildHeritageQuiz(false);
 
 // ---------- BIBLE VERSE ----------
 const verse="Be diligent to present yourself to God as one approved, a worker who doesn’t need to be ashamed, correctly teaching the word of truth.";
