@@ -54,9 +54,9 @@ footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 <div class="progress"><div id="bar"></div></div>
 <div class="meta"><span id="count"></span><span id="scoreTop">0 correct</span></div>
 <span class="badge" id="badge">Spelling Word</span>
-<div class="hero"><div class="speaker">🔊</div><h2>Listen and spell</h2><p>Tap Hear Word. It says the word twice, then type the spelling.</p></div>
+<div class="hero"><div class="speaker">🔊</div><h2>Listen and spell</h2><p>Tap Hear Word. The sentence clue hides the spelling word so it does not give away the answer.</p></div>
 <div class="row"><button class="primary" id="hearWord">🔊 Hear Word</button><button id="hearSentence">🗣️ Hear Sentence</button></div>
-<div class="cluebox"><div class="label">Clue</div><div class="clue" id="clue"></div><div class="label" style="margin-top:13px">Sentence</div><div class="sentence" id="sentence"></div></div>
+<div class="cluebox"><div class="label">Clue</div><div class="clue" id="clue"></div><div class="label" style="margin-top:13px">Sentence Clue</div><div class="sentence" id="sentence"></div></div>
 <input id="answer" class="answer" placeholder="Type the spelling…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" writingsuggestions="false" enterkeyhint="done">
 <div class="row"><button class="primary" id="check">Check Answer</button><button id="hint">💡 Hint</button><button id="show">Show Word</button></div>
 <div id="feedback" class="feedback"></div>
@@ -98,7 +98,8 @@ function current(){return cards[i]}
 function normalize(v){return(v||"").toLowerCase().replace(/[^a-z]/g,"")}
 function chooseVoice(){const vs=speechSynthesis.getVoices()||[];return vs.find(v=>/samantha|ava|allison|susan/i.test(v.name))||vs.find(v=>/^en(-|_)?US/i.test(v.lang||""))||vs.find(v=>/^en/i.test(v.lang||""))||null}
 function speak(t,r=.68){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=r;const v=chooseVoice();if(v)u.voice=v;speechSynthesis.speak(u)}
-function render(){const x=current();scored=false;answer.value="";$("clue").textContent=x.clue;$("sentence").textContent=x.sentence;$("badge").className="badge "+(x.retry?"retry":x.category||"");$("badge").textContent=x.retry?"Try Again":x.category==="review"?"Review Word":x.category==="challenge"?"Challenge Word":"Spelling Word";$("feedback").textContent="";$("feedback").className="feedback";$("reveal").style.display="none";$("word").textContent=x.word;$("count").textContent=`Word ${i+1} of ${cards.length}`;$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`;$("bar").style.width=`${Math.round((i/cards.length)*100)}%`}
+function sentenceForDisplay(x){const escaped=x.word.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");return x.sentence.replace(new RegExp("\\b"+escaped+"\\b","gi"),"________")}
+function render(){const x=current();scored=false;answer.value="";$("clue").textContent=x.clue;$("sentence").textContent=sentenceForDisplay(x);$("badge").className="badge "+(x.retry?"retry":x.category||"");$("badge").textContent=x.retry?"Try Again":x.category==="review"?"Review Word":x.category==="challenge"?"Challenge Word":"Spelling Word";$("feedback").textContent="";$("feedback").className="feedback";$("reveal").style.display="none";$("word").textContent=x.word;$("count").textContent=`Word ${i+1} of ${cards.length}`;$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`;$("bar").style.width=`${Math.round((i/cards.length)*100)}%`}
 function renderFullList(){const box=$("fullList");box.innerHTML=spellingData.map((x,idx)=>`<div class="wordItem">${idx+1}. ${x.word}${x.category==="review"?"<small>Review word</small>":x.category==="challenge"?"<small>Challenge word</small>":""}</div>`).join("")}
 renderFullList();
 $("listToggle").onclick=()=>{const box=$("fullList");const open=box.style.display!=="none";box.style.display=open?"none":"grid";$("listToggle").textContent=open?"👀 View All 20 Words":"🙈 Hide Word List"};
