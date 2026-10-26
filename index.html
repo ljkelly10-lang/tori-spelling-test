@@ -3,117 +3,107 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#ff6fb5">
+<meta name="theme-color" content="#ff65aa">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Tori Study Hub">
 <title>Tori's Study Hub</title>
 <style>
-:root{--pink:#ff5fad;--lav:#8f72ea;--ink:#34283f;--muted:#756a7e;--line:#f0d8e7;--green:#178459;--red:#c43b4b;--gold:#a06d12}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(160deg,#fff8fc,#fff0f8 55%,#f4efff)}
-body{min-height:100vh;min-height:100dvh}
-.app{max-width:820px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 14px calc(35px + env(safe-area-inset-bottom))}
-header{text-align:center;margin-bottom:14px}h1{margin:0;font-size:clamp(30px,8vw,46px)}.subtitle{margin:7px 0;color:var(--muted)}
-.schedule{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0}.day{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;text-align:center;font-size:12px;box-shadow:0 8px 25px rgba(78,45,91,.06)}.day b{display:block;font-size:14px;margin-bottom:3px}
-.tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0 16px}.tab{border:0;border-radius:14px;padding:12px 7px;font-size:14px;font-weight:900;background:#f2e9f5;color:var(--ink);text-decoration:none;text-align:center;display:block}.tab.active{background:linear-gradient(135deg,var(--pink),var(--lav));color:white}
-.panel{display:none}.panel.active{display:block}.card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:20px;box-shadow:0 18px 50px rgba(78,45,91,.12)}
-.sectionTitle{margin:0 0 6px;font-size:26px}.muted{color:var(--muted);line-height:1.45}.pattern{background:#f7f1ff;border:1px solid #e4d8f2;border-radius:15px;padding:11px;margin-top:10px;color:#5f4d73;font-weight:800;text-align:center}
-.wordList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 12px;margin-top:12px}.wordItem{background:#fff8fc;border:1px solid #f1dce8;border-radius:12px;padding:9px 11px;font-weight:800;font-size:15px}.wordItem small{display:block;color:var(--muted);font-weight:700;margin-top:3px}.listToggle{width:100%;margin-top:12px}
-.progress{height:10px;background:#eadff0;border-radius:999px;overflow:hidden;margin-top:14px}.progress>div{height:100%;background:linear-gradient(90deg,var(--pink),var(--lav));width:0}.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;font-weight:800;margin:8px 2px 10px}
-.badge{display:inline-block;padding:7px 11px;border-radius:999px;background:#ffe6f3;color:#bd3d80;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}.badge.challenge{background:#f0eaff;color:#7357ca}.badge.review{background:#eaf8ff;color:#2e6f91}.badge.retry{background:#fff3d9;color:#9a6916}
-.hero{text-align:center;padding:7px 0 2px}.speaker{font-size:52px;margin:4px 0}.hero h2{margin:0;font-size:24px}.hero p{margin:6px 0;color:var(--muted)}
-.row,.nav{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin-top:14px}button{border:0;border-radius:14px;padding:13px 15px;font-size:15px;font-weight:900;background:#f2e9f5;color:var(--ink);min-height:46px;touch-action:manipulation}button:active{transform:scale(.98)}.primary{background:linear-gradient(135deg,var(--pink),var(--lav));color:#fff}
-.cluebox{margin-top:16px;background:#fff8fc;border:1px solid #f2d9e7;border-radius:19px;padding:15px}.label{font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;color:#b44b81}.clue{font-size:18px;font-weight:850;margin-top:5px}.sentence{font-size:16px;color:var(--muted);margin-top:6px}
-.answer{width:100%;margin-top:16px;border:2px solid #edd8e6;border-radius:15px;padding:14px;font-size:21px;text-align:center;outline:none;text-transform:lowercase}.answer:focus{border-color:var(--lav)}.feedback{text-align:center;min-height:30px;margin-top:10px;font-size:16px;font-weight:900}.good{color:var(--green)}.bad{color:var(--red)}
-.reveal{display:none;text-align:center;margin-top:12px;padding:15px;border-radius:17px;background:#fff8fc;border:1px dashed #dabfd0}.word{font-size:40px;font-weight:950}.nav{justify-content:space-between}.nav button{flex:1}.score{margin-top:13px;padding:11px;border-radius:15px;background:#faf6fc;text-align:center;color:var(--muted);font-size:14px;font-weight:800}
-footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
-@media(max-width:560px){.schedule{grid-template-columns:1fr}.wordList{grid-template-columns:1fr}.card{padding:17px}.row button{flex:1 1 45%}}
+:root{--pink:#ff65aa;--purple:#8c6ee8;--ink:#34293d;--muted:#776d7d;--line:#ecdce7;--good:#1c8458;--bad:#bd4050}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(160deg,#fff9fc,#fff0f7 55%,#f5efff)}
+.app{max-width:860px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 14px calc(35px + env(safe-area-inset-bottom))}header{text-align:center}h1{margin:0;font-size:clamp(31px,8vw,46px)}.subtitle{color:var(--muted);margin:7px 0}
+.deadlines{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.deadline{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;font-size:12px}.deadline b{display:block;font-size:14px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0 16px}.tab{border:0;border-radius:14px;padding:11px 6px;font-size:13px;font-weight:900;background:#f2e9f5;color:var(--ink);text-decoration:none;text-align:center}.tab.active{background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff}
+.panel{display:none}.panel.active{display:block}.card{background:#fff;border:1px solid var(--line);border-radius:25px;padding:19px;box-shadow:0 18px 50px rgba(78,45,91,.1);margin-bottom:14px}.sectionTitle{margin:0 0 6px;font-size:26px}.muted{color:var(--muted);line-height:1.5}
+.weekGrid{display:grid;gap:11px}.dayCard{border:1px solid var(--line);border-radius:18px;padding:14px;background:#fffafd}.dayTop{display:flex;justify-content:space-between;gap:10px}.dayTop h3{margin:0}.date{font-size:12px;color:var(--purple);font-weight:900}.dayCard ul{margin:9px 0 0;padding-left:20px;line-height:1.5}
+.ruleGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.rule{border:1px solid var(--line);border-radius:14px;background:#faf6ff;padding:11px;text-align:center;font-size:13px}.rule b{display:block;color:var(--purple)}.notice{background:#fff6d9;border:1px solid #ead196;border-radius:16px;padding:12px;color:#71551c;font-size:13px;line-height:1.45}
+.listToggle{width:100%;border:0;border-radius:14px;padding:12px;font-weight:900;background:#f3eafa;color:#513f65;margin-top:10px}.wordList{display:none;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:10px}.wordItem{padding:9px 11px;border-radius:12px;background:#fff8fc;border:1px solid #f0dbe8;font-weight:800}.wordItem small{display:block;color:var(--muted);font-weight:700;margin-top:2px}
+.progress{height:10px;background:#eadff0;border-radius:999px;overflow:hidden;margin-top:15px}.progress>div{height:100%;background:linear-gradient(90deg,var(--pink),var(--purple));width:0}.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:850;margin:8px 2px}.badge{display:inline-block;padding:7px 10px;border-radius:999px;background:#ffe6f3;color:#b83c7c;font-size:11px;font-weight:950;text-transform:uppercase}.badge.review{background:#e9f7ff;color:#2d708e}.badge.challenge{background:#eee8ff;color:#6e54bd}.badge.retry{background:#fff2d5;color:#8f6315}
+.hero{text-align:center;padding:5px 0}.speaker{font-size:49px}.hero h2{margin:0}.row,.nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}button{border:0;border-radius:13px;padding:12px 14px;font-size:14px;font-weight:900;background:#f2eaf5;color:var(--ink);min-height:44px}.primary{background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff}.cluebox{margin-top:14px;background:#fff8fc;border:1px solid #f1dae8;border-radius:18px;padding:14px}.label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:950;color:#b54b80}.clue{font-size:17px;font-weight:850;margin-top:4px}.sentence{color:var(--muted);margin-top:5px}.answer{width:100%;margin-top:14px;border:2px solid #ead8e5;border-radius:15px;padding:14px;font-size:21px;text-align:center;outline:none}.feedback{text-align:center;min-height:27px;margin-top:9px;font-weight:900}.good{color:var(--good)}.bad{color:var(--bad)}.reveal{display:none;text-align:center;margin-top:10px;padding:12px;border-radius:15px;background:#fff8fc;border:1px dashed #d9bdd0}.word{font-size:36px;font-weight:950}.nav{justify-content:space-between}.nav button{flex:1}.score{margin-top:11px;padding:10px;border-radius:13px;background:#faf6fc;text-align:center;color:var(--muted);font-size:13px;font-weight:850}
+.verseBox{font-size:22px;line-height:1.6;font-weight:850;text-align:center;padding:18px;background:#fff8e9;border:1px solid #ead4a4;border-radius:18px}.step{border-top:1px solid var(--line);margin-top:15px;padding-top:14px}.step h3{margin:0 0 7px}.chunkBox,.lettersBox,.orderBox{background:#faf7ff;border:1px solid #e6dcf2;border-radius:15px;padding:14px;line-height:1.7}.blankWord{display:inline-block;min-width:60px;border-bottom:2px solid #9e87d8;text-align:center;color:#6d54aa;font-weight:900;margin:0 2px}.textInput,.memoryText{width:100%;padding:12px;border:2px solid #e2d7e0;border-radius:13px;font-size:17px;outline:none;background:#fff}.memoryText{min-height:130px;resize:vertical}.token{display:inline-block;background:#fff;border:1px solid #dacdea;border-radius:11px;padding:8px 10px;margin:4px;font-weight:800}.token.used{opacity:.35}.bprogress{text-align:center;font-weight:900;color:#7058bf;margin-top:8px}
+.mathHero{text-align:center;padding:25px 8px}.mathHero .big{font-size:55px}.mathLink{display:block;text-decoration:none;background:linear-gradient(135deg,#4a8cff,#6d6cf1);color:white;font-weight:950;border-radius:16px;padding:15px;margin-top:15px}footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
+@media(max-width:650px){.deadlines{grid-template-columns:1fr}.tabs{grid-template-columns:repeat(2,1fr)}.ruleGrid,.wordList{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="app">
 <header>
-<h1>Tori's Study Hub 💗</h1>
-<p class="subtitle">Spelling List 10 + Math Link</p>
-<div class="schedule"><div class="day"><b>Spelling List 10</b>Practice all 20 words</div><div class="day"><b>Math</b>Open Time4Learning for practice</div></div>
+<h1>Tori's Study Hub 💗</h1><p class="subtitle">Week of October 26, 2026</p>
+<div class="deadlines"><div class="deadline"><b>Tue 10/27</b>Heritage Ch. 6 Test</div><div class="deadline"><b>Wed 10/28</b>Spelling List 11 + Math Quiz</div><div class="deadline"><b>Fri 10/30</b>Math Ch. 3 + Bible Test</div><div class="deadline"><b>Wed 11/4</b>Language Arts: Nouns</div></div>
 </header>
+<div class="tabs"><button class="tab active" data-tab="week">📅 Week</button><button class="tab" data-tab="spelling">📝 Spelling</button><button class="tab" data-tab="bible">✝️ Bible</button><button class="tab" data-tab="math">➕ Math</button></div>
 
-<div class="tabs">
-<button class="tab active" data-tab="spelling">📝 Spelling</button>
-<a class="tab" href="https://app.time4learning.com/Login/SingleLogin/T4LL/StudentLogin.aspx?_ga=2.241428610.1609851635.1791888378-246833741.1791126523" target="_blank" rel="noopener noreferrer">➕ Math</a>
-</div>
+<section id="week" class="panel active"><div class="card"><h2 class="sectionTitle">Homework & Tests</h2><p class="muted">Simplified from the school homework pages.</p><div class="weekGrid">
+<div class="dayCard"><div class="dayTop"><h3>Monday</h3><span class="date">October 26</span></div><ul><li>Spelling — List 11 pretest today; test Wednesday</li><li>Heritage Studies — Chapter 6 open-book test tomorrow</li><li>Math — Chapter 3 quiz/pretest Wednesday</li><li>Math — Chapter 3 test Friday</li><li>Bible — Chapter 7 + Jeremiah 32:17 test Friday</li><li>Language Arts — Chapter 3 Nouns test Wednesday, Nov. 4</li></ul></div>
+<div class="dayCard"><div class="dayTop"><h3>Tuesday</h3><span class="date">October 27</span></div><ul><li>Heritage Studies — Chapter 6 open-book test</li><li>Math — Chapter 3 quiz/pretest tomorrow</li><li>Bible — Continue Jeremiah 32:17</li><li>Language Arts — Continue Chapter 3 Nouns review</li></ul></div>
+<div class="dayCard"><div class="dayTop"><h3>Wednesday</h3><span class="date">October 28</span></div><ul><li>Spelling — List 11 test</li><li>Math — Chapter 3 quiz/pretest</li><li>Math — Chapter 3 test Friday</li><li>Bible — Jeremiah 32:17 test Friday</li><li>Language Arts — Chapter 3 Nouns test Nov. 4</li></ul></div>
+<div class="dayCard"><div class="dayTop"><h3>Thursday</h3><span class="date">October 29</span></div><ul><li>Math — Final Chapter 3 review</li><li>Bible — Final Jeremiah 32:17 review</li><li>Language Arts — Chapter 3 Nouns test Nov. 4</li></ul></div>
+<div class="dayCard"><div class="dayTop"><h3>Friday</h3><span class="date">October 30</span></div><ul><li>Math — Chapter 3 test</li><li>Bible — Chapter 7 + Jeremiah 32:17 test</li><li>Language Arts — Keep reviewing Chapter 3 Nouns for Nov. 4</li></ul></div>
+</div></div></section>
 
-<section id="spelling" class="panel active">
-<div class="card">
-<h2 class="sectionTitle">Spelling List 10</h2>
-<p class="muted">These are the exact 20 words from Tori's List 10 sheet. Missed words will come back again at the end.</p>
-<div class="pattern">Sound focus: /o/ — <b>au, aw, a followed by l, ough</b></div>
-<button class="listToggle" id="listToggle">👀 View All 20 Words</button>
-<div id="fullList" class="wordList" style="display:none"></div>
-
-<div class="progress"><div id="bar"></div></div>
-<div class="meta"><span id="count"></span><span id="scoreTop">0 correct</span></div>
-<span class="badge" id="badge">Spelling Word</span>
-<div class="hero"><div class="speaker">🔊</div><h2>Listen and spell</h2><p>Tap Hear Word. The sentence clue hides the spelling word so it does not give away the answer.</p></div>
+<section id="spelling" class="panel"><div class="card"><h2 class="sectionTitle">Spelling List 11</h2><p class="muted">Suffix rules: double the final consonant, drop the final e, and change y to i.</p>
+<div class="ruleGrid"><div class="rule"><b>Double final consonant</b>submit → submitting<br>prefer → preferred</div><div class="rule"><b>Drop final e</b>carve → carving<br>bounce → bouncing</div><div class="rule"><b>Change y to i</b>copy → copied<br>heavy → heaviest</div></div>
+<div class="notice">The sentence on screen hides the spelling word. The full sentence is only spoken aloud when Tori taps <b>Hear Sentence</b>.</div>
+<button class="listToggle" id="toggleList">👀 View All 20 Words</button><div class="wordList" id="wordList"></div>
+<div class="progress"><div id="bar"></div></div><div class="meta"><span id="count"></span><span id="scoreTop">0 correct</span></div><span class="badge" id="badge">Spelling Word</span>
+<div class="hero"><div class="speaker">🔊</div><h2>Listen and spell</h2><p class="muted">Hear the word, use the clue, then type it.</p></div>
 <div class="row"><button class="primary" id="hearWord">🔊 Hear Word</button><button id="hearSentence">🗣️ Hear Sentence</button></div>
-<div class="cluebox"><div class="label">Clue</div><div class="clue" id="clue"></div><div class="label" style="margin-top:13px">Sentence Clue</div><div class="sentence" id="sentence"></div></div>
+<div class="cluebox"><div class="label">Clue</div><div class="clue" id="clue"></div><div class="label" style="margin-top:12px">Sentence</div><div class="sentence" id="sentence"></div></div>
 <input id="answer" class="answer" placeholder="Type the spelling…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" writingsuggestions="false" enterkeyhint="done">
-<div class="row"><button class="primary" id="check">Check Answer</button><button id="hint">💡 Hint</button><button id="show">Show Word</button></div>
-<div id="feedback" class="feedback"></div>
-<div id="reveal" class="reveal"><div id="word" class="word"></div></div>
-<div class="nav"><button id="prev">← Back</button><button id="shuffle">🔀 Shuffle</button><button class="primary" id="next">Next →</button></div>
-<div id="score" class="score">Score: 0 correct out of 0 answers</div>
-</div>
-</section>
-<footer>Study Hub • Spelling List 10 • Time4Learning Math</footer>
-</div>
+<div class="row"><button class="primary" id="check">Check Answer</button><button id="hint">💡 Hint</button><button id="show">Show Word</button></div><div id="feedback" class="feedback"></div><div id="reveal" class="reveal"><div id="word" class="word"></div><div id="ruleText" class="muted"></div></div>
+<div class="nav"><button id="prev">← Back</button><button id="shuffle">🔀 Shuffle</button><button class="primary" id="next">Next →</button></div><div id="score" class="score">Score: 0 correct out of 0 answers</div>
+</div></section>
 
+<section id="bible" class="panel"><div class="card"><h2 class="sectionTitle" style="text-align:center">Jeremiah 32:17 (CSB)</h2><p class="muted" style="text-align:center">Memory verse test: Friday, October 30</p><div class="verseBox">“Oh, Lord GOD! You yourself made the heavens and earth by your great power and with your outstretched arm. Nothing is too difficult for you!”</div>
+<div class="step"><h3>1. Read & Listen</h3><div class="row"><button class="primary" id="hearVerse">🔊 Hear Verse</button><button id="hearSlow">🐢 Hear Slowly</button></div></div>
+<div class="step"><h3>2. Chunks</h3><div class="chunkBox" id="chunkBox"></div><div class="row"><button id="prevChunk">← Previous</button><button class="primary" id="toggleChunk">Hide Words</button><button id="nextChunk">Next →</button></div><div class="bprogress" id="chunkProgress"></div></div>
+<div class="step"><h3>3. Missing Words</h3><div class="row"><button class="blankLevel" data-level="easy">Easy</button><button class="blankLevel" data-level="hard">Hard</button><button id="newBlanks">New Blanks</button></div><div class="chunkBox" id="missingDisplay" style="margin-top:10px"></div><div id="missingInputs" style="margin-top:9px"></div><div class="row"><button class="primary" id="checkMissing">Check</button><button id="showMissing">Show Answers</button></div><div class="feedback" id="missingFeedback"></div></div>
+<div class="step"><h3>4. First Letters</h3><div class="lettersBox" id="lettersBox"></div><div class="row"><button class="primary" id="hearFromLetters">🔊 Hear Verse</button><button id="revealLetters">Reveal Verse</button></div></div>
+<div class="step"><h3>5. Put in Order</h3><div class="orderBox"><b>Your order:</b><div id="chosenOrder"></div></div><div id="orderChoices" style="margin-top:9px"></div><div class="row"><button class="primary" id="checkOrder">Check Order</button><button id="resetOrder">Reset</button></div><div class="feedback" id="orderFeedback"></div></div>
+<div class="step"><h3>6. From Memory</h3><textarea class="memoryText" id="memoryText" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Type Jeremiah 32:17 from memory..."></textarea><div class="row"><button class="primary" id="scoreMemory">Score It</button><button id="showVerse">Show Verse</button></div><div class="feedback" id="memoryFeedback"></div><div class="bprogress" id="memoryScore"></div></div>
+</div></section>
+
+<section id="math" class="panel"><div class="card mathHero"><div class="big">➕</div><h2 class="sectionTitle">Math Practice</h2><p class="muted">Chapter 3 quiz/pretest Wednesday, October 28 and test Friday, October 30.</p><a class="mathLink" href="https://app.time4learning.com/Login/SingleLogin/T4LL/StudentLogin.aspx?_ga=2.241428610.1609851635.1791888378-246833741.1791126523" target="_blank" rel="noopener noreferrer">Open Time4Learning</a></div></section>
+
+<footer>Tori's Study Hub • List 11 • Jeremiah 32:17 • Week of Oct. 26</footer>
+</div>
 <script>
-const spellingData=[
-{word:"hawk",clue:"A bird of prey with sharp eyesight.",sentence:"A hawk circled high above the field.",category:"regular"},
-{word:"ought",clue:"A word meaning should or was expected to.",sentence:"You ought to check your work before turning it in.",category:"regular"},
-{word:"hauling",clue:"Pulling or carrying something heavy.",sentence:"The truck was hauling supplies across town.",category:"regular"},
-{word:"launches",clue:"Sends or starts something, such as a rocket.",sentence:"The rocket launches after the countdown.",category:"regular"},
-{word:"false",clue:"Not true or correct.",sentence:"Tori marked the statement false.",category:"regular"},
-{word:"laundry",clue:"Clothes and other items that need washing.",sentence:"She folded the clean laundry after dinner.",category:"regular"},
-{word:"crawling",clue:"Moving slowly close to the ground.",sentence:"The baby was crawling across the rug.",category:"regular"},
-{word:"causing",clue:"Making something happen.",sentence:"The storm was causing delays.",category:"regular"},
-{word:"drawn",clue:"Made with a pencil or pulled.",sentence:"The picture had been drawn with colored pencils.",category:"regular"},
-{word:"hall",clue:"A passage inside a building.",sentence:"The students walked quietly down the hall.",category:"regular"},
-{word:"sought",clue:"Past tense of seek; looked for.",sentence:"The explorers sought a safer route home.",category:"regular"},
-{word:"fault",clue:"Responsibility for a mistake.",sentence:"It was no one's fault that the game was canceled.",category:"regular"},
-{word:"stalk",clue:"The main stem of a plant.",sentence:"The flower grew on a tall green stalk.",category:"regular"},
-{word:"applause",clue:"Clapping to show approval or enjoyment.",sentence:"The dancers smiled when they heard the applause.",category:"regular"},
-{word:"exalted",clue:"Raised to a high rank or praised greatly.",sentence:"The leader was exalted by the people.",category:"regular"},
-{word:"faucet",clue:"A fixture that controls the flow of water.",sentence:"Please turn off the faucet when you finish.",category:"regular"},
-{word:"employed",clue:"Having a job or being used for a purpose.",sentence:"The company employed several new workers.",category:"review"},
-{word:"surround",clue:"To be all around something.",sentence:"Tall trees surround the playground.",category:"review"},
-{word:"laughter",clue:"The sound people make when something is funny.",sentence:"Laughter filled the room after the joke.",category:"challenge"},
-{word:"cough",clue:"To force air suddenly from the lungs.",sentence:"Cover your mouth when you cough.",category:"challenge"}
-];
 const $=id=>document.getElementById(id);
-let cards=[...spellingData],i=0,correct=0,checks=0,scored=false,missed=new Map(),retryAdded=false;
-const answer=$("answer");
-function current(){return cards[i]}
-function normalize(v){return(v||"").toLowerCase().replace(/[^a-z]/g,"")}
-function chooseVoice(){const vs=speechSynthesis.getVoices()||[];return vs.find(v=>/samantha|ava|allison|susan/i.test(v.name))||vs.find(v=>/^en(-|_)?US/i.test(v.lang||""))||vs.find(v=>/^en/i.test(v.lang||""))||null}
-function speak(t,r=.68){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=r;const v=chooseVoice();if(v)u.voice=v;speechSynthesis.speak(u)}
-function sentenceForDisplay(x){const escaped=x.word.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");return x.sentence.replace(new RegExp("\\b"+escaped+"\\b","gi"),"________")}
-function render(){const x=current();scored=false;answer.value="";$("clue").textContent=x.clue;$("sentence").textContent=sentenceForDisplay(x);$("badge").className="badge "+(x.retry?"retry":x.category||"");$("badge").textContent=x.retry?"Try Again":x.category==="review"?"Review Word":x.category==="challenge"?"Challenge Word":"Spelling Word";$("feedback").textContent="";$("feedback").className="feedback";$("reveal").style.display="none";$("word").textContent=x.word;$("count").textContent=`Word ${i+1} of ${cards.length}`;$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`;$("bar").style.width=`${Math.round((i/cards.length)*100)}%`}
-function renderFullList(){const box=$("fullList");box.innerHTML=spellingData.map((x,idx)=>`<div class="wordItem">${idx+1}. ${x.word}${x.category==="review"?"<small>Review word</small>":x.category==="challenge"?"<small>Challenge word</small>":""}</div>`).join("")}
-renderFullList();
-$("listToggle").onclick=()=>{const box=$("fullList");const open=box.style.display!=="none";box.style.display=open?"none":"grid";$("listToggle").textContent=open?"👀 View All 20 Words":"🙈 Hide Word List"};
-$("hearWord").onclick=()=>{speak(current().word,.64);setTimeout(()=>speak(current().word,.60),1100)};
-$("hearSentence").onclick=()=>speak(current().sentence,.73);
-$("hint").onclick=()=>{const w=current().word;$("feedback").textContent=`Hint: ${w[0]} ${"_ ".repeat(Math.max(1,w.length-2))}${w[w.length-1]}`};
-$("show").onclick=()=>{$("reveal").style.display="block";$("feedback").textContent="Study it, then try again without looking."};
-$("check").onclick=()=>{if(scored)return;const typed=normalize(answer.value),target=normalize(current().word);if(!typed){$("feedback").textContent="Type the word first.";return}checks++;scored=true;if(typed===target){correct++;$("feedback").textContent="✅ Correct!";$("feedback").className="feedback good"}else{if(!current().retry)missed.set(current().word,current());$("feedback").textContent="❌ Not quite. This word will come back again.";$("feedback").className="feedback bad";$("reveal").style.display="block"}$("scoreTop").textContent=`${correct} correct`;$("score").textContent=`Score: ${correct} correct out of ${checks} answers`};
-$("prev").onclick=()=>{if(i>0){i--;render()}};
-$("next").onclick=()=>{if(i<cards.length-1){i++;render();return}if(!retryAdded&&missed.size){const retry=[...missed.values()].sort(()=>Math.random()-.5).map(x=>({...x,retry:true}));cards.push(...retry);retryAdded=true;i++;render();return}$("bar").style.width="100%";$("feedback").textContent="🎉 Practice complete!";$("feedback").className="feedback good"};
-$("shuffle").onclick=()=>{cards=[...spellingData].sort(()=>Math.random()-.5);i=0;correct=0;checks=0;missed=new Map();retryAdded=false;render()};
-answer.addEventListener("input",()=>answer.value=answer.value.toLowerCase());
-answer.addEventListener("keydown",e=>{if(e.key==="Enter")$("check").click()});
-render();
+document.querySelectorAll('.tab').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');$(btn.dataset.tab).classList.add('active')});
+const spellingData=[
+{word:'empties',base:'empty',rule:'Change y to i',clue:'Removes everything from a container.',sentence:'She empties her dance bag after practice.',category:'regular'},
+{word:'submitting',base:'submit',rule:'Double final consonant',clue:'Turning in work for someone to review.',sentence:'Tori is submitting her assignment online.',category:'regular'},
+{word:'tidiest',base:'tidy',rule:'Change y to i',clue:'The most neat and orderly.',sentence:'Her desk was the tidiest one in the room.',category:'regular'},
+{word:'carving',base:'carve',rule:'Drop final e',clue:'Cutting a shape or design into something.',sentence:'They were carving a pumpkin for fall.',category:'regular'},
+{word:'copied',base:'copy',rule:'Change y to i',clue:'Made another version of something.',sentence:'She copied the notes into her notebook.',category:'regular'},
+{word:'skies',base:'sky',rule:'Change y to i',clue:'More than one sky.',sentence:'The evening skies turned pink and orange.',category:'regular'},
+{word:'preferred',base:'prefer',rule:'Double final consonant',clue:'Liked one choice better than another.',sentence:'She preferred the blue costume over the red one.',category:'regular'},
+{word:'arrived',base:'arrive',rule:'Final e + d',clue:'Reached a place.',sentence:'The team arrived early for rehearsal.',category:'regular'},
+{word:'solved',base:'solve',rule:'Final e + d',clue:'Found the answer to a problem.',sentence:'She solved the math problem correctly.',category:'regular'},
+{word:'heaviest',base:'heavy',rule:'Change y to i',clue:'Having the greatest weight.',sentence:'The heaviest box was placed on the bottom.',category:'regular'},
+{word:'rubies',base:'ruby',rule:'Change y to i',clue:'More than one red gemstone.',sentence:'The necklace was decorated with bright rubies.',category:'regular'},
+{word:'bouncing',base:'bounce',rule:'Drop final e',clue:'Moving up and down after hitting a surface.',sentence:'The ball kept bouncing across the gym floor.',category:'regular'},
+{word:'prepared',base:'prepare',rule:'Final e + d',clue:'Got ready ahead of time.',sentence:'She prepared her clothes the night before school.',category:'regular'},
+{word:'applied',base:'apply',rule:'Change y to i',clue:'Put something to use or asked formally for something.',sentence:'She applied the rule to the new example.',category:'regular'},
+{word:'occurred',base:'occur',rule:'Double final consonant',clue:'Happened or took place.',sentence:'The change occurred during the second half.',category:'regular'},
+{word:'hungrier',base:'hungry',rule:'Change y to i',clue:'More in need of food.',sentence:'After dance practice, Tori felt hungrier than usual.',category:'regular'},
+{word:'exalted',base:'exalt',rule:'Review',clue:'Raised in honor, rank, or praise.',sentence:'David was exalted as king over Israel.',category:'review'},
+{word:'causing',base:'cause',rule:'Review',clue:'Making something happen.',sentence:'The rain was causing traffic delays.',category:'review'},
+{word:'anymore',base:'anymore',rule:'Challenge',clue:'Any longer.',sentence:'She does not need the extra paper anymore.',category:'challenge'},
+{word:'wherever',base:'wherever',rule:'Challenge',clue:'In or to any place.',sentence:'Take your notebook wherever you go.',category:'challenge'}];
+$('wordList').innerHTML=spellingData.map((w,i)=>`<div class="wordItem">${i+1}. ${w.word}<small>${w.rule}</small></div>`).join('');
+$('toggleList').onclick=()=>{const box=$('wordList');const show=getComputedStyle(box).display==='none';box.style.display=show?'grid':'none';$('toggleList').textContent=show?'🙈 Hide Word List':'👀 View All 20 Words'};
+let cards=[...spellingData],i=0,correct=0,checks=0,scored=false,missed=new Map(),retryAdded=false;const answer=$('answer');
+function c(){return cards[i]}function norm(v){return(v||'').toLowerCase().replace(/[^a-z]/g,'')}function blankSentence(s,w){return s.replace(new RegExp('\\b'+w+'\\b','gi'),'________')}
+function voice(){const vs=speechSynthesis.getVoices()||[];return vs.find(v=>/Samantha|Ava/i.test(v.name))||vs.find(v=>/^en-US/i.test(v.lang||''))||vs.find(v=>/^en/i.test(v.lang||''))||null}function speak(t,r=.7){if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=r;const v=voice();if(v)u.voice=v;speechSynthesis.speak(u)}
+function render(){const x=c();scored=false;answer.value='';$('clue').textContent=x.clue;$('sentence').textContent=blankSentence(x.sentence,x.word);$('badge').className='badge '+(x.retry?'retry':x.category||'');$('badge').textContent=x.retry?'Try Again':x.category==='review'?'Review Word':x.category==='challenge'?'Challenge Word':'Spelling Word';$('feedback').textContent='';$('feedback').className='feedback';$('reveal').style.display='none';$('word').textContent=x.word;$('ruleText').textContent=`${x.base} → ${x.word} • ${x.rule}`;$('count').textContent=`Word ${i+1} of ${cards.length}`;$('scoreTop').textContent=`${correct} correct`;$('score').textContent=`Score: ${correct} correct out of ${checks} answers`;$('bar').style.width=`${Math.round(i/cards.length*100)}%`}
+$('hearWord').onclick=()=>{speak(c().word,.64);setTimeout(()=>speak(c().word,.6),1050)};$('hearSentence').onclick=()=>speak(c().sentence,.73);$('hint').onclick=()=>{const w=c().word;$('feedback').textContent=`Hint: ${w[0]} ${'_ '.repeat(Math.max(1,w.length-2))}${w[w.length-1]}`};$('show').onclick=()=>{$('reveal').style.display='block';$('feedback').textContent='Study the spelling and suffix rule, then try it again later.'};
+$('check').onclick=()=>{if(scored)return;const t=norm(answer.value),target=norm(c().word);if(!t){$('feedback').textContent='Type the word first.';return}checks++;scored=true;if(t===target){correct++;$('feedback').textContent='✅ Correct!';$('feedback').className='feedback good'}else{if(!c().retry)missed.set(c().word,c());$('feedback').textContent='❌ Not quite. This word will come back again.';$('feedback').className='feedback bad';$('reveal').style.display='block'}$('scoreTop').textContent=`${correct} correct`;$('score').textContent=`Score: ${correct} correct out of ${checks} answers`};
+$('prev').onclick=()=>{if(i>0){i--;render()}};$('next').onclick=()=>{if(i<cards.length-1){i++;render();return}if(!retryAdded&&missed.size){cards.push(...[...missed.values()].sort(()=>Math.random()-.5).map(x=>({...x,retry:true})));retryAdded=true;i++;render();return}$('bar').style.width='100%';$('feedback').textContent='🎉 Practice complete!';$('feedback').className='feedback good'};$('shuffle').onclick=()=>{cards=[...spellingData].sort(()=>Math.random()-.5);i=0;correct=0;checks=0;missed=new Map();retryAdded=false;render()};answer.addEventListener('input',()=>answer.value=answer.value.toLowerCase());answer.addEventListener('keydown',e=>{if(e.key==='Enter')$('check').click()});render();
+const verse='Oh, Lord GOD! You yourself made the heavens and earth by your great power and with your outstretched arm. Nothing is too difficult for you!';const reference='Jeremiah 32:17';const chunks=['Oh, Lord GOD!','You yourself made the heavens and earth','by your great power','and with your outstretched arm.','Nothing is too difficult for you!'];
+$('hearVerse').onclick=()=>speak(`${reference}. ${verse}`,.86);$('hearSlow').onclick=()=>speak(`${reference}. ${verse}`,.66);let ci=0,hidden=false;function renderChunk(){$('chunkBox').textContent=hidden?'••••••••••••••':chunks[ci];$('chunkProgress').textContent=`Chunk ${ci+1} of ${chunks.length}`;$('toggleChunk').textContent=hidden?'Show Words':'Hide Words'}$('prevChunk').onclick=()=>{ci=(ci-1+chunks.length)%chunks.length;hidden=false;renderChunk()};$('nextChunk').onclick=()=>{ci=(ci+1)%chunks.length;hidden=false;renderChunk()};$('toggleChunk').onclick=()=>{hidden=!hidden;renderChunk()};renderChunk();
+const vwords=verse.replace(/[!;,.]/g,'').split(/\s+/);let level='easy',blankIndexes=[];function makeBlanks(){const count=level==='easy'?5:9;blankIndexes=[];const pool=[...vwords.keys()];while(blankIndexes.length<count&&pool.length)blankIndexes.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);blankIndexes.sort((a,b)=>a-b);$('missingDisplay').innerHTML=vwords.map((w,idx)=>blankIndexes.includes(idx)?`<span class="blankWord">${idx+1}</span>`:w).join(' ');$('missingInputs').innerHTML=blankIndexes.map((idx,n)=>`<input class="textInput miss" data-index="${idx}" placeholder="Blank ${n+1}">`).join('<div style="height:7px"></div>');$('missingFeedback').textContent=''}document.querySelectorAll('.blankLevel').forEach(b=>b.onclick=()=>{level=b.dataset.level;makeBlanks()});$('newBlanks').onclick=makeBlanks;$('checkMissing').onclick=()=>{let right=0;document.querySelectorAll('.miss').forEach(inp=>{if(inp.value.trim().toLowerCase()===vwords[Number(inp.dataset.index)].toLowerCase())right++});const ok=right===blankIndexes.length;$('missingFeedback').textContent=ok?`✅ ${right}/${blankIndexes.length} correct!`:`You got ${right}/${blankIndexes.length}. Try the missed blanks again.`;$('missingFeedback').className='feedback '+(ok?'good':'bad')};$('showMissing').onclick=()=>document.querySelectorAll('.miss').forEach(inp=>inp.value=vwords[Number(inp.dataset.index)]);makeBlanks();
+$('lettersBox').textContent=vwords.map(w=>w[0].toUpperCase()).join('  ');$('hearFromLetters').onclick=()=>speak(verse,.8);let revealed=false;$('revealLetters').onclick=()=>{revealed=!revealed;$('lettersBox').textContent=revealed?verse:vwords.map(w=>w[0].toUpperCase()).join('  ');$('revealLetters').textContent=revealed?'Show First Letters':'Reveal Verse'};
+let chosen=[];function sh(a){return[...a].sort(()=>Math.random()-.5)}let orderPool=sh(chunks);function renderOrder(){$('chosenOrder').innerHTML=chosen.map(x=>`<span class="token">${x}</span>`).join('');$('orderChoices').innerHTML=orderPool.map((x,idx)=>`<button class="token ${chosen.includes(x)?'used':''}" data-i="${idx}">${x}</button>`).join('');$('orderChoices').querySelectorAll('button:not(.used)').forEach(b=>b.onclick=()=>{chosen.push(orderPool[Number(b.dataset.i)]);renderOrder()})}$('resetOrder').onclick=()=>{chosen=[];orderPool=sh(chunks);$('orderFeedback').textContent='';renderOrder()};$('checkOrder').onclick=()=>{const ok=chosen.length===chunks.length&&chosen.every((x,idx)=>x===chunks[idx]);$('orderFeedback').textContent=ok?'✅ Correct order!':'❌ Not quite. Reset and try again.';$('orderFeedback').className='feedback '+(ok?'good':'bad')};renderOrder();
+function nv(s){return String(s).toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,' ').trim()}$('scoreMemory').onclick=()=>{const target=nv(verse).split(' '),typed=nv($('memoryText').value).split(' ').filter(Boolean);let match=0;for(let x=0;x<Math.max(target.length,typed.length);x++)if(target[x]===typed[x])match++;const pct=Math.round(match/target.length*100);$('memoryScore').textContent=`Score: ${Math.max(0,Math.min(100,pct))}%`;if(pct>=100){$('memoryFeedback').textContent='✅ Perfect!';$('memoryFeedback').className='feedback good'}else{let first=target.findIndex((w,idx)=>w!==typed[idx]);$('memoryFeedback').textContent=first>=0?`Next expected word: “${target[first]}.”`:'Check the ending.';$('memoryFeedback').className='feedback bad'}};$('showVerse').onclick=()=>{$('memoryText').value=verse;$('memoryScore').textContent=''};
 </script>
-</body>
-</html>
+</body></html>
