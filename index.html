@@ -22,6 +22,41 @@
 .verseBox{font-size:22px;line-height:1.6;font-weight:850;text-align:center;padding:18px;background:#fff8e9;border:1px solid #ead4a4;border-radius:18px}.step{border-top:1px solid var(--line);margin-top:15px;padding-top:14px}.step h3{margin:0 0 7px}.chunkBox,.lettersBox,.orderBox{background:#faf7ff;border:1px solid #e6dcf2;border-radius:15px;padding:14px;line-height:1.7}.blankWord{display:inline-block;min-width:60px;border-bottom:2px solid #9e87d8;text-align:center;color:#6d54aa;font-weight:900;margin:0 2px}.textInput,.memoryText{width:100%;padding:12px;border:2px solid #e2d7e0;border-radius:13px;font-size:17px;outline:none;background:#fff}.memoryText{min-height:130px;resize:vertical}.token{display:inline-block;background:#fff;border:1px solid #dacdea;border-radius:11px;padding:8px 10px;margin:4px;font-weight:800}.token.used{opacity:.35}.bprogress{text-align:center;font-weight:900;color:#7058bf;margin-top:8px}
 .mathHero{text-align:center;padding:25px 8px}.mathHero .big{font-size:55px}.mathLink{display:block;text-decoration:none;background:linear-gradient(135deg,#4a8cff,#6d6cf1);color:white;font-weight:950;border-radius:16px;padding:15px;margin-top:15px}footer{text-align:center;color:#8b7d91;font-size:11px;margin-top:16px}
 @media(max-width:650px){.deadlines{grid-template-columns:1fr}.tabs{grid-template-columns:repeat(2,1fr)}.ruleGrid,.wordList{grid-template-columns:1fr}}
+
+/* Adaptive Math Practice */
+.mathDash{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
+.mathInfo{background:linear-gradient(135deg,#eef8ff,#f5f2ff);border:1px solid #d9e5f3;border-radius:17px;padding:13px}
+.mathInfo b{display:block;margin-bottom:4px}
+.dayPicker{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:14px 0}
+.mathDay{padding:10px 4px;border:1px solid #e3d6e4;background:#fff;font-size:12px}
+.mathDay.active{background:linear-gradient(135deg,#5689f5,#786fe9);color:#fff;border-color:transparent}
+.mathDay.done::after{content:" ✓";font-weight:950}
+.skillBars{display:grid;gap:9px;margin-top:12px}
+.skillRow{display:grid;grid-template-columns:150px 1fr 48px;gap:8px;align-items:center;font-size:13px}
+.skillTrack{height:10px;background:#ebe7f1;border-radius:999px;overflow:hidden}
+.skillFill{height:100%;background:linear-gradient(90deg,#ff65aa,#8c6ee8)}
+.mathQ{background:#fff9fc;border:1px solid #efdce8;border-radius:18px;padding:15px;margin-top:12px}
+.mathQ.done{opacity:.92}
+.mathQTop{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.skillTag{font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.05em;color:#6d55b3;background:#f0eaff;border-radius:999px;padding:6px 9px}
+.mathPrompt{font-size:18px;font-weight:850;line-height:1.45;margin:10px 0}
+.mathAns{width:100%;border:2px solid #e2d7e0;border-radius:13px;padding:12px;font-size:18px;outline:none;background:#fff}
+.mathAns:focus{border-color:#8c6ee8}
+.mathMini{font-size:12px;color:var(--muted);margin-top:5px}
+.mathHint,.mathExplain{display:none;margin-top:9px;padding:10px;border-radius:12px;background:#f7f3fb;color:#5f5468;line-height:1.45;font-size:13px}
+.mathExplain.show,.mathHint.show{display:block}
+.mathSummary{background:#f8f5ff;border:1px solid #ded4ef;border-radius:18px;padding:14px;margin-top:15px}
+.tomorrowPlan{background:#fff6d9;border:1px solid #ead196;border-radius:15px;padding:12px;margin-top:11px;color:#6f541c;line-height:1.45}
+.mathActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.mathActions button,.mathActions a{flex:1;text-align:center}
+.mathLinkBtn{display:block;text-decoration:none;background:#edf4ff;color:#365fbd;border-radius:13px;padding:12px;font-weight:900}
+.mathLegend{font-size:12px;color:var(--muted);line-height:1.45}
+@media(max-width:650px){
+  .mathDash{grid-template-columns:1fr}
+  .dayPicker{grid-template-columns:repeat(5,1fr)}
+  .skillRow{grid-template-columns:110px 1fr 42px}
+}
+
 </style>
 </head>
 <body>
@@ -62,7 +97,44 @@
 <div class="step"><h3>6. From Memory</h3><textarea class="memoryText" id="memoryText" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Type Jeremiah 32:17 from memory..."></textarea><div class="row"><button class="primary" id="scoreMemory">Score It</button><button id="showVerse">Show Verse</button></div><div class="feedback" id="memoryFeedback"></div><div class="bprogress" id="memoryScore"></div></div>
 </div></section>
 
-<section id="math" class="panel"><div class="card mathHero"><div class="big">➕</div><h2 class="sectionTitle">Math Practice</h2><p class="muted">Chapter 3 quiz/pretest Wednesday, October 28 and test Friday, October 30.</p><a class="mathLink" href="https://app.time4learning.com/Login/SingleLogin/T4LL/StudentLogin.aspx?_ga=2.241428610.1609851635.1791888378-246833741.1791126523" target="_blank" rel="noopener noreferrer">Open Time4Learning</a></div></section>
+
+<section id="math" class="panel">
+<div class="card">
+<h2 class="sectionTitle">Adaptive Chapter 3 Math Practice</h2>
+<p class="muted">The first day is weighted toward the areas that showed up in Tori's worksheets. After each completed practice, this page saves her first-attempt results and gives weaker skills more questions the next day.</p>
+
+<div class="mathDash">
+  <div class="mathInfo"><b>🎯 Starting priority</b>Fraction of a set — especially when the numerator is greater than 1.</div>
+  <div class="mathInfo"><b>✅ Lighter review</b>Mixed numbers, comparing fractions, and like-denominator addition/subtraction.</div>
+</div>
+
+<div class="notice"><b>How the adapting works:</b> the score that matters is her <b>first answer</b>. She can still correct the problem afterward, but the first attempt tells the Study Hub what to practice more tomorrow.</div>
+
+<div class="dayPicker" id="mathDayPicker">
+  <button class="mathDay" data-day="monday">Mon</button>
+  <button class="mathDay" data-day="tuesday">Tue</button>
+  <button class="mathDay" data-day="wednesday">Wed</button>
+  <button class="mathDay" data-day="thursday">Thu</button>
+  <button class="mathDay" data-day="friday">Fri</button>
+</div>
+
+<div id="mathProgressCard" class="mathSummary">
+  <b>Progress so far</b>
+  <div id="mathSkillBars" class="skillBars"></div>
+  <div id="mathOverallNote" class="mathLegend"></div>
+</div>
+
+<div id="mathDayIntro" class="mathSummary"></div>
+<div id="mathQuestions"></div>
+<div id="mathDaySummary"></div>
+
+<div class="mathActions">
+  <a class="mathLinkBtn" href="https://app.time4learning.com/Login/SingleLogin/T4LL/StudentLogin.aspx?_ga=2.241428610.1609851635.1791888378-246833741.1791126523" target="_blank" rel="noopener noreferrer">Open Time4Learning</a>
+  <button id="resetMathProgress">Reset This Week's Math Progress</button>
+</div>
+</div>
+</section>
+
 
 <footer>Tori's Study Hub • List 11 • Jeremiah 32:17 • Week of Oct. 26</footer>
 </div>
@@ -105,5 +177,321 @@ const vwords=verse.replace(/[!;,.]/g,'').split(/\s+/);let level='easy',blankInde
 $('lettersBox').textContent=vwords.map(w=>w[0].toUpperCase()).join('  ');$('hearFromLetters').onclick=()=>speak(verse,.8);let revealed=false;$('revealLetters').onclick=()=>{revealed=!revealed;$('lettersBox').textContent=revealed?verse:vwords.map(w=>w[0].toUpperCase()).join('  ');$('revealLetters').textContent=revealed?'Show First Letters':'Reveal Verse'};
 let chosen=[];function sh(a){return[...a].sort(()=>Math.random()-.5)}let orderPool=sh(chunks);function renderOrder(){$('chosenOrder').innerHTML=chosen.map(x=>`<span class="token">${x}</span>`).join('');$('orderChoices').innerHTML=orderPool.map((x,idx)=>`<button class="token ${chosen.includes(x)?'used':''}" data-i="${idx}">${x}</button>`).join('');$('orderChoices').querySelectorAll('button:not(.used)').forEach(b=>b.onclick=()=>{chosen.push(orderPool[Number(b.dataset.i)]);renderOrder()})}$('resetOrder').onclick=()=>{chosen=[];orderPool=sh(chunks);$('orderFeedback').textContent='';renderOrder()};$('checkOrder').onclick=()=>{const ok=chosen.length===chunks.length&&chosen.every((x,idx)=>x===chunks[idx]);$('orderFeedback').textContent=ok?'✅ Correct order!':'❌ Not quite. Reset and try again.';$('orderFeedback').className='feedback '+(ok?'good':'bad')};renderOrder();
 function nv(s){return String(s).toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,' ').trim()}$('scoreMemory').onclick=()=>{const target=nv(verse).split(' '),typed=nv($('memoryText').value).split(' ').filter(Boolean);let match=0;for(let x=0;x<Math.max(target.length,typed.length);x++)if(target[x]===typed[x])match++;const pct=Math.round(match/target.length*100);$('memoryScore').textContent=`Score: ${Math.max(0,Math.min(100,pct))}%`;if(pct>=100){$('memoryFeedback').textContent='✅ Perfect!';$('memoryFeedback').className='feedback good'}else{let first=target.findIndex((w,idx)=>w!==typed[idx]);$('memoryFeedback').textContent=first>=0?`Next expected word: “${target[first]}.”`:'Check the ending.';$('memoryFeedback').className='feedback bad'}};$('showVerse').onclick=()=>{$('memoryText').value=verse;$('memoryScore').textContent=''};
+
+// ---------- ADAPTIVE CHAPTER 3 MATH ----------
+const mathStorageKey="toriMathCh3Week2026-10-26-v1";
+const mathDays=["monday","tuesday","wednesday","thursday","friday"];
+const mathDayNames={monday:"Monday",tuesday:"Tuesday",wednesday:"Wednesday",thursday:"Thursday",friday:"Friday"};
+const mathSkills={
+  fracSet:{name:"Fraction of a Set",base:4},
+  compare:{name:"Compare Fractions",base:2},
+  mixed:{name:"Mixed / Improper",base:1},
+  addsub:{name:"Add / Subtract",base:1},
+  meaning:{name:"Fraction Meaning",base:1},
+  review:{name:"Careful Review",base:1}
+};
+
+const mathBank=[
+  // Fraction of a set
+  {id:"fs1",skill:"fracSet",kind:"number",q:"What is 1/4 of 20?",a:"5",hint:"Split 20 into 4 equal groups first.",ex:"20 ÷ 4 = 5."},
+  {id:"fs2",skill:"fracSet",kind:"number",q:"What is 3/4 of 20?",a:"15",hint:"Find one fourth first, then take 3 groups.",ex:"20 ÷ 4 = 5, then 5 × 3 = 15."},
+  {id:"fs3",skill:"fracSet",kind:"number",q:"What is 2/5 of 15?",a:"6",hint:"Divide by the denominator, then multiply by the numerator.",ex:"15 ÷ 5 = 3, then 3 × 2 = 6."},
+  {id:"fs4",skill:"fracSet",kind:"number",q:"What is 4/5 of 15?",a:"12",hint:"Find one fifth first.",ex:"15 ÷ 5 = 3, then 3 × 4 = 12."},
+  {id:"fs5",skill:"fracSet",kind:"number",q:"What is 1/6 of 24?",a:"4",hint:"The denominator tells how many equal groups.",ex:"24 ÷ 6 = 4."},
+  {id:"fs6",skill:"fracSet",kind:"number",q:"What is 5/6 of 24?",a:"20",hint:"Find one sixth, then count five of those groups.",ex:"24 ÷ 6 = 4, then 4 × 5 = 20."},
+  {id:"fs7",skill:"fracSet",kind:"number",q:"What is 2/3 of 18?",a:"12",hint:"Find one third first.",ex:"18 ÷ 3 = 6, then 6 × 2 = 12."},
+  {id:"fs8",skill:"fracSet",kind:"number",q:"What is 3/8 of 24?",a:"9",hint:"Divide by 8 before multiplying by 3.",ex:"24 ÷ 8 = 3, then 3 × 3 = 9."},
+  {id:"fs9",skill:"fracSet",kind:"number",q:"What is 5/8 of 16?",a:"10",hint:"Find one eighth, then take five groups.",ex:"16 ÷ 8 = 2, then 2 × 5 = 10."},
+  {id:"fs10",skill:"fracSet",kind:"number",q:"What is 3/4 of 12?",a:"9",hint:"Divide by 4, then multiply by 3.",ex:"12 ÷ 4 = 3, then 3 × 3 = 9."},
+  {id:"fs11",skill:"fracSet",kind:"number",q:"What is 2/5 of 20?",a:"8",hint:"Find one fifth first.",ex:"20 ÷ 5 = 4, then 4 × 2 = 8."},
+  {id:"fs12",skill:"fracSet",kind:"number",q:"What is 3/5 of 25?",a:"15",hint:"Divide by 5, then multiply by 3.",ex:"25 ÷ 5 = 5, then 5 × 3 = 15."},
+
+  // Compare fractions and mixed numbers
+  {id:"cp1",skill:"compare",kind:"compare",q:"Write >, <, or = : 1/3 □ 1/6",a:">",hint:"With the same numerator, fewer equal pieces means larger pieces.",ex:"1/3 is greater than 1/6."},
+  {id:"cp2",skill:"compare",kind:"compare",q:"Write >, <, or = : 2/3 □ 4/6",a:"=",hint:"Think about equivalent fractions.",ex:"2/3 and 4/6 name the same amount."},
+  {id:"cp3",skill:"compare",kind:"compare",q:"Write >, <, or = : 3/4 □ 5/8",a:">",hint:"Compare both fractions to eighths or to one half.",ex:"3/4 = 6/8, and 6/8 > 5/8."},
+  {id:"cp4",skill:"compare",kind:"compare",q:"Write >, <, or = : 2/5 □ 3/10",a:">",hint:"Rename 2/5 in tenths.",ex:"2/5 = 4/10, so 4/10 > 3/10."},
+  {id:"cp5",skill:"compare",kind:"compare",q:"Write >, <, or = : 5/8 □ 3/4",a:"<",hint:"Rename 3/4 in eighths.",ex:"3/4 = 6/8, so 5/8 < 6/8."},
+  {id:"cp6",skill:"compare",kind:"compare",q:"Write >, <, or = : 4/10 □ 2/5",a:"=",hint:"Rename 2/5 in tenths.",ex:"2/5 = 4/10."},
+  {id:"cp7",skill:"compare",kind:"compare",q:"Write >, <, or = : 1/4 □ 3/8",a:"<",hint:"Rename 1/4 in eighths.",ex:"1/4 = 2/8, and 2/8 < 3/8."},
+  {id:"cp8",skill:"compare",kind:"compare",q:"Write >, <, or = : 3/6 □ 1/2",a:"=",hint:"Both can describe one half.",ex:"3/6 = 1/2."},
+  {id:"cp9",skill:"compare",kind:"compare",q:"Write >, <, or = : 5/6 □ 4/6",a:">",hint:"The denominators match, so compare numerators.",ex:"5 sixths is greater than 4 sixths."},
+  {id:"cp10",skill:"compare",kind:"compare",q:"Write >, <, or = : 3/10 □ 3/5",a:"<",hint:"Rename 3/5 in tenths.",ex:"3/5 = 6/10, so 3/10 < 6/10."},
+  {id:"cp11",skill:"compare",kind:"compare",q:"Write >, <, or = : 2 5/8 □ 3 1/8",a:"<",hint:"Compare the whole-number parts first.",ex:"2 wholes is less than 3 wholes."},
+  {id:"cp12",skill:"compare",kind:"compare",q:"Write >, <, or = : 6 1/3 □ 6 2/3",a:"<",hint:"The whole numbers match, so compare the fractions.",ex:"1/3 < 2/3."},
+
+  // Mixed / improper
+  {id:"mx1",skill:"mixed",kind:"mixed",q:"Write 8/3 as a mixed number.",a:"2 2/3",hint:"How many whole groups of 3 fit into 8?",ex:"8 ÷ 3 = 2 remainder 2, so 2 2/3."},
+  {id:"mx2",skill:"mixed",kind:"mixed",q:"Write 18/8 as a mixed number.",a:"2 2/8",hint:"Count the complete groups of 8 first.",ex:"18 = 16 + 2, so 18/8 = 2 2/8."},
+  {id:"mx3",skill:"mixed",kind:"mixed",q:"Write 7/4 as a mixed number.",a:"1 3/4",hint:"Four fourths make one whole.",ex:"7/4 = 4/4 + 3/4 = 1 3/4."},
+  {id:"mx4",skill:"mixed",kind:"mixed",q:"Write 14/6 as a mixed number.",a:"2 2/6",hint:"Twelve sixths make two wholes.",ex:"14/6 = 12/6 + 2/6 = 2 2/6."},
+  {id:"mx5",skill:"mixed",kind:"mixed",q:"Write 11/2 as a mixed number.",a:"5 1/2",hint:"How many pairs fit into 11?",ex:"11 ÷ 2 = 5 remainder 1."},
+  {id:"mx6",skill:"mixed",kind:"mixed",q:"Write 17/6 as a mixed number.",a:"2 5/6",hint:"Twelve sixths make two wholes.",ex:"17/6 = 12/6 + 5/6 = 2 5/6."},
+  {id:"mx7",skill:"mixed",kind:"mixed",q:"Write 15/8 as a mixed number.",a:"1 7/8",hint:"Eight eighths make one whole.",ex:"15/8 = 8/8 + 7/8 = 1 7/8."},
+  {id:"mx8",skill:"mixed",kind:"mixed",q:"Write 21/6 as a mixed number.",a:"3 3/6",hint:"Eighteen sixths make three wholes.",ex:"21/6 = 18/6 + 3/6 = 3 3/6."},
+  {id:"mx9",skill:"mixed",kind:"fraction",q:"Write 2 1/3 as an improper fraction.",a:"7/3",hint:"Count all of the thirds in 2 wholes, then add one more third.",ex:"2 wholes = 6/3; 6/3 + 1/3 = 7/3."},
+  {id:"mx10",skill:"mixed",kind:"fraction",q:"Write 1 3/4 as an improper fraction.",a:"7/4",hint:"One whole is 4/4.",ex:"4/4 + 3/4 = 7/4."},
+  {id:"mx11",skill:"mixed",kind:"fraction",q:"Write 3 5/6 as an improper fraction.",a:"23/6",hint:"Three wholes contain 18 sixths.",ex:"18/6 + 5/6 = 23/6."},
+  {id:"mx12",skill:"mixed",kind:"fraction",q:"Write 4 1/2 as an improper fraction.",a:"9/2",hint:"Four wholes contain 8 halves.",ex:"8/2 + 1/2 = 9/2."},
+
+  // Add / subtract with like denominators
+  {id:"as1",skill:"addsub",kind:"fraction",q:"3/5 + 1/5 = ?",a:"4/5",hint:"Keep the denominator and combine the numerators.",ex:"3 fifths + 1 fifth = 4 fifths."},
+  {id:"as2",skill:"addsub",kind:"fraction",q:"1/3 + 1/3 = ?",a:"2/3",hint:"The pieces are the same size.",ex:"1 third + 1 third = 2 thirds."},
+  {id:"as3",skill:"addsub",kind:"fraction",q:"4/8 + 2/8 = ?",a:"6/8",hint:"Add the numerators; keep eighths.",ex:"4 + 2 = 6, so 6/8."},
+  {id:"as4",skill:"addsub",kind:"fraction",q:"7/9 − 3/9 = ?",a:"4/9",hint:"Subtract the numerators; keep ninths.",ex:"7 − 3 = 4, so 4/9."},
+  {id:"as5",skill:"addsub",kind:"fraction",q:"8/10 − 3/10 = ?",a:"5/10",hint:"The denominator stays 10.",ex:"8 − 3 = 5, so 5/10."},
+  {id:"as6",skill:"addsub",kind:"fraction",q:"5/6 − 2/6 = ?",a:"3/6",hint:"Subtract sixths from sixths.",ex:"5 − 2 = 3, so 3/6."},
+  {id:"as7",skill:"addsub",kind:"fraction",q:"3/4 − 1/4 = ?",a:"2/4",hint:"Keep the denominator 4.",ex:"3 − 1 = 2, so 2/4."},
+  {id:"as8",skill:"addsub",kind:"fraction",q:"6/8 − 3/8 = ?",a:"3/8",hint:"Subtract the numerators.",ex:"6 − 3 = 3, so 3/8."},
+  {id:"as9",skill:"addsub",kind:"fraction",q:"2/5 + 2/5 = ?",a:"4/5",hint:"Add fifths to fifths.",ex:"2 + 2 = 4, so 4/5."},
+  {id:"as10",skill:"addsub",kind:"fraction",q:"3/6 + 1/6 = ?",a:"4/6",hint:"Keep the denominator 6.",ex:"3 + 1 = 4, so 4/6."},
+  {id:"as11",skill:"addsub",kind:"fraction",q:"9/10 − 5/10 = ?",a:"4/10",hint:"Subtract the numerators.",ex:"9 − 5 = 4, so 4/10."},
+  {id:"as12",skill:"addsub",kind:"fraction",q:"2/4 + 1/4 = ?",a:"3/4",hint:"Combine the fourths.",ex:"2 + 1 = 3, so 3/4."},
+
+  // Fraction meaning / set / probability
+  {id:"mn1",skill:"meaning",kind:"fraction",q:"There are 10 pearls. 6 are in the box. What fraction of the pearls are in the box?",a:"6/10",hint:"The denominator is the total number of pearls.",ex:"6 of 10 pearls are in the box, so 6/10."},
+  {id:"mn2",skill:"meaning",kind:"fraction",q:"A ring box has 6 spaces. 3 contain rings. What fraction of the spaces contain rings?",a:"3/6",hint:"Use filled spaces over total spaces.",ex:"3 of 6 spaces contain rings, so 3/6."},
+  {id:"mn3",skill:"meaning",kind:"fraction",q:"A ring box has 6 spaces. 3 are empty. What fraction of the spaces are empty?",a:"3/6",hint:"Use empty spaces over total spaces.",ex:"3 of 6 are empty, so 3/6."},
+  {id:"mn4",skill:"meaning",kind:"number",q:"A fraction equals 1 and has denominator 8. What numerator makes the fraction equal 1?",a:"8",hint:"A whole has the same numerator and denominator.",ex:"8/8 = 1."},
+  {id:"mn5",skill:"meaning",kind:"fraction",q:"A shape is divided into 4 equal parts. 2 parts are colored. What fraction is uncolored?",a:"2/4",hint:"Count the uncolored parts over all equal parts.",ex:"2 of the 4 parts are uncolored, so 2/4."},
+  {id:"mn6",skill:"meaning",kind:"fraction",q:"A bag has 3 red counters and 2 blue counters. What fraction of the counters are red?",a:"3/5",hint:"Count red counters over the total number of counters.",ex:"There are 3 red out of 5 total, so 3/5."},
+  {id:"mn7",skill:"meaning",kind:"fraction",q:"A spinner has 6 equal sections: 3 blue, 2 red, and 1 green. What fraction of the spinner is green?",a:"1/6",hint:"Green sections over all sections.",ex:"1 of 6 sections is green, so 1/6."},
+  {id:"mn8",skill:"meaning",kind:"fraction",q:"There are 9 pearls, and 5 are pink. What fraction are pink?",a:"5/9",hint:"Pink pearls go on top; all pearls go on bottom.",ex:"5 of 9 are pink, so 5/9."},
+  {id:"mn9",skill:"meaning",kind:"fraction",q:"A rectangle has 8 equal boxes and 5 are colored. What fraction is colored?",a:"5/8",hint:"Colored parts over total equal parts.",ex:"5 of 8 are colored, so 5/8."},
+  {id:"mn10",skill:"meaning",kind:"fraction",q:"A set has 7 gems. 3 are green. What fraction are green?",a:"3/7",hint:"Green gems over all gems.",ex:"3 of 7 are green, so 3/7."},
+
+  // Careful chapter review
+  {id:"rv1",skill:"review",kind:"number",q:"8,391 + 2,752 = ?",a:"11143",hint:"Line up place values and regroup carefully.",ex:"8,391 + 2,752 = 11,143."},
+  {id:"rv2",skill:"review",kind:"number",q:"1,840 + 3,023 = ?",a:"4863",hint:"Add ones, tens, hundreds, then thousands.",ex:"1,840 + 3,023 = 4,863."},
+  {id:"rv3",skill:"review",kind:"number",q:"35,704 − 12,298 = ?",a:"23406",hint:"Regroup carefully, then check by adding.",ex:"23,406 + 12,298 = 35,704."},
+  {id:"rv4",skill:"review",kind:"number",q:"796 − 280 = ?",a:"516",hint:"Subtract by place value.",ex:"796 − 280 = 516."},
+  {id:"rv5",skill:"review",kind:"money",q:"A bookshelf costs $229.89 and a file cabinet costs $159.39. What is the total? Write it as money.",a:"389.28",hint:"Line up the decimal points before adding.",ex:"$229.89 + $159.39 = $389.28."},
+  {id:"rv6",skill:"review",kind:"number",q:"64 ÷ 8 = ?",a:"8",hint:"Think: 8 × what number = 64?",ex:"8 × 8 = 64, so 64 ÷ 8 = 8."},
+  {id:"rv7",skill:"review",kind:"number",q:"72 ÷ 8 = ?",a:"9",hint:"Use the related multiplication fact.",ex:"8 × 9 = 72."},
+  {id:"rv8",skill:"review",kind:"number",q:"48 ÷ 8 = ?",a:"6",hint:"Use the related multiplication fact.",ex:"8 × 6 = 48."},
+  {id:"rv9",skill:"review",kind:"number",q:"Round 8,391 to the nearest thousand.",a:"8000",hint:"Look at the hundreds digit.",ex:"The hundreds digit is 3, so 8,391 rounds to 8,000."},
+  {id:"rv10",skill:"review",kind:"number",q:"Round 3,023 to the nearest thousand.",a:"3000",hint:"Look at the hundreds digit.",ex:"The hundreds digit is 0, so 3,023 rounds to 3,000."}
+];
+
+function loadMathState(){
+  try{return JSON.parse(localStorage.getItem(mathStorageKey))||{days:{}}}catch(e){return{days:{}}}
+}
+function saveMathState(s){localStorage.setItem(mathStorageKey,JSON.stringify(s))}
+let mathState=loadMathState();
+let currentMathDay="monday";
+
+function parseFracValue(s){
+  const t=String(s||"").trim().replace(/\s+/g," ");
+  if(/^-?\d+\s+\d+\/\d+$/.test(t)){
+    const [w,f]=t.split(" ");const [n,d]=f.split("/").map(Number);
+    return Number(w)+n/d;
+  }
+  if(/^-?\d+\/\d+$/.test(t)){
+    const [n,d]=t.split("/").map(Number);return n/d;
+  }
+  const n=Number(t.replace(/,/g,"").replace(/\$/g,""));
+  return Number.isFinite(n)?n:null;
+}
+function normalizeMixed(s){return String(s||"").trim().replace(/\s+/g," ")}
+function mathIsCorrect(q,value){
+  const raw=String(value||"").trim();
+  if(q.kind==="compare")return raw===q.a;
+  if(q.kind==="number")return Number(raw.replace(/,/g,""))===Number(q.a);
+  if(q.kind==="money")return /^\$?\d+(?:,\d{3})*\.\d{2}$/.test(raw) && Math.abs(parseFracValue(raw)-Number(q.a))<0.0001;
+  if(q.kind==="mixed")return normalizeMixed(raw)===q.a;
+  if(q.kind==="fraction"){
+    const av=parseFracValue(raw),ev=parseFracValue(q.a);
+    return av!==null&&ev!==null&&Math.abs(av-ev)<0.000001;
+  }
+  return raw.toLowerCase()===String(q.a).toLowerCase();
+}
+function aggregateMath(beforeDay=null){
+  const agg={};Object.keys(mathSkills).forEach(k=>agg[k]={correct:0,total:0});
+  const stop=beforeDay===null?mathDays.length:mathDays.indexOf(beforeDay);
+  mathDays.slice(0,stop).forEach(day=>{
+    const rec=mathState.days[day];
+    if(!rec||!rec.completed)return;
+    Object.entries(rec.stats||{}).forEach(([k,v])=>{
+      if(!agg[k])return;agg[k].correct+=v.correct||0;agg[k].total+=v.total||0;
+    });
+  });
+  return agg;
+}
+function accuracyFor(agg,k){
+  return agg[k].total?agg[k].correct/agg[k].total:null;
+}
+function skillStatus(acc,total){
+  if(!total)return"Not checked yet";
+  if(acc>=.9)return"Strong";
+  if(acc>=.7)return"Improving";
+  return"Needs practice";
+}
+function planCountsFor(day){
+  if(day==="monday")return{fracSet:4,compare:2,mixed:1,addsub:1,meaning:1,review:1};
+  const total=day==="friday"?5:10;
+  const agg=aggregateMath(day);
+  const counts={fracSet:0,compare:0,mixed:0,addsub:0,meaning:0,review:0};
+  // Give every core skill a chance when there is enough room.
+  const core=day==="friday"?["fracSet","compare","mixed"]:["fracSet","compare","mixed","addsub","meaning","review"];
+  core.forEach(k=>counts[k]++);
+  let used=core.length;
+  while(used<total){
+    const ranked=Object.keys(mathSkills).sort((a,b)=>{
+      const aa=accuracyFor(agg,a),bb=accuracyFor(agg,b);
+      const deficiencyA=aa===null?.35:(1-aa);
+      const deficiencyB=bb===null?.35:(1-bb);
+      const priorityA=deficiencyA*10+(a==="fracSet"?2:0)+(mathSkills[a].base/10)-(counts[a]*.55);
+      const priorityB=deficiencyB*10+(b==="fracSet"?2:0)+(mathSkills[b].base/10)-(counts[b]*.55);
+      return priorityB-priorityA;
+    });
+    counts[ranked[0]]++;used++;
+  }
+  return counts;
+}
+function usedQuestionIdsBefore(day){
+  const ids=new Set();const stop=mathDays.indexOf(day);
+  mathDays.slice(0,stop).forEach(d=>(mathState.days[d]?.questionIds||[]).forEach(id=>ids.add(id)));
+  return ids;
+}
+function pickMathQuestions(day){
+  const counts=planCountsFor(day),used=usedQuestionIdsBefore(day),out=[];
+  Object.entries(counts).forEach(([skill,n])=>{
+    let pool=mathBank.filter(q=>q.skill===skill&&!used.has(q.id));
+    if(pool.length<n)pool=mathBank.filter(q=>q.skill===skill);
+    // predictable rotation by day so a refresh doesn't make a totally new assignment
+    const offset=mathDays.indexOf(day)*2;
+    pool=[...pool.slice(offset%pool.length),...pool.slice(0,offset%pool.length)];
+    out.push(...pool.slice(0,n));
+  });
+  // Interleave skills instead of grouping all weak-skill problems together.
+  return out.sort((a,b)=>{
+    const ai=mathBank.indexOf(a),bi=mathBank.indexOf(b);
+    return ((ai*7+mathDays.indexOf(day)*3)%17)-((bi*7+mathDays.indexOf(day)*3)%17);
+  });
+}
+function ensureMathDay(day){
+  let rec=mathState.days[day];
+  if(!rec){
+    const qs=pickMathQuestions(day);
+    rec={questionIds:qs.map(q=>q.id),answers:{},stats:{},completed:false,started:false};
+    mathState.days[day]=rec;saveMathState(mathState);
+  }
+  return rec;
+}
+function mathQuestionById(id){return mathBank.find(q=>q.id===id)}
+function planText(counts){
+  return Object.entries(counts).filter(([,n])=>n>0).map(([k,n])=>`${n} ${mathSkills[k].name}`).join(" • ");
+}
+function renderMathProgress(){
+  const agg=aggregateMath();
+  $("mathSkillBars").innerHTML=Object.keys(mathSkills).map(k=>{
+    const v=agg[k],acc=v.total?v.correct/v.total:0,pct=Math.round(acc*100);
+    return `<div class="skillRow"><span>${mathSkills[k].name}</span><div class="skillTrack"><div class="skillFill" style="width:${pct}%"></div></div><b>${v.total?pct+"%":"—"}</b></div>`;
+  }).join("");
+  const total=Object.values(agg).reduce((s,v)=>s+v.total,0);
+  const correct=Object.values(agg).reduce((s,v)=>s+v.correct,0);
+  $("mathOverallNote").textContent=total?`Overall first-attempt accuracy: ${Math.round(correct/total*100)}% across ${total} practice questions.`:"Complete Monday's practice to start the progress analysis.";
+  document.querySelectorAll(".mathDay").forEach(b=>b.classList.toggle("done",!!mathState.days[b.dataset.day]?.completed));
+}
+function renderMathDay(day){
+  currentMathDay=day;
+  document.querySelectorAll(".mathDay").forEach(b=>b.classList.toggle("active",b.dataset.day===day));
+  const rec=ensureMathDay(day);
+  const qs=rec.questionIds.map(mathQuestionById).filter(Boolean);
+  const prevAgg=aggregateMath(day);
+  const counts=planCountsFor(day);
+  const priorCompleted=mathDays.slice(0,mathDays.indexOf(day)).filter(d=>mathState.days[d]?.completed).length;
+  const adaptiveNote=day==="monday"
+    ?"Monday is the baseline. It intentionally includes extra Fraction of a Set practice because that is the clearest worksheet weakness."
+    :priorCompleted
+      ?"This set was weighted using Tori's earlier first-attempt results. Skills with lower accuracy receive more practice."
+      :"Earlier practice is not complete yet, so this day is using the default skill priorities.";
+  $("mathDayIntro").innerHTML=`<b>${mathDayNames[day]} Practice — ${qs.length} questions</b><div class="mathMini">${adaptiveNote}</div><div class="mathMini" style="margin-top:6px"><b>Today's mix:</b> ${planText(counts)}</div>`;
+
+  $("mathQuestions").innerHTML=qs.map((q,idx)=>{
+    const saved=rec.answers[q.id];
+    const placeholder=q.kind==="compare"?">, <, or =":q.kind==="mixed"?"Example: 2 1/3":q.kind==="fraction"?"Example: 3/5":q.kind==="money"?"Example: $12.34":"Type the answer";
+    return `<div class="mathQ ${saved?"done":""}" data-id="${q.id}">
+      <div class="mathQTop"><b>Question ${idx+1}</b><span class="skillTag">${mathSkills[q.skill].name}</span></div>
+      <div class="mathPrompt">${q.q}</div>
+      <input class="mathAns" ${saved?"disabled":""} value="${saved?saved.value.replace(/"/g,"&quot;"):""}" placeholder="${placeholder}" inputmode="${q.kind==="number"||q.kind==="money"?"decimal":"text"}">
+      <div class="row">
+        <button class="primary mathCheck" ${saved?"disabled":""}>Check</button>
+        <button class="mathHintBtn">Hint</button>
+      </div>
+      <div class="mathHint">${q.hint}</div>
+      <div class="feedback mathFb ${saved?(saved.correct?"good":"bad"):""}">${saved?(saved.correct?"✅ Correct on the first try.":"❌ First try missed. Review the explanation, then keep going."):""}</div>
+      <div class="mathExplain ${saved?"show":""}">${saved?q.ex:""}</div>
+    </div>`;
+  }).join("");
+
+  document.querySelectorAll(".mathQ").forEach(card=>{
+    const id=card.dataset.id,q=mathQuestionById(id);
+    card.querySelector(".mathHintBtn").onclick=()=>card.querySelector(".mathHint").classList.toggle("show");
+    const check=card.querySelector(".mathCheck");
+    if(!check.disabled)check.onclick=()=>{
+      const input=card.querySelector(".mathAns"),value=input.value.trim();
+      if(!value){card.querySelector(".mathFb").textContent="Enter an answer first.";return;}
+      const correct=mathIsCorrect(q,value);
+      rec.started=true;
+      rec.answers[id]={value,correct};
+      input.disabled=true;check.disabled=true;card.classList.add("done");
+      const fb=card.querySelector(".mathFb"),ex=card.querySelector(".mathExplain");
+      fb.textContent=correct?"✅ Correct on the first try.":"❌ Not quite. Use the explanation to correct it before moving on.";
+      fb.className="feedback mathFb "+(correct?"good":"bad");
+      ex.textContent=q.ex;ex.classList.add("show");
+      saveMathState(mathState);
+      checkMathDayCompletion(day);
+    };
+  });
+  renderMathDaySummary(day);
+}
+function checkMathDayCompletion(day){
+  const rec=mathState.days[day];
+  if(Object.keys(rec.answers).length<rec.questionIds.length){saveMathState(mathState);return;}
+  const stats={};Object.keys(mathSkills).forEach(k=>stats[k]={correct:0,total:0});
+  rec.questionIds.forEach(id=>{
+    const q=mathQuestionById(id),a=rec.answers[id];
+    stats[q.skill].total++;if(a?.correct)stats[q.skill].correct++;
+  });
+  rec.stats=stats;rec.completed=true;saveMathState(mathState);
+  renderMathProgress();renderMathDaySummary(day);
+}
+function renderMathDaySummary(day){
+  const rec=mathState.days[day],box=$("mathDaySummary");
+  if(!rec?.completed){
+    const answered=Object.keys(rec?.answers||{}).length,total=rec?.questionIds?.length||0;
+    box.innerHTML=`<div class="mathSummary"><b>${answered}/${total} completed</b><div class="mathMini">Finish the set to unlock today's skill analysis and tomorrow's adjusted plan.</div></div>`;
+    return;
+  }
+  const rows=Object.entries(rec.stats).filter(([,v])=>v.total).map(([k,v])=>{
+    const acc=v.correct/v.total,pct=Math.round(acc*100);
+    return `<div class="skillRow"><span>${mathSkills[k].name}</span><div class="skillTrack"><div class="skillFill" style="width:${pct}%"></div></div><b>${pct}%</b></div>`;
+  }).join("");
+  const nextIndex=mathDays.indexOf(day)+1;
+  let tomorrow="";
+  if(nextIndex<mathDays.length){
+    const next=mathDays[nextIndex];
+    // If next day's record has not started, rebuild it now from today's new results.
+    if(mathState.days[next]&&!mathState.days[next].started&&!mathState.days[next].completed)delete mathState.days[next];
+    const nextCounts=planCountsFor(next);
+    tomorrow=`<div class="tomorrowPlan"><b>${mathDayNames[next]}'s adjusted plan:</b><br>${planText(nextCounts)}</div>`;
+  }else{
+    tomorrow=`<div class="tomorrowPlan"><b>Friday review complete.</b><br>Use the school test results to decide what needs continued practice next week.</div>`;
+  }
+  const missed=Object.entries(rec.stats).filter(([,v])=>v.total&&v.correct/v.total<.7).map(([k])=>mathSkills[k].name);
+  const note=missed.length?`Today's main practice need: ${missed.join(", ")}.`:"No skill fell below 70% today. Tomorrow keeps a mixed review while still favoring the lowest-scoring area.";
+  box.innerHTML=`<div class="mathSummary"><b>${mathDayNames[day]} Analysis</b><div class="skillBars">${rows}</div><div class="mathMini" style="margin-top:9px">${note}</div>${tomorrow}</div>`;
+  saveMathState(mathState);
+}
+document.querySelectorAll(".mathDay").forEach(b=>b.onclick=()=>renderMathDay(b.dataset.day));
+$("resetMathProgress").onclick=()=>{
+  if(confirm("Reset all of this week's saved math practice and scores?")){
+    localStorage.removeItem(mathStorageKey);mathState={days:{}};renderMathProgress();renderMathDay("monday");
+  }
+};
+renderMathProgress();
+renderMathDay("monday");
+
 </script>
 </body></html>
